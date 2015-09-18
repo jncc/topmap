@@ -33,6 +33,7 @@ module.exports = (config) ->
       'bower_components/angular-x2js/dist/x2js.min.js'
       'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js'
       'bower_components/Leaflet.EasyButton/src/easy-button.js'
+      'bower_components/proj4/dist/proj4.js'
       'bower_components/angular-mocks/angular-mocks.js'
       # endbower
       # bower:coffee

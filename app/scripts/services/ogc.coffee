@@ -44,22 +44,27 @@ angular.module 'topMapApp'
       
       layers.promise
       
-    getFeatureInfoUrl: (latlng, map, layer) -> 
+    getBBoxString: (version, se_x, se_y, ne_x, ne_y) ->
+      if version is '1.3.0'  
+        boundsStr = se_y + ',' + se_x + ',' + ne_y + ',' + ne_x
+      else
+        boundsStr = se_x + ',' + se_y + ',' + ne_x + ',' + ne_y
+      
+      return boundsStr      
+      
+    getFeatureInfoUrl: (latlng, map, layer, srs) -> 
       point = map.latLngToContainerPoint(latlng, map.getZoom())
       size = map.getSize()
       bounds = map.getBounds()
-      boundsStr = bounds.getSouthWest().lat + ',' + bounds.getSouthWest().lng + ',' + bounds.getNorthEast().lat + ',' + bounds.getNorthEast().lng
-        
+             
       params = {
         request: "GetFeatureInfo",
         service: "WMS",
-        srs: "EPSG:4326",
+        srs: srs,
         styles: "",
         version: layer.version,      
         format: "image/png",
-        #bbox: map.getBounds().toBBoxString(),
         feature_count: 50,
-        bbox: boundsStr,
         height: size.y,
         width: size.x,
         layers: layer.name,
@@ -67,10 +72,19 @@ angular.module 'topMapApp'
         info_format: 'application/json'
       };
     
-      params[if params.version is '1.3.0' then 'i' else 'x'] = point.x;
-      params[if params.version is '1.3.0' then 'j' else 'y'] = point.y;
+      params[if params.version is '1.3.0' then 'i' else 'x'] = point.x
+      params[if params.version is '1.3.0' then 'j' else 'y'] = point.y
+
+      sw = proj4("EPSG:4326", srs, [bounds.getSouthWest().lng, bounds.getSouthWest().lat])
+      ne = proj4("EPSG:4326", srs, [bounds.getNorthEast().lng, bounds.getNorthEast().lat])
+
+      if params.version is '1.3.0'  
+          boundsStr = sw[0] + ',' + sw[1] + ',' + ne[0] + ',' + ne[1]
+        else
+          boundsStr = sw[1] + ',' + sw[0] + ',' + ne[1] + ',' + ne[0]
+      params['bbox'] = boundsStr
     
-      L.Util.getParamString(params, this._url, true);
+      L.Util.getParamString(params, this._url, true)
 
     getFeatureInfo: (url, target) ->
       features = $q.defer()

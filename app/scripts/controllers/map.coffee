@@ -79,6 +79,7 @@ angular.module 'topMapApp'
             url: $scope.layer.base,
             layerParams: {
               layers: $scope.layer.name,
+              version: $scope.layer.version,
               format: 'image/png',
               transparent: true
             }
@@ -104,10 +105,9 @@ angular.module 'topMapApp'
       }
       
       leafletData.getMap().then (map) ->
-        params = ogc.getFeatureInfoUrl wrap.leafletEvent.latlng, map, $scope.layer 
+        params = ogc.getFeatureInfoUrl wrap.leafletEvent.latlng, map, $scope.layer, map.options.crs.code
         url = $scope.layer.base + params
-        #bounds = map.getBounds();
-        #url = $scope.layer.base + '?request=GetFeatureInfo&service=WMS&version=1.1.1&layers=' + $scope.layer.name + '&styles=&srs=' + map.options.crs.code + '&format=image%2Fpng&query_layers=' + $scope.layer.name + '&info_format=application/json&feature_count=50&x=' + $scope.clicked.x + '&y=' + $scope.clicked.y + '&BBOX=' + bounds.getSouthWest().lng + ',' + bounds.getSouthWest().lat + ',' + bounds.getNorthEast().lng + ',' + bounds.getNorthEast().lat + '&height=' + map._size.y + '&width=' + map._size.x
+        
         ogc.getFeatureInfo(url).then (data) ->
           $scope.features = data.features
           $scope.hideGetFeatureInfo = false
