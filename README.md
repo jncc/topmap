@@ -7,6 +7,8 @@ version 0.12.1.
 
 ## Build & development
 
+You will need to run `npm install` and `bower install` to install dependencies
+
 Run `grunt` for building and `grunt serve` for preview.
 
 ## Testing

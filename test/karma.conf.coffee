@@ -21,7 +21,7 @@ module.exports = (config) ->
       'bower_components/angular/angular.js'
       'bower_components/angular-animate/angular-animate.js'
       'bower_components/angular-cookies/angular-cookies.js'
-      'bower_components/angular-simple-logger/dist/index.js'
+      'bower_components/angular-simple-logger/dist/angular-simple-logger.js'
       'bower_components/leaflet/dist/leaflet-src.js'
       'bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.js'
       'bower_components/angular-resource/angular-resource.js'
@@ -33,7 +33,6 @@ module.exports = (config) ->
       'bower_components/angular-x2js/dist/x2js.min.js'
       'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js'
       'bower_components/Leaflet.EasyButton/src/easy-button.js'
-      'bower_components/ngScrollable/min/ng-scrollable.min.js'
       'bower_components/angular-mocks/angular-mocks.js'
       # endbower
       # bower:coffee

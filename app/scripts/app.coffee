@@ -19,8 +19,7 @@ angular
     'angularShamSpinner',
     'cb.x2js',
     'leaflet-directive',
-    'angularUtils.directives.dirPagination',
-    'ngScrollable'
+    'angularUtils.directives.dirPagination'
   ]
   .config ($routeProvider) ->
     $routeProvider
