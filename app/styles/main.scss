@@ -97,8 +97,20 @@ mapContainer {
 .legendContainer {
     max-width: 40%;
     max-height: 80%;
-/*    max-height: 350px;*/
     position: absolute;
     top: 110px;
     right: 10px;
 }
+
+.scroll {
+   overflow-y: auto;
+}
+.scroll::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 10px;        
+}    
+.scroll::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background-color: lightgray;
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.75);        
+}	

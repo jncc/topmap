@@ -24,7 +24,7 @@ angular.module 'topMapApp'
 #        ngDialog.open({
 #          template: 'views/partials/getFeatureInfo.html'
 #        })
-      ).addTo(map)      
+      ).addTo(map)    
     
     if 'baseURL' of parameters and 'layer' of parameters
       $scope.layer = Layer({
@@ -86,8 +86,8 @@ angular.module 'topMapApp'
           }
         }      
       }
-    })    
-
+    })
+    
     $scope.$on 'leafletDirectiveMap.click', (e, wrap) ->
       $scope.clicked = {
         x: Math.round(wrap.leafletEvent.containerPoint.x),
