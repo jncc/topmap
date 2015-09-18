@@ -1,0 +1,20 @@
+<table class="">
+    <tbody>
+        <tr ng-repeat-start="layer in wms" ng-click="selLayer(layer)">
+            <td>{{layer.Title}}</td>
+            <td>{{layer.CRS}}</td>
+        </tr>
+        <tr ng-repeat-end>
+            <td colspan="2">
+                <div ng-animate="'animate'" ng-switch on="isSelLayer(layer)">
+                    <div ng-switch-when="true">
+                        <span ng-show="!(layer.Abstract === '')">{{layer.Abstract}}</span>
+                        <span ng-show="(layer.Abstract === '')">NO ABSTRACT FOUND</span>
+                        <span><a href="/#/map">View Map</a></span>
+                    </div>
+                    <div ng-switch-when="false" />
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

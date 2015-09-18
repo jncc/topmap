@@ -1,0 +1,104 @@
+$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+// bower:scss
+@import "sham-spinner/sham-spinner.scss";
+@import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+// endbower
+
+body {
+  padding: 0;
+}
+
+.navbar {
+    position: relative;
+    min-height: 50px;
+    margin-bottom: 0px;
+    border: 1px solid transparent;
+}
+
+.header,
+.footer {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.header {
+  /* Make the masthead heading the same height as the navigation */
+  h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 40px;
+    padding-bottom: 19px;
+  }
+}
+
+.footer {
+  padding-top: 19px;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+}
+
+.container-narrow > hr {
+  margin: 30px 0;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+  .container {
+    max-width: 730px;
+  }
+
+  /* Remove the padding we set earlier */
+  .header,
+  .footer {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  /* Space out the masthead */
+  .header {
+    //margin-bottom: 30px;
+  }
+}
+
+@import "sham-spinner/sham-spinner";
+.sham-spinner-blocker {
+    .sham-spinner-container {
+        padding: 2px 15px;
+        background-color: #000;
+        border: 1px solid #333;
+        color: #ffffff;
+        position: fixed;
+        left: 5px;
+        top: 0px;
+        z-index: 5000;
+
+        .spinner {
+            display: block;
+            float: left;
+            width: 50px;
+            height: 50px;
+            @include sham-spinner-spokes(LightCoral, 44px, 2s);
+        }
+        .text {
+            padding: 10px 12px;
+            float: left;
+            font-weight: 700;
+        }
+    }
+}
+
+html, body {
+    height: 100%;
+}
+
+mapContainer {
+    height: 100%;
+}
+
+.legendContainer {
+    max-width: 40%;
+    max-height: 80%;
+/*    max-height: 350px;*/
+    position: absolute;
+    top: 110px;
+    right: 10px;
+}
