@@ -103,7 +103,7 @@ mapContainer {
 }
 
 .scroll {
-   overflow-y: auto;
+   overflow: auto;
 }
 .scroll::-webkit-scrollbar {
     -webkit-appearance: none;
@@ -114,3 +114,14 @@ mapContainer {
     background-color: lightgray;
     -webkit-box-shadow: 0 0 1px rgba(255,255,255,.75);        
 }	
+
+.modal-dialog,
+.modal-content {
+    /* 80% of window height */
+    height: 80%;
+}
+
+.modal-body {
+    /* 100% = dialog height, 120px = header + footer */
+    max-height: calc(100% - 120px);
+}
