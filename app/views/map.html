@@ -8,17 +8,25 @@
         <img ng-src="{{layer.base}}?service=WMS&REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER={{layer.name}}" class="img-responsive" style="max-height: 100%;" alt="Legend Graphic"/>
     </div>
 
-    <div id="getFeatureInfo" ng-show="showGetFeatureInfo">
-        <div ng-if="features === []">
-            
+    <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Feature Info</h3>
         </div>
-        <div ng-if="features !== []">
-            <div dir-paginate="feature in features | itemsPerPage: 1">
-                <ul>
-                    <li ng-repeat="(key, data) in feature.properties">{{key}}: {{data}}</li>
-                </ul>
+        <div class="modal-body">
+            <div ng-if="!data.length">
+                <span>No features found at this location</span>    
             </div>
-            <dir-pagination-controls></dir-pagination-controls>
+            <div ng-if="data.length">
+                <div dir-paginate="feature in data | itemsPerPage: 1">
+                    <ul>
+                        <li ng-repeat="(key, data) in feature.properties">{{key}}: {{data}}</li>
+                    </ul>
+                </div>
+                <dir-pagination-controls></dir-pagination-controls>
+            </div>
         </div>
-    </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+        </div>
+    </script>
 </div>

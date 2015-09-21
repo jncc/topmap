@@ -19,7 +19,8 @@ angular
     'angularShamSpinner',
     'cb.x2js',
     'leaflet-directive',
-    'angularUtils.directives.dirPagination'
+    'angularUtils.directives.dirPagination',
+    'ui.bootstrap'
   ]
   .config ($routeProvider) ->
     $routeProvider

@@ -8,22 +8,35 @@
  # Controller of the topMapApp
 ###
 angular.module 'topMapApp'
-  .controller 'MapCtrl', ($scope, $location, leafletData, ogc, store, Layer) ->
+  .controller 'MapCtrl', ($scope, $location, leafletData, ogc, store, Layer, $modal, $log) ->
     parameters = $location.search()
     
     $scope.showGetFeatureInfo = true
     $scope.showLegend = false
     $scope.features = []
+
+    $scope.open = () -> 
+      modalInstance = $modal.open({
+        animation: true,
+        templateUrl: 'myModalContent.html',
+        controller: 'ModalInstanceCtrl',
+        size: 'lg',
+        resolve: {
+          data: () ->
+            return $scope.features;
+        }
+      });
+   
+    $scope.toggleAnimation = () ->
+      $scope.animationsEnabled = !$scope.animationsEnabled;
+
     
     leafletData.getMap().then (map) ->
       L.easyButton('glyphicon glyphicon-list', (btn, map) ->
         $scope.showLegend = !$scope.showLegend
       ).addTo(map)
       L.easyButton('glyphicon glyphicon-info-sign', (btn, map) ->
-        $scope.showGetFeatureInfo = !$scope.showGetFeatureInfo
-#        ngDialog.open({
-#          template: 'views/partials/getFeatureInfo.html'
-#        })
+        $scope.open()
       ).addTo(map)    
     
     if 'baseURL' of parameters and 'layer' of parameters
@@ -110,7 +123,21 @@ angular.module 'topMapApp'
         
         ogc.getFeatureInfo(url).then (data) ->
           $scope.features = data.features
-          $scope.hideGetFeatureInfo = false
+          $scope.open()
         , (error) -> 
           alert 'Could not get feature info'
 
+
+angular.module 'topMapApp'
+  .controller 'ModalInstanceCtrl', ($scope, $modalInstance, data) ->
+
+    $scope.data = data;
+    $scope.selected = {
+      item: $scope.data[0]
+    };
+
+    $scope.ok = () ->
+      $modalInstance.close($scope.selected.data);
+
+    $scope.cancel = () ->
+      $modalInstance.dismiss('cancel');
