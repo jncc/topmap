@@ -9,7 +9,13 @@ version 0.12.1.
 
 You will need to run `npm install` and `bower install` to install dependencies
 
-Run `grunt` for building and `grunt serve` for preview.
+Run `grunt clean build` for building and `grunt serve` for preview.
+
+### Additional Dependencies
+
+This project uses SASS and you may need to install compass to compile the CSS files during the build process, you will need ruby installed on your system and then you just need to install the compass gem;
+
+`gem install compass`
 
 ## Testing
 
