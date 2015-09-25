@@ -16,6 +16,11 @@ angular.module 'topMapApp'
     $scope.features = []
 
     $scope.open = () -> 
+#      modalScope = {
+#        data: $scope.features
+#      }
+#    
+#      $modal({scope: modalScope, templateUrl: 'myModalContent.html', show: true});
       modalInstance = $modal.open({
         animation: true,
         templateUrl: 'myModalContent.html',
