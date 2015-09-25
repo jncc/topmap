@@ -1,8 +1,14 @@
-<table class="">
-    <tbody>
+<table class="layer-list">
+    <thead>
+        <tr>
+            <th class="layer-title">Layer Name</th>
+            <th class="layer-projection">Original Projection</th>
+        </tr>
+    </thead>
+<!--    <tbody>
         <tr ng-repeat-start="layer in wms" ng-click="selLayer(layer)">
-            <td>{{layer.Title}}</td>
-            <td>{{layer.CRS}}</td>
+            <td class="layer-title">{{layer.Title}}</td>
+            <td class="layer-projection">{{layer.CRS}}</td>
         </tr>
         <tr ng-repeat-end>
             <td colspan="2">
@@ -16,5 +22,24 @@
                 </div>
             </td>
         </tr>
-    </tbody>
+    </tbody>-->
+    <tbody dir-paginate="layer in wms | itemsPerPage: 10">
+        <tr ng-click="selLayer(layer)" class="row-hover">
+            <td class="layer-title">{{layer.Title}}</td>
+            <td class="layer-projection">{{layer.CRS}}</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div ng-animate="'animate'" ng-switch on="isSelLayer(layer)">
+                    <div ng-switch-when="true">
+                        <span ng-show="!(layer.Abstract === '')">{{layer.Abstract}}</span>
+                        <span ng-show="(layer.Abstract === '')">NO ABSTRACT FOUND</span>
+                        <span><a href="/#/map">View Map</a></span>
+                    </div>
+                    <div ng-switch-when="false" />
+                </div>
+            </td>
+        </tr>
+    </tbody>    
 </table>
+<dir-pagination-controls></dir-pagination-controls>
