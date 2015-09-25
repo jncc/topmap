@@ -115,14 +115,14 @@ mapContainer {
     -webkit-box-shadow: 0 0 1px rgba(255,255,255,.75);        
 }	
 
-.modal-dialog {
+.modal-dialog, .modal-content {
     /* 80% of window height */
     height: 80%;
 }
 
-.modal-content {
+/*.modal-content {
     max-height: 100%;
-}
+}*/
 
 .modal-body {
     /* 100% = dialog height, 120px = header + footer */

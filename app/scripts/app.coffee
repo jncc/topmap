@@ -20,7 +20,8 @@ angular
     'cb.x2js',
     'leaflet-directive',
     'angularUtils.directives.dirPagination',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'mgcrea.ngStrap'
   ]
   .config ($routeProvider) ->
     $routeProvider

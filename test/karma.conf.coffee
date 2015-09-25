@@ -35,6 +35,8 @@ module.exports = (config) ->
       'bower_components/Leaflet.EasyButton/src/easy-button.js'
       'bower_components/proj4/dist/proj4.js'
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js'
+      'bower_components/angular-strap/dist/angular-strap.js'
+      'bower_components/angular-strap/dist/angular-strap.tpl.js'
       'bower_components/angular-mocks/angular-mocks.js'
       # endbower
       # bower:coffee
