@@ -34,8 +34,15 @@
             <h3 class="modal-title">Layer Info</h3>
         </div>
         <div class="modal-body scroll">
-            <span>Service URL: {{data.base}}</span>
-            <span>WMS Version: {{data.version}}</span>
+            <p>Title: {{data.layer.title}}</p>
+            <p>Abstract: {{data.layer.abstract}}</p>
+            <br/>
+            <p>Service URL: {{data.layer.base}}</p>
+            <p>WMS Version: {{data.layer.version}}</p>
+            <p>Layer Name: {{data.layer.name}}</p>
+            <p>Get Capabilities URL: {{data.capabilities}}</p>
+            
+            
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>

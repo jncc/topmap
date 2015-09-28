@@ -35,7 +35,10 @@ angular.module 'topMapApp'
         size: 'lg',
         resolve: {
           data: () ->
-            return $scope.layer
+            return {
+              capabilities: ogc.getCapabilitiesURL($scope.layer.base, 'wms', $scope.layer.version),
+              layer: $scope.layer
+            }
         }
       });      
    
@@ -52,31 +55,41 @@ angular.module 'topMapApp'
     
     if 'baseURL' of parameters and 'layer' of parameters
       $scope.layer = Layer({
-        Name: parameters.layer,
-        Title: 'URL Layer',
-        Abstract: 'None',
-        Style: {},
-        EX_GeographicBoundingBox: {
-          southBoundLatitude: 48.2369976053553,
-          westBoundLongitude: -10.5834521778756,
-          northBoundLatitude: 63.8904084768698,
-          eastBoundLongitude: 3.99789995551856
-        }          
-      }, parameters.baseURL, '1.3.0')
+          name: parameters.layer,
+          title: 'URL Layer',
+          abstract: 'None',
+          wms: {
+            Name: parameters.layer,
+            Title: 'URL Layer',
+            Abstract: 'None',
+            Style: {},
+            EX_GeographicBoundingBox: {
+              southBoundLatitude: 48.2369976053553,
+              westBoundLongitude: -10.5834521778756,
+              northBoundLatitude: 63.8904084768698,
+              eastBoundLongitude: 3.99789995551856
+            }          
+          }
+        }, parameters.baseURL, '1.3.0')
     else if store.hasData('layer')
       $scope.layer = store.getData('layer')
     else
       $scope.layer = Layer({
-        Name: 'OIA:BGS_250k_SeaBedSediments_WGS84_v3',
-        Title: 'BGS 250K Sea Bed Sediments',
-        Abstract: 'None',
-        Style: {},
-        EX_GeographicBoundingBox: {
-          southBoundLatitude: 48.2369976053553,
-          westBoundLongitude: -10.5834521778756,
-          northBoundLatitude: 63.8904084768698,
-          eastBoundLongitude: 3.99789995551856
-        }          
+        name: 'OIA:BGS_250k_SeaBedSediments_WGS84_v3',
+        title: 'BGS 250K Sea Bed Sediments',
+        abstract: 'None',        
+        wms: {
+          Name: 'OIA:BGS_250k_SeaBedSediments_WGS84_v3',
+          Title: 'BGS 250K Sea Bed Sediments',
+          Abstract: 'None',
+          Style: {},
+          EX_GeographicBoundingBox: {
+            southBoundLatitude: 48.2369976053553,
+            westBoundLongitude: -10.5834521778756,
+            northBoundLatitude: 63.8904084768698,
+            eastBoundLongitude: 3.99789995551856
+          }          
+        }
       }, 'http://spatial-store:8080/geoserver/OIA/wms', '1.3.0')    
            
     angular.extend($scope, {
