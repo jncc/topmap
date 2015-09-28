@@ -15,34 +15,40 @@ angular.module 'topMapApp'
     $scope.showLegend = false
     $scope.features = []
 
-    $scope.open = () -> 
-#      modalScope = {
-#        data: $scope.features
-#      }
-#    
-#      $modal({scope: modalScope, templateUrl: 'myModalContent.html', show: true});
+    $scope.openGetFeatureInfo = () -> 
       modalInstance = $modal.open({
         animation: true,
-        templateUrl: 'myModalContent.html',
+        templateUrl: 'getFeatureInfo.html',
         controller: 'ModalInstanceCtrl',
         size: 'lg',
         resolve: {
           data: () ->
-            return $scope.features;
+            return $scope.features
         }
       });
+      
+    $scope.openLayerInfo = () -> 
+      modalInstance = $modal.open({
+        animation: true,
+        templateUrl: 'getLayerInfo.html',
+        controller: 'ModalInstanceCtrl',
+        size: 'lg',
+        resolve: {
+          data: () ->
+            return $scope.layer
+        }
+      });      
    
-    $scope.toggleAnimation = () ->
-      $scope.animationsEnabled = !$scope.animationsEnabled;
-
-    
     leafletData.getMap().then (map) ->
       L.easyButton('glyphicon glyphicon-list', (btn, map) ->
         $scope.showLegend = !$scope.showLegend
       ).addTo(map)
       L.easyButton('glyphicon glyphicon-info-sign', (btn, map) ->
-        $scope.open()
-      ).addTo(map)    
+        $scope.openGetFeatureInfo()
+      ).addTo(map) 
+      L.easyButton('glyphicon glyphicon-globe', (btn, map) ->
+        $scope.openLayerInfo()
+      ).addTo(map)
     
     if 'baseURL' of parameters and 'layer' of parameters
       $scope.layer = Layer({
@@ -128,7 +134,7 @@ angular.module 'topMapApp'
         
         ogc.getFeatureInfo(url).then (data) ->
           $scope.features = data.features
-          $scope.open()
+          $scope.openGetFeatureInfo()
         , (error) -> 
           alert 'Could not get feature info'
 

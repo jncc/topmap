@@ -126,7 +126,7 @@ mapContainer {
 
 .modal-body {
     /* 100% = dialog height, 120px = header + footer */
-    max-height: calc(100% - 120px);
+    height: calc(100% - 120px);
 }
 
 .row-hover:hover {
