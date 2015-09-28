@@ -9,7 +9,7 @@
 ###
 angular.module 'topMapApp'
   .controller 'MainCtrl', (leafletData, ogc, config, $q, $scope, store, Layer) ->  
-    $scope.wms = []
+    $scope.layers = []
     
     $scope.storeData = (key, obj) ->
       store.storeData(key, obj)        
@@ -33,16 +33,8 @@ angular.module 'topMapApp'
     wfsPromise = ogc.fetchWFSCapabilities(wfs_capabilities_url)
     
     $q.all([wmsPromise, wfsPromise]).then (data) ->
-      $scope.wms = data[0]
-      $scope.wfs = data[1]
+      $scope.layers = ogc.joinCapabilitiesLists(data[0], data[1])
     , (error) ->
       alert 'Could not get capabilites from OGC server, please try again later'
-    
-#    ogc.fetchWMSCapabilities(wms_capabilities_url).then (data) ->
-#      $scope.wms = data
-#    , (error) -> 
-#      alert 'Could not get WMS capabilities, please try again later'
-    
-    updatePage: () ->
 
     return

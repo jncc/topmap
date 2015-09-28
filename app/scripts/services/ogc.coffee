@@ -96,3 +96,30 @@ angular.module 'topMapApp'
         )
         
       features.promise
+      
+    joinCapabilitiesLists: (wms, wfs) ->
+      layers = []
+    
+      for wmslayer in wms
+        foundMatch = false
+        
+        for wfslayer in wfs
+          if wmslayer.Name is wfslayer.Name
+            layers.push {
+              name: wmslayer.Name,
+              title: wmslayer.Title,
+              abstract: if wmslayer.Abstract?.length then wmslayer.Abstract else 'No Abstract Available',
+              wms: wmslayer,
+              wfs: wfslayer
+            }
+            foundMatch = true
+        
+        if not foundMatch
+          layers.push {
+              name: wmslayer.Name,
+              title: wmslayer.Title,
+              abstract: if wmslayer.Abstract?.length then wmslayer.Abstract else 'No Abstract Available',
+              wms: wmslayer  
+          }
+      
+      return layers      
