@@ -8,11 +8,12 @@
  # Controller of the topMapApp
 ###
 angular.module 'topMapApp'
-  .controller 'MapCtrl', ($scope, $location, leafletData, ogc, store, Layer, $modal, $log) ->
+  .controller 'MapCtrl', ($scope, $location, leafletData, ogc, store, Layer, $modal, $log, $base64, usSpinnerService) ->
     parameters = $location.search()
     
     $scope.showGetFeatureInfo = true
     $scope.showLegend = false
+    $scope.spinner = false
     $scope.features = []
 
     $scope.openGetFeatureInfo = () -> 
@@ -36,6 +37,7 @@ angular.module 'topMapApp'
         resolve: {
           data: () ->
             return {
+              base64: $base64.encode(JSON.stringify($scope.layer.toJSON())),
               capabilities: ogc.getCapabilitiesURL($scope.layer.base, 'wms', $scope.layer.version),
               layer: $scope.layer
             }
@@ -126,6 +128,8 @@ angular.module 'topMapApp'
     })
     
     $scope.$on 'leafletDirectiveMap.click', (e, wrap) ->
+      usSpinnerService.spin('spinner-main')
+    
       $scope.clicked = {
         x: Math.round(wrap.leafletEvent.containerPoint.x),
         y: Math.round(wrap.leafletEvent.containerPoint.y)
@@ -146,11 +150,12 @@ angular.module 'topMapApp'
         url = $scope.layer.base + params
         
         ogc.getFeatureInfo(url).then (data) ->
+          usSpinnerService.stop('spinner-main')
           $scope.features = data.features
           $scope.openGetFeatureInfo()
         , (error) -> 
+          usSpinnerService.stop('spinner-main')
           alert 'Could not get feature info'
-
 
 angular.module 'topMapApp'
   .controller 'ModalInstanceCtrl', ($scope, $modalInstance, data) ->

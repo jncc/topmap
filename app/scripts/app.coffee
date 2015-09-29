@@ -16,11 +16,12 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'angularShamSpinner',
+    'angularSpinner',
     'cb.x2js',
     'leaflet-directive',
     'angularUtils.directives.dirPagination',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'base64'
   ]
   .config ($routeProvider) ->
     $routeProvider

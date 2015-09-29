@@ -24,5 +24,16 @@ angular.module 'topMapApp'
         @wms = config.wms
         @wfs = config.wfs
         
+      toJSON: () ->
+        return {
+          name: @name,
+          title: @title,
+          abstract: @abstract,
+          style: @style,
+          bbox: @bbox,
+          base: @base,
+          version: @version
+        }
+        
     (config, base, version) ->
       new Layer config, base, version

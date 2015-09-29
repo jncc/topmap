@@ -8,8 +8,16 @@
  # Controller of the topMapApp
 ###
 angular.module 'topMapApp'
-  .controller 'MainCtrl', (leafletData, ogc, config, $q, $scope, store, Layer) ->  
+  .controller 'MainCtrl', (leafletData, ogc, config, $q, $scope, store, Layer, usSpinnerService) ->  
     $scope.layers = []
+    
+    $scope.startSpin = () ->
+      usSpinnerService.spin('spinner-main')
+      $scope.spinner = true
+        
+    $scope.stopSpin = () ->
+      $scope.spinner = false
+      usSpinnerService.stop('spinner-main')
     
     $scope.storeData = (key, obj) ->
       store.storeData(key, obj)        
@@ -31,9 +39,11 @@ angular.module 'topMapApp'
     
     wmsPromise = ogc.fetchWMSCapabilities(wms_capabilities_url)
     wfsPromise = ogc.fetchWFSCapabilities(wfs_capabilities_url)
+    $scope.startSpin()
     
     $q.all([wmsPromise, wfsPromise]).then (data) ->
       $scope.layers = ogc.joinCapabilitiesLists(data[0], data[1])
+      $scope.stopSpin()
     , (error) ->
       alert 'Could not get capabilites from OGC server, please try again later'
 

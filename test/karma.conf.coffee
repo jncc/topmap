@@ -27,7 +27,8 @@ module.exports = (config) ->
       'bower_components/angular-resource/angular-resource.js'
       'bower_components/angular-route/angular-route.js'
       'bower_components/angular-sanitize/angular-sanitize.js'
-      'bower_components/angular-sham-spinner/angular-sham-spinner.js'
+      'bower_components/spin.js/spin.js'
+      'bower_components/angular-spinner/angular-spinner.js'
       'bower_components/angular-touch/angular-touch.js'
       'bower_components/x2js/xml2json.min.js'
       'bower_components/angular-x2js/dist/x2js.min.js'
@@ -35,6 +36,7 @@ module.exports = (config) ->
       'bower_components/Leaflet.EasyButton/src/easy-button.js'
       'bower_components/proj4/dist/proj4.js'
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js'
+      'bower_components/angular-base64/angular-base64.js'
       'bower_components/angular-mocks/angular-mocks.js'
       # endbower
       # bower:coffee
