@@ -37,6 +37,7 @@ angular
         templateUrl: 'views/map.html'
         controller: 'MapCtrl'
         controllerAs: 'map'
+        reloadOnSearch: false
       .when '/dataset',
         templateUrl: 'views/dataset.html'
         controller: 'DatasetCtrl'

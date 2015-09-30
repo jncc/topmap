@@ -5,18 +5,31 @@
  # @name topMapAppApp.ogc
  # @description
  # # ogc
- # Factory in the topMapApp.
+ # Factory in the topMapApp, a set of helpers based around OGC web services and
+ # other mapping functions
 ###
 angular.module 'topMapApp'
-  .factory 'ogc', ($http, $q, x2js) ->
-    wms_layers = []
-    
-    addWMSLayers: (layers, capabilties) ->
-      Array::push.apply layers, capabilities['WMT_MS_Capabilities']['Capability']['Layer']['Layer']
+  .factory 'ogc', ($http, $q, x2js) ->     
+    getBoundsFromFragment: (fragment) ->
+      latlngPattern = /^([-]?[0-9]+\.?[0-9]+,){3}([-]?[0-9]+\.?[0-9]+)$/g 
+      if fragment.match latlngPattern
+        parts = fragment.split ','
+        return {
+          error: false,
+          southWest: L.latLng(parts[0], parts[1]),
+          northEast: L.latLng(parts[2], parts[3])
+        }
+      return {error: true, msg: 'Supplied fragment was not a valid bounding box'}
       
-    getWMSLayers: ->
-      wms_layers    
-      
+    modifyBoundsTo: (layer, bounds) ->
+      layer.EX_GeographicBoundingBox = {
+        southBoundLatitude: bounds.southWest.lat,
+        westBoundLongitude: bounds.southWest.lng,
+        northBoundLatitude: bounds.northEast.lat,
+        eastBoundLongitude: bounds.northEast.lng
+      }    
+      return layer
+  
     getCapabilitiesURL: (base, service, version) ->
       base + '?service=' + service + '&version=' + version + '&request=GetCapabilities'
     
@@ -43,6 +56,12 @@ angular.module 'topMapApp'
       )
       
       layers.promise
+      
+    extractLayerFromCapabilities: (target, layers) ->
+      for layer in layers
+        if layer.Name is target
+          return {error: false, data: layer}
+      return {error: true, msg: 'The layer \'' + target + '\' was not available from this service'} 
       
     getBBoxString: (version, se_x, se_y, ne_x, ne_y) ->
       if version is '1.3.0'  
