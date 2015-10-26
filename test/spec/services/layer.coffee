@@ -1,14 +1,14 @@
 'use strict'
 
-describe 'Service: layer', ->
+describe 'Service: Layer', ->
 
   # load the service's module
   beforeEach module 'topMapApp'
 
   # instantiate service
-  layer = {}
-  beforeEach inject (_layer_) ->
-    layer = _layer_
+  Layer = {}
+  beforeEach inject (_Layer_) ->
+    Layer = _Layer_
 
   it 'should do something', ->
-    expect(!!layer).toBe true
+    expect(!!Layer).toBe true

@@ -39,13 +39,6 @@ angular
         controller: 'MapCtrl'
         controllerAs: 'map'
         reloadOnSearch: false
-      .when '/dataset',
-        templateUrl: 'views/dataset.html'
-        controller: 'DatasetCtrl'
-        controllerAs: 'dataset'
-      .when '/help',
-        templateUrl: 'views/help.html'
-        controller: 'HelpCtrl'
-        controllerAs: 'help'
       .otherwise
         redirectTo: '/'
+

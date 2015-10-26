@@ -1,6 +1,6 @@
 # Karma configuration
 # http://karma-runner.github.io/0.12/config/configuration-file.html
-# Generated on 2015-08-26 using
+# Generated on 2015-10-26 using
 # generator-karma 1.0.0
 
 module.exports = (config) ->
@@ -19,26 +19,27 @@ module.exports = (config) ->
       # bower:js
       'bower_components/jquery/dist/jquery.js'
       'bower_components/angular/angular.js'
+      'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js'
       'bower_components/angular-animate/angular-animate.js'
       'bower_components/angular-cookies/angular-cookies.js'
-      'bower_components/angular-simple-logger/dist/angular-simple-logger.js'
-      'bower_components/leaflet/dist/leaflet-src.js'
-      'bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.js'
       'bower_components/angular-resource/angular-resource.js'
       'bower_components/angular-route/angular-route.js'
       'bower_components/angular-sanitize/angular-sanitize.js'
+      'bower_components/angular-touch/angular-touch.js'
+      'bower_components/angular-simple-logger/dist/angular-simple-logger.js'
+      'bower_components/leaflet/dist/leaflet-src.js'
+      'bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.js'
       'bower_components/spin.js/spin.js'
       'bower_components/angular-spinner/angular-spinner.js'
-      'bower_components/angular-touch/angular-touch.js'
       'bower_components/x2js/xml2json.min.js'
       'bower_components/angular-x2js/dist/x2js.min.js'
-      'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js'
-      'bower_components/Leaflet.EasyButton/src/easy-button.js'
       'bower_components/proj4/dist/proj4.js'
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js'
       'bower_components/angular-base64/angular-base64.js'
       'bower_components/slick-carousel/slick/slick.min.js'
       'bower_components/angular-slick/dist/slick.js'
+      'bower_components/angular-utils-pagination/dirPagination.js'
+      'bower_components/Leaflet.EasyButton/src/easy-button.js'
       'bower_components/angular-mocks/angular-mocks.js'
       # endbower
       # bower:coffee
