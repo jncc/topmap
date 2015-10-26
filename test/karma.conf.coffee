@@ -37,6 +37,8 @@ module.exports = (config) ->
       'bower_components/proj4/dist/proj4.js'
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js'
       'bower_components/angular-base64/angular-base64.js'
+      'bower_components/slick-carousel/slick/slick.min.js'
+      'bower_components/angular-slick/dist/slick.js'
       'bower_components/angular-mocks/angular-mocks.js'
       # endbower
       # bower:coffee

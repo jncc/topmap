@@ -21,7 +21,8 @@ angular
     'leaflet-directive',
     'angularUtils.directives.dirPagination',
     'ui.bootstrap',
-    'base64'
+    'base64',
+    'slick'
   ]
   .config ($routeProvider) ->
     $routeProvider

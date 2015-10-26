@@ -37,10 +37,14 @@ angular.module 'topMapApp'
         }   
       }
     })
-
+    
+    # Set up some basic settings, hide the legend and add an empty features
+    # array
     $scope.showLegend = false
     $scope.features = []
 
+    # Open a modal window for displaying features from a GetFeatureInfo request
+    # on the map
     $scope.openGetFeatureInfo = () -> 
       modalInstance = $modal.open({
         animation: true,
@@ -53,6 +57,7 @@ angular.module 'topMapApp'
         }
       });
       
+    # Open a modal window for displaying general layer infomation to the user
     $scope.openLayerInfo = () -> 
       modalInstance = $modal.open({
         animation: true,
@@ -70,6 +75,8 @@ angular.module 'topMapApp'
         }
       });      
    
+   # Add and overlayer layer, currently only copes with one layer in the future
+   # we should be able to add multiple layers in the same way
     $scope.addOverlay = (layer) ->
       $scope.layer = layer
     
@@ -91,21 +98,20 @@ angular.module 'topMapApp'
         }
       }) 
            
-      # Update bounds
+      # Update bounds and fit the map to the given bounds
       $scope.bounds = {
         southWest: layer.bbox[0],
         northEast: layer.bbox[1]
       }
-
       leafletData.getMap().then (map) ->
-        bounds = L.latLngBounds([layer.bbox[0].lat, layer.bbox[0].lng], 
-                                [layer.bbox[1].lat, layer.bbox[1].lng])
-        map.fitBounds(bounds)
-        v = 1 + 1
-          
+        map.fitBounds(L.latLngBounds([layer.bbox[0].lat, layer.bbox[0].lng], 
+                                     [layer.bbox[1].lat, layer.bbox[1].lng]))
+       
+    # Remove all overlays from the map
     $scope.removeOverlays = () ->
       $scope.layers.overlays = {}
    
+    # Set up a set of buttons to do a few simple options
     leafletData.getMap().then (map) ->
       L.easyButton('glyphicon glyphicon-list', (btn, map) ->
         $scope.showLegend = !$scope.showLegend
@@ -117,6 +123,9 @@ angular.module 'topMapApp'
         $scope.openLayerInfo()
       ).addTo(map)
     
+    # Set up the overlays on the map, either by a given b (base url), l (layer 
+    # name), v (wms version), or via a passed in Layer stored from the MainCtrl
+    # controller
     if 'b' of parameters and 'l' of parameters and 'v' of parameters
       usSpinnerService.spin('spinner-main')
       
@@ -146,30 +155,30 @@ angular.module 'topMapApp'
           decodeURIComponent(parameters.v)))
           
         usSpinnerService.stop('spinner-main')  
-    else if 'base' of parameters
-      # Permalink used
-      usSpinnerService.spin('spinner-main')
-      
-      decoded = JSON.parse($base64.decode(decodeURIComponent(parameters.base)))
-            
-      ogc.fetchWMSCapabilities(
-        ogc.getCapabilitiesURL(decoded.b, 'wms', decoded.v)).then (data) ->
-        resObj = ogc.extractLayerFromCapabilities(decoded.l, data)
-        if resObj.error
-          alert resObj.msg
-        else
-          bounds = ogc.getBoundsFromFragment(hash)
-          if not bounds.error
-            resObj.data = ogc.modifyBoundsTo(resObj.data, bounds)
-          
-          $scope.addOverlay(Layer({
-            name: resObj.data.Name,
-            title: resObj.data.Title,
-            abstract: resObj.data.Abstract,
-            wms: resObj.data
-          }, decoded.b, decoded.v))
-
-        usSpinnerService.stop('spinner-main')        
+#    else if 'base' of parameters
+#      # Permalink used
+#      usSpinnerService.spin('spinner-main')
+#      
+#      decoded = JSON.parse($base64.decode(decodeURIComponent(parameters.base)))
+#            
+#      ogc.fetchWMSCapabilities(
+#        ogc.getCapabilitiesURL(decoded.b, 'wms', decoded.v)).then (data) ->
+#        resObj = ogc.extractLayerFromCapabilities(decoded.l, data)
+#        if resObj.error
+#          alert resObj.msg
+#        else
+#          bounds = ogc.getBoundsFromFragment(hash)
+#          if not bounds.error
+#            resObj.data = ogc.modifyBoundsTo(resObj.data, bounds)
+#          
+#          $scope.addOverlay(Layer({
+#            name: resObj.data.Name,
+#            title: resObj.data.Title,
+#            abstract: resObj.data.Abstract,
+#            wms: resObj.data
+#          }, decoded.b, decoded.v))
+#
+#        usSpinnerService.stop('spinner-main')        
     else if store.hasData('layer')
       layer = store.getData('layer')
       # Update bounds if supplied
@@ -224,6 +233,14 @@ angular.module 'topMapApp'
           usSpinnerService.stop('spinner-main')
           alert 'Could not get feature info'
 
+###*
+ # @ngdoc function
+ # @name topMapApp.controller:ModalInstanceCtrl
+ # @description
+ # # ModalInstanceCtrl
+ # Controller of the topMapApp for displaying a basic modal dialog with a 
+ # provided data element
+###
 angular.module 'topMapApp'
   .controller 'ModalInstanceCtrl', ($scope, $modalInstance, data) ->
 
