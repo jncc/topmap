@@ -49,7 +49,11 @@ angular.module 'topMapApp'
       layers = $q.defer()
       
       $http.get(url).success((data) ->
-        out = x2js.xml_str2json(data)['WFS_Capabilities']['FeatureTypeList']['FeatureType']
+        out = x2js.xml_str2json(data)
+        if 'WFS_Capabilities' of out and 'FeatureTypeList' of out['WFS_Capabilities'] and 'FeatureType' of out['WFS_Capabilities']['FeatureTypeList']
+            out = out['WFS_Capabilities']['FeatureTypeList']['FeatureType']
+        else
+            out = []
         layers.resolve out
       ).error((data) ->
         layers.reject 'Failed to retrieve WFS capabilities from ' + url
