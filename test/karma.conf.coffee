@@ -39,7 +39,9 @@ module.exports = (config) ->
       'bower_components/slick-carousel/slick/slick.min.js'
       'bower_components/angular-slick/dist/slick.js'
       'bower_components/angular-utils-pagination/dirPagination.js'
+      'bower_components/leaflet-dist/leaflet.js'
       'bower_components/Leaflet.EasyButton/src/easy-button.js'
+      'bower_components/leaflet-draw/dist/leaflet.draw-src.js'
       'bower_components/angular-mocks/angular-mocks.js'
       # endbower
       # bower:coffee
