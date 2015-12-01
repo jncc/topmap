@@ -39,6 +39,10 @@ angular
         controller: 'MapCtrl'
         controllerAs: 'map'
         reloadOnSearch: false
+      .when '/topsat',
+        templateUrl: 'views/topsat.html'
+        controller: 'TopsatCtrl'
+        controllerAs: 'topsat'
       .otherwise
         redirectTo: '/'
 
