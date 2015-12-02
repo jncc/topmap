@@ -8,8 +8,8 @@
  # Controller of the topMapApp
 ###
 angular.module 'topMapApp'
-  .controller 'TopsatCtrl', ($scope, $location, $route, leafletData, $modal, 
-    $log, $base64, usSpinnerService, leafletFuncs) -> 
+  .controller 'TopsatCtrl', ($q, $scope, $location, $route, leafletData, $modal, 
+    $log, $base64, usSpinnerService, leafletFuncs, topsat) -> 
     
   # Set up basic Leaflet view
   angular.extend($scope, {
@@ -50,14 +50,38 @@ angular.module 'topMapApp'
     }
   })
 
+  # Open a modal window for displaying general layer infomation to the user
+  $scope.openLayerInfo = () -> 
+    modalInstance = $modal.open({
+      animation: true,
+      templateUrl: 'getLayerInfo.html',
+      controller: 'ModalInstanceCtrl',
+      size: 'lg',
+      resolve: {
+        data: () ->
+          return {
+            capabilities: ogc.getCapabilitiesURL($scope.layer.base, 
+              'wms', 
+              $scope.layer.version),
+            layer: $scope.layer
+          }
+      }
+    })
+
+
   leafletData.getMap('topsat').then (map) ->
     map.on('draw:created', (e) ->
       leafletData.getLayers().then (baselayers) ->
         drawnItems = baselayers.overlays.draw
+        # Remove old drawn layer
         layers = drawnItems.getLayers()
         for layer in layers
           drawnItems.removeLayer(layer)
+        # Add new drawn area as layer
         layer = e.layer
         drawnItems.addLayer(layer)
-        console.log leafletFuncs.toWKT(layer)
+        
+        topsat.getScenes(leafletFuncs.toWKT(layer)).then (data) ->
+          alert data
+          v = 1 + 1
     )
