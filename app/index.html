@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="styles/animation.css">
     <!-- endbuild -->
   </head>
-  <body ng-app="topMapApp">
+  <body ng-app="topMapApp" style="height:100%;">
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -54,18 +54,7 @@
         </div>
       </div>
     </div>
-
-    <div style="height: 91%;">
-        <div ng-view="" style="height: 100%;"></div>
-    </div>
-
-<!--    <div class="navbar-fixed-bottom footer">
-      <div class="container">
-        <p>Developed by JNCC</p>
-      </div>
-    </div>-->
-
-
+    <div ng-view="" style="height: calc(100% - 52px)"></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>

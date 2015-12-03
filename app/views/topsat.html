@@ -1,26 +1,23 @@
-<div class="mapContainer" style="height: 100%;">
-    <div id="leafletContainer" style="height: 100%;">
-        <leaflet id="topsat" controls="controls" bounds="bounds" layers="layers"width="100%" height="100%" ></leaflet>
-    </div>
-    
+<div style="height: 100%">
+    <leaflet id="topsat" controls="controls" bounds="bounds" layers="layers"></leaflet>
     <span us-spinner="{radius:30, width:8, length: 16}" spinner-key="spinner-main"></span>
-</div>
-
-<script type="text/ng-template" id="getLayerInfo.html">
-    <div class="modal-header">
-        <h3 class="modal-title">{{data.layer.title}}</h3>
-    </div>
-    <div class="modal-body scroll">
-        <table>
-            <tr dir-paginate="item in data | itemsPerPage: itemsPerPage" total-items="totalItems" current-page="pagination.current">
+    <div class="slide" ng-show="showResults">    
+        <table width="100%">
+            <thead>
+                <th>Id</th>
+                <th>WRS2 Path</th>
+                <th>WRS2 Row</th>
+                <th>Capture Date</th>
+                <th>Cloud Cover</th>
+            </thead>
+            <tr dir-paginate="item in data.page._embedded.landsatSceneResourceList | itemsPerPage: data.page.page.size" total-items="data.page.page.totalElements" current-page="$scope.data.page.number">
                 <td>{{ item.guid }}</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ item.wrs2.path }}</td>
+                <td>{{ item.wrs2.row }}</td>
+                <td>{{ item.captureDate }}</td>
+                <td>{{ item.cloudCover }}</td>
             </tr>
         </table>
+        <dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
     </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
-    </div>
-</script>    
+</div>

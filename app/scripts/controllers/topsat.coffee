@@ -44,30 +44,40 @@ angular.module 'topMapApp'
       draw: {
         draw: {
           polyline: false,
+          circle: false,
           marker: false
         }
       }
-    }
+    },
+    data: { }
   })
-
-  # Open a modal window for displaying general layer infomation to the user
-  $scope.openLayerInfo = () -> 
-    modalInstance = $modal.open({
-      animation: true,
-      templateUrl: 'getLayerInfo.html',
-      controller: 'ModalInstanceCtrl',
-      size: 'lg',
-      resolve: {
-        data: () ->
-          return {
-            capabilities: ogc.getCapabilitiesURL($scope.layer.base, 
-              'wms', 
-              $scope.layer.version),
-            layer: $scope.layer
-          }
+  
+  updateMap = () ->
+    $scope.layers.overlays.results = {
+      name: 'Result Layer',
+      type: 'geoJSONShape',
+      data: topsat.getGeoJSONCollection($scope.data.page),
+      visible:true,
+      layerOptions: {
+        style: {
+          color: '#00D',
+          fillColor: 'red',
+          weight: 2.0,
+          opacity: 0.6,
+          fillOpacity: 0.2
+        }
       }
-    })
-
+    }
+  
+  $scope.pageChanged = (newPage) ->
+    usSpinnerService.spin('spinner-main')
+    topsat.getScenePage($scope.data.layer, newPage - 1, $scope.data.page.page.size).then (data) ->
+      usSpinnerService.stop('spinner-main')
+      $scope.showResults = true
+      $scope.data.page = data
+      $scope.data.page.number = newPage
+      delete $scope.layers.overlays.results
+      updateMap()
 
   leafletData.getMap('topsat').then (map) ->
     map.on('draw:created', (e) ->
@@ -81,7 +91,11 @@ angular.module 'topMapApp'
         layer = e.layer
         drawnItems.addLayer(layer)
         
-        topsat.getScenes(leafletFuncs.toWKT(layer)).then (data) ->
-          alert data
-          v = 1 + 1
+        $scope.data.layer = leafletFuncs.toWKT(layer)
+        
+        topsat.getScenes($scope.data.layer).then (data) ->
+          $scope.showResults = true
+          $scope.data.page = data
+          $scope.data.page.number = 1
+          updateMap()
     )
