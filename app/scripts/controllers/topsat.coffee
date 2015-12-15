@@ -10,7 +10,7 @@
 angular.module 'topMapApp'
   .controller 'TopsatCtrl', ($q, $scope, $location, $route, leafletData, $modal, 
     $log, $base64, usSpinnerService, leafletFuncs, topsat) -> 
-    
+
   # Set up basic Leaflet view
   angular.extend($scope, {
     layers: {
@@ -49,15 +49,19 @@ angular.module 'topMapApp'
         }
       }
     },
-    data: { }
+    data: { 
+      landsat: {},
+      sentinel: {}
+    }
   })
   
-  updateMap = () ->
+  updateMapLandsat = () ->
     $scope.layers.overlays.results = {
       name: 'Result Layer',
       type: 'geoJSONShape',
-      data: topsat.getGeoJSONCollection($scope.data.page),
+      data: topsat.getGeoJSONCollection($scope.data.landsat.page),
       visible:true,
+      doRefresh: true,
       layerOptions: {
         style: {
           color: '#00D',
@@ -71,13 +75,13 @@ angular.module 'topMapApp'
   
   $scope.pageChanged = (newPage) ->
     usSpinnerService.spin('spinner-main')
-    topsat.getScenePage($scope.data.layer, newPage - 1, $scope.data.page.page.size).then (data) ->
+    topsat.getLandsatScenePage($scope.data.layer, newPage - 1, $scope.data.landsat.page.size).then (data) ->
       usSpinnerService.stop('spinner-main')
       $scope.showResults = true
-      $scope.data.page = data
-      $scope.data.page.number = newPage
+      $scope.data.landsat.page = data
+      $scope.data.landsat.currentpage = newPage
       delete $scope.layers.overlays.results
-      updateMap()
+      updateMapLandsat()
 
   leafletData.getMap('topsat').then (map) ->
     map.on('draw:created', (e) ->
@@ -93,9 +97,9 @@ angular.module 'topMapApp'
         
         $scope.data.layer = leafletFuncs.toWKT(layer)
         
-        topsat.getScenes($scope.data.layer).then (data) ->
+        topsat.getLandsatScenes($scope.data.layer).then (data) ->
           $scope.showResults = true
-          $scope.data.page = data
-          $scope.data.page.number = 1
-          updateMap()
+          $scope.data.landsat.page = data
+          $scope.data.landsat.currentpage = 1
+          updateMapLandsat()
     )

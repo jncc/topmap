@@ -10,7 +10,7 @@
                 <th>Capture Date</th>
                 <th>Cloud Cover</th>
             </thead>
-            <tr dir-paginate="item in data.page._embedded.landsatSceneResourceList | itemsPerPage: data.page.page.size" total-items="data.page.page.totalElements" current-page="$scope.data.page.number">
+            <tr dir-paginate="item in data.landsat.page._embedded.landsatSceneResourceList | itemsPerPage: data.landsat.page.page.size" total-items="data.landsat.page.page.totalElements" current-page="data.landsat.page.currentpage">
                 <td>{{ item.guid }}</td>
                 <td>{{ item.wrs2.path }}</td>
                 <td>{{ item.wrs2.row }}</td>

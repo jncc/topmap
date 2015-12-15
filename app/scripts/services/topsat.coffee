@@ -12,7 +12,7 @@ angular.module 'topMapApp'
     getServices: () ->
       api = config.topsat_api.url
       
-    getScenes: (wkt) ->
+    getLandsatScenes: (wkt) ->
       retData = $q.defer()
     
       url = 'http://localhost:8084/api/landsat/search?wkt=' + encodeURIComponent(wkt)
@@ -24,7 +24,7 @@ angular.module 'topMapApp'
       
       return retData.promise
       
-    getScenePage: (wkt, page, size) ->
+    getLandsatScenePage: (wkt, page, size) ->
       retData = $q.defer()
     
       url = 'http://localhost:8084/api/landsat/search?wkt=' + encodeURIComponent(wkt) + '&page=' + page + '&size=' + size;
