@@ -11,13 +11,11 @@ From a fresh machine, I would recomend setting up using NodeJS using [NVM](https
 
 You will need to run `npm install` and `bower install` to install dependencies
 
-Run `grunt clean build` for building and `grunt serve` for preview.
+You will also need to have a working ruby / compass install on the machine to compile the SASS files during the build to do this install ruby (I would recommend using [RVM](https://rvm.io/) to control ruby installs and then you just need to install the compass gem;
 
-### Additional Dependencies
+`gem install compass` 
 
-This project uses SASS and you may need to install compass to compile the CSS files during the build process, you will need ruby installed on your system and then you just need to install the compass gem;
-
-`gem install compass`
+After everything is set up run `grunt clean build` for building and `grunt serve` for preview.
 
 ## Testing
 
