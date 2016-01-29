@@ -1,6 +1,6 @@
 <!doctype html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
-<!--[if gt IE 8]><!--><html lang="en"><!--<![endif]-->
+<!--[if gt IE 8]><!--><html lang="en" style="height:100%;"><!--<![endif]-->
     <head>
         <meta charset="utf-8">
         <title>DEFRA EODIP Web Mapping Portal</title>
@@ -24,36 +24,37 @@
         <link rel="stylesheet" href="styles/footer.css">
         <!-- endbuild -->
     </head>
-    <body ng-app="topMapApp" height="100%">
+    <body ng-app="topMapApp"  style="height: 100%;">
         <!--[if lte IE 8]>
           <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-
-        <header role="banner" id="global-header" class="">
-            <div class="header-wrapper">
-                <div class="header-global">
-                    <div class="header-logo">
-                        <a href="https://www.gov.uk" title="Go to the GOV.UK homepage" id="logo" class="content">
-                            <img src="/public/images/gov.uk_logotype_crown_invert_trans.png?0.16.1" width="40" height="31" alt=""> GOV.UK
-                        </a>
+        <div>
+            <header role="banner" id="global-header" class="">
+                <div class="header-wrapper">
+                    <div class="header-global">
+                        <div class="header-logo">
+                            <a href="https://www.gov.uk" title="Go to the GOV.UK homepage" id="logo" class="content">
+                                <img src="/images/govuk/gov.uk_logotype_crown_invert_trans.png?0.16.1" width="40" height="31" alt=""> GOV.UK
+                            </a>
+                        </div>
                     </div>
+                    <div class="header-proposition" ng-controller="NavbarCtrl">
+                        <div class="content">
+                            <a href="#proposition-links" class="js-header-toggle menu">Menu</a>
+                            <nav id="proposition-menu">
+                                <a href="/" id="proposition-name">DEFRA EODIP Web Mapping Portal</a>
+                                <ul id="proposition-links">
+                                    <li><a ng-class="{ active: isCurrentPath('/') }" href="/#/">Home</a></li>
+                                    <li><a ng-class="{ active: isCurrentPath('/map') }" href="/#/map">Map</a></li>
+                                    <li><a ng-class="{ active: isCurrentPath('/about') }" href="/#/about">About</a></li>
+                                    <li><a ng-class="{ active: isCurrentPath('/about') }" href="/#/help">Help</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>                
                 </div>
-                <div class="header-proposition" ng-controller="NavbarCtrl">
-                    <div class="content">
-                        <a href="#proposition-links" class="js-header-toggle menu">Menu</a>
-                        <nav id="proposition-menu">
-                            <a href="/" id="proposition-name">DEFRA EODIP Web Mapping Portal</a>
-                            <ul id="proposition-links">
-                                <li><a ng-class="{ active: isCurrentPath('/') }" href="/#/">Home</a></li>
-                                <li><a ng-class="{ active: isCurrentPath('/map') }" href="/#/map">Map</a></li>
-                                <li><a ng-class="{ active: isCurrentPath('/about') }" href="/#/about">About</a></li>
-                                <li><a ng-class="{ active: isCurrentPath('/about') }" href="/#/help">Help</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>                
-            </div>
-        </header>     
+            </header>     
+        </div>
 
         <div class="phase-banner" style="padding-left:10px">
             <p>
@@ -62,10 +63,9 @@
             </p>
         </div>             
 
-        <!--        <div ng-view="" style="height: calc(100% - 52px - 43px)"></div>  -->
-        <div ng-view=""></div>  
+        <div ng-view="" ng-style="contentDivHeight"></div>
 
-        <footer id="footer" role="contentinfo">
+        <footer id="footer" role="contentinfo" ng-class="{'hidden': 'hiddenFooter'}">
             <div class="footer-wrapper">
                 <div class="footer-meta">
                     <div class="footer-meta-inner">
@@ -142,10 +142,10 @@
         <script src="scripts/services/store.js"></script>
         <script src="scripts/services/config.js"></script>
         <script src="scripts/controllers/navbar.js"></script>
-        <script src="scripts/controllers/topsat.js"></script>
+<!--        <script src="scripts/controllers/topsat.js"></script>
         <script src="scripts/services/leafletfuncs.js"></script>
         <script src="scripts/services/topsat.js"></script>
-        <script src="scripts/controllers/modalinstance.js"></script>
+        <script src="scripts/controllers/modalinstance.js"></script>-->
         <!-- endbuild -->
     </body>
 </html>
