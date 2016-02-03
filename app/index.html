@@ -42,12 +42,12 @@
                         <div class="content">
                             <a href="#proposition-links" class="js-header-toggle menu">Menu</a>
                             <nav id="proposition-menu">
-                                <a href="/" id="proposition-name">DEFRA EODIP Web Mapping Portal</a>
+                                <a href="/#/" id="proposition-name">DEFRA EODIP Web Mapping Portal</a>
                                 <ul id="proposition-links">
                                     <li><a ng-class="{ active: isCurrentPath('/') }" href="/#/">Home</a></li>
                                     <li><a ng-class="{ active: isCurrentPath('/map') }" href="/#/map">Map</a></li>
                                     <li><a ng-class="{ active: isCurrentPath('/about') }" href="/#/about">About</a></li>
-                                    <li><a ng-class="{ active: isCurrentPath('/about') }" href="/#/help">Help</a></li>
+                                    <li><a ng-class="{ active: isCurrentPath('/help') }" href="/#/help">Help</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -65,7 +65,7 @@
 
         <div ng-view="" ng-style="contentDivHeight"></div>
 
-        <footer id="footer" role="contentinfo" ng-class="{'hidden': 'hiddenFooter'}">
+        <footer id="footer" role="contentinfo" ng-class="{'hidden': $hideFooter}">
             <div class="footer-wrapper">
                 <div class="footer-meta">
                     <div class="footer-meta-inner">

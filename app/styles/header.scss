@@ -310,12 +310,12 @@
 
 #global-header .header-proposition #proposition-link a.active,
 #global-header .header-proposition #proposition-links a.active {
-    color: #1d8feb; 
+    color: $white; 
 }
 
 #global-header .header-proposition #proposition-link a:focus,
 #global-header .header-proposition #proposition-links a:focus {
-    color: $black; 
+    color: $white; 
 }
 
 #global-header .header-proposition #proposition-link {

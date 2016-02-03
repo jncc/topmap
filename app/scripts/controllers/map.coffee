@@ -12,6 +12,10 @@
 angular.module 'topMapApp'
   .controller 'MapCtrl', ($scope, $location, $route, leafletData, ogc, store, 
                           Layer, $modal, $log, $base64, usSpinnerService) ->    
+    $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
+      footer = angular.element '#footer'
+      footer.addClass 'hidden'
+      
     # Grab the initial parameters and hash values before they get changed by the
     # map being set up
     parameters = $location.search()
@@ -22,7 +26,6 @@ angular.module 'topMapApp'
       contentDivHeight: {
         height: "calc(100% - 120px)"
       },
-      hideFooter: true,
       defaults: {
         scrollWheelZoom: true,
         attributionControl: true
