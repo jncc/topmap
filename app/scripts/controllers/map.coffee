@@ -120,16 +120,19 @@ angular.module 'topMapApp'
    
     # Set up a set of buttons to do a few simple options
     leafletData.getMap().then (map) ->
+      L.easyButton('glyphicon glyphicon-folder-open', (btn, map) ->
+        $scope.showLayerList()
+      ).addTo(map)
       L.easyButton('glyphicon glyphicon-list', (btn, map) ->
         $scope.showLegend = !$scope.showLegend
       ).addTo(map)
-      L.easyButton('glyphicon glyphicon-info-sign', (btn, map) ->
-        $scope.openGetFeatureInfo()
-      ).addTo(map) 
+#      L.easyButton('glyphicon glyphicon-info-sign', (btn, map) ->
+#        $scope.openGetFeatureInfo()
+#      ).addTo(map) 
       L.easyButton('glyphicon glyphicon-globe', (btn, map) ->
         $scope.openLayerInfo()
       ).addTo(map)
-    
+      
     # Set up the overlays on the map, either by a given b (base url), l (layer 
     # name), v (wms version), or via a passed in Layer stored from the MainCtrl
     # controller
