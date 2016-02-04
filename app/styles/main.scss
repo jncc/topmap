@@ -101,6 +101,11 @@ mapContainer {
     height: calc(100% - 120px);
 }
 
+.left {
+    float: left;
+    margin-right: 5px;
+}
+
 .row-hover:hover {
   background-color: lightgrey;
 }
