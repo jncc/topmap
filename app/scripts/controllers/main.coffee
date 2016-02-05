@@ -12,7 +12,8 @@ angular.module 'topMapApp'
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
       footer = angular.element '#footer'
       footer.removeClass 'hidden'
-  
+      
+    $scope.contentDivHeight = 'height: calc(100% - 150px;);'
     $scope.layers = []
       
     $scope.startSpin = () ->

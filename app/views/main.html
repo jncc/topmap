@@ -1,6 +1,7 @@
 <main id="content" role="main">
-    <h1 class="heading-large">DEFRA EODIP Web Mapping Portal Service</h1>
+    <h1 class="heading-large">Defra EODIP Web Mapping Portal Service</h1>
     <h3>This service is in development it should only be used by members of the development team and user group</h3>
+    <br />
     <p>
         This service is a light-weight tool through which to quickly explore spatial 
         data offered through an OGC compliant web service primarily through its WMS 
@@ -16,43 +17,3 @@
     </p>
     
 </main>
-
-<div ng-hide="spinner">
-    <table class="layer-list">
-        <thead>
-            <tr>
-                <th class="layer-title">Layer Name</th>
-                <th class="layer-column">WMS</th>
-                <th class="layer-column">WFS</th>
-            </tr>
-        </thead>
-        <tbody dir-paginate="layer in layers | itemsPerPage: 10">
-            <tr ng-click="selLayer(layer)" class="row-hover">
-                <td class="layer-title">{{layer.title}}</td>
-                <td class="layer-column">
-                    <span ng-if="layer.wms !== undefined" class="glyphicon glyphicon-ok"></span>
-                    <span ng-if="layer.wms === undefined" class="glyphicon glyphicon-remove"></span>
-                </td>
-                <td class="layer-column">
-                    <span ng-if="layer.wfs !== undefined" class="glyphicon glyphicon-ok"></span>
-                    <span ng-if="layer.wfs === undefined" class="glyphicon glyphicon-remove"></span>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <div ng-animate="'animate'" ng-switch on="isSelLayer(layer)">
-                        <div ng-switch-when="true">
-                            <span>{{layer.abstract}}</span>
-                            <span><a href="#/map">View Map</a></span>
-                        </div>
-                        <div ng-switch-when="false"></div>
-                    </div>
-                </td>
-            </tr>
-        </tbody>    
-    </table>
-    <dir-pagination-controls></dir-pagination-controls>
-</div>
-<div ng-show="spinner">
-    <span us-spinner="{radius:30, width:8, length: 16}" spinner-key="spinner-main" spinner-start-active="true"></span>
-</div>
