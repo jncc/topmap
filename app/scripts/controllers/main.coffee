@@ -9,8 +9,13 @@
 ###
 angular.module 'topMapApp'
   .controller 'MainCtrl', (leafletData, ogc, config, $q, $scope, store, Layer, usSpinnerService) ->  
+    $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
+      footer = angular.element '#footer'
+      footer.removeClass 'hidden'
+      
+    $scope.contentDivHeight = 'height: calc(100% - 150px;);'
     $scope.layers = []
-    
+      
     $scope.startSpin = () ->
       usSpinnerService.spin('spinner-main')
       $scope.spinner = true

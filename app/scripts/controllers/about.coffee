@@ -9,9 +9,6 @@
 ###
 angular.module 'topMapApp'
   .controller 'AboutCtrl', ->
-    @awesomeThings = [
-      'HTML5 Boilerplate'
-      'AngularJS'
-      'Karma'
-    ]
-    return
+    $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
+      footer = angular.element '#footer'
+      footer.removeClass 'hidden'
