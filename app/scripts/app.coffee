@@ -43,6 +43,10 @@ angular
         controller: 'MapCtrl'
         controllerAs: 'map'
         reloadOnSearch: false
+      .when '/roadmap',
+        templateUrl: 'views/roadmap.html'
+        controller: 'RoadmapCtrl'
+        controllerAs: 'roadmap'
       .otherwise
         redirectTo: '/'
 

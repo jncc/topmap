@@ -23,7 +23,9 @@
                 </tr>
             </tbody>
         </table>
-        <dir-pagination-controls></dir-pagination-controls>
+        <div class="modal-footer">
+            <dir-pagination-controls></dir-pagination-controls>
+        </div>
     </div>
     <div id="list" ng-class="{'hidden': !displayLayerInfo}">
         <table>
@@ -48,8 +50,31 @@
             </tr>
         </table>
         <div class="modal-footer">
-            <input class="button left button-back" ng-class="{'hidden': !displayLayerInfo}" type="submit" ng-click="back()" value="Back"></input>
+            <input class="button left button-back" ng-class="{'hidden': !displayLayerInfo}" type="submit" ng-click="back()" value="Back" />
             <input class="button button-start" type="submit" ng-click="add()" value="View Layer" />
         </div>
+    </div>
+    <div>
+        <h4 id="contributing" class="heading-small">Contributing data to the node</h4>
+        <p>
+            If you have a dataset which would be useful to the DEFRA Group, is 
+            available under Open Government Licence or could be licensed for 
+            use by the DEFRA Group, then please get in touch to discuss adding 
+            it to the portal. In order to add a dataset to the portal we will 
+            need the following:
+        </p>
+        <ol class="list list-number">
+            <li>The dataset</li>
+            <li>Dataset metadata (ideally in Gemini II format)</li>
+            <li>Styling file for displaying the data ie layer file, stylesheet.</li>
+            <li>Licensing covering the DEFRA Group and contractors, either under OGL or proprietary licence.</li>
+        </ol>
+        <p>
+            Also this note on licensing: <br/> To note: Some of these datasets 
+            are available for use under the Open Government Licence, and some 
+            come with more stringent use restrictions. More information on data 
+            use will be made available soon through dataset metadata and the 
+            download facility.
+        </p>
     </div>
 </main>

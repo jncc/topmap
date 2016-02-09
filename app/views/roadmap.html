@@ -1,0 +1,40 @@
+<main id="content" role="main">
+    <h2 id="roadmap" class="heading-large">Roadmap</h2>
+    <div>
+        <p>
+            The major changes planned, for each iteration of the node, have 
+            been noted below. Please send us your comments on how the node can 
+            better serve your needs and we can look to accommodate the changes 
+            in the next iteration cycle.
+        </p>
+        <p>
+            <b>The next iteration cycle is expected to conclude by the end of 
+                March</b>. If you have pressing <b>requirements</b> then please 
+            send them to us <b>by the end of February</b> and we will try to 
+            accommodate them within the next cycle. Iteration cycles thereafter 
+            are expected to run over the course of a month, with new 
+            functionality and/or data being released soon after.
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Area</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Details</th>
+                    <th scope="col">Progress</th>
+                    <th scope="col">Iteration</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in roadmap">
+                    <td>{{item.area}}</td>
+                    <td>{{item.item}}</td>
+                    <td>{{item.details}}</td>
+                    <td>{{item.progress}}</td>
+                    <td>{{item.iteration}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<div style="clear:both;"></div>

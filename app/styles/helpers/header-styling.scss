@@ -1,0 +1,19 @@
+@import 'govuk_frontend_toolkit/stylesheets/_conditionals';
+@import 'govuk_frontend_toolkit/stylesheets/_typography';
+
+.heading-large {
+  @include heading-24;
+}
+
+@media (min-width: 641px) {
+  .heading-large {
+    @include heading-36;
+  }
+}
+
+@media (min-width: 641px) {
+  .heading-large {
+    margin-top: 1.25em;
+    margin-bottom: 0.5555555556em;
+  }
+}

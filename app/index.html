@@ -43,7 +43,7 @@
                                 <ul id="proposition-links">
                                     <li><a ng-class="{ active: isCurrentPath('/') }" href="/#/">Home</a></li>
                                     <li><a ng-class="{ active: isCurrentPath('/data') }" href="/#/data">Data</a></li>
-                                    <li><a href="/#/about#roadmap">Roadmap</a></li>
+                                    <li><a ng-class="{ active: isCurrentPath('/roadmap') }" href="/#/roadmap">Roadmap</a></li>
                                     <li><a ng-class="{ active: isCurrentPath('/about') }" href="/#/about">About</a></li>
                                 </ul>
                             </nav>
@@ -133,19 +133,16 @@
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/main.js"></script>
-        <script src="scripts/controllers/data.js"></script>
         <script src="scripts/controllers/about.js"></script>
+        <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/map.js"></script>
+        <script src="scripts/controllers/data.js"></script>
+        <script src="scripts/controllers/roadmap.js"></script>
         <script src="scripts/services/ogc.js"></script>
         <script src="scripts/services/layer.js"></script>
         <script src="scripts/services/store.js"></script>
         <script src="scripts/services/config.js"></script>
         <script src="scripts/controllers/navbar.js"></script>
-        <!--        <script src="scripts/controllers/topsat.js"></script>
-                <script src="scripts/services/leafletfuncs.js"></script>
-                <script src="scripts/services/topsat.js"></script>
-                <script src="scripts/controllers/modalinstance.js"></script>-->
         <!-- endbuild -->
     </body>
 </html>
