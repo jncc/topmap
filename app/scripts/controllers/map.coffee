@@ -28,12 +28,15 @@ angular.module 'topMapApp'
       base_wms_url: config.ogc_datasources[0].url,
       # Make Leaflet map fit to page height automatically
       contentDivHeight: {
-        height: "calc(100% - 120px)"
+        height: "calc(100% - 60px)"
       },
       # Setup basic Leaflet view
       defaults: {
         scrollWheelZoom: true,
         attributionControl: true
+      },
+      controls: {
+        scale: true
       },
       bounds: {
         southWest: L.latLng(48.2369976053553, -10.5834521778756),
