@@ -124,7 +124,7 @@
     margin-bottom: -3px;
     padding-top: 2px;
     border-bottom: 1px solid transparent;
-    background: url(/images/govuk/gov.uk_logotype_crown.png?0.16.1) no-repeat;
+    //background: url(/images/govuk/gov.uk_logotype_crown.png?0.16.1) no-repeat;
     background-size: 35px 31px;
     background-position: 0 0; 
 }
@@ -159,7 +159,7 @@
 }
 
 #global-header .header-proposition #proposition-name {
-    @include core-24($line-height: (5/4), $font-weight: (400));
+    @include core-19($line-height: (5/4), $font-weight: (400));
     text-transform: none;
     font-weight: bold;
     color: white;

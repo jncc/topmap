@@ -22,6 +22,19 @@ html, body, div, h1, h2, h3, h4, h5, h6, article, aside, footer, header, hgroup,
     vertical-align: baseline; 
 }
 
+.button-start,
+.button-get-started {
+  font-family: "nta", Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 700;
+  text-transform: none;
+  background-image: url("/images/icon-pointer.png");
+  background-repeat: no-repeat;
+  background-position: 100% 50%;
+  padding: 10px 50px 10px 10px !important;
+}
+
 main {
     display: block; 
 }
