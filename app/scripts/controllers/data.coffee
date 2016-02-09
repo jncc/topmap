@@ -8,8 +8,14 @@
  # Controller of the topMapApp
 ###
 angular.module 'topMapApp'
-  .controller 'DataCtrl', ($scope, $q, usSpinnerService, ogc, config, store) ->
+  .controller 'DataCtrl', ($scope, $q, $modal, $location, usSpinnerService, 
+    ogc, config, store, Layer) ->
+    $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
+      footer = angular.element '#footer'
+      footer.removeClass 'hidden'
+    
     $scope.base_wms_url = config.ogc_datasources[0].url
+    $scope.displayLayerInfo = false
   
     ###*
      # OGC Layers browser
@@ -30,12 +36,16 @@ angular.module 'topMapApp'
     $scope.displayLayerInfo = false;
     
     $scope.add = () ->
-      $scope.addOverlay(new Layer($scope.layer, config.ogc_datasources[0].url, config.ogc_datasources[0].wms.version)) 
+      store.storeData('layer', Layer($scope.layer, $scope.base_wms_url, config.ogc_datasources[0].wms.version))   
+      $location.path('/map')
       
     $scope.selLayer = (layer) ->
-      $scope.displayLayerInfo = true;
       $scope.layer = layer      
+      $scope.displayLayerInfo = true
       
+    $scope.back = () ->
+      $scope.displayLayerInfo = false
+           
 ###*
  # @ngdoc function
  # @name topMapApp.controller:OGCModalInstanceCtrl
@@ -64,4 +74,4 @@ angular.module 'topMapApp'
       
     $scope.selLayer = (layer) ->
       $scope.displayLayerInfo = true;
-      $scope.layer = layer      
+      $scope.layer = layer   
