@@ -30,10 +30,10 @@ angular
         templateUrl: 'views/main.html'
         controller: 'MainCtrl'
         controllerAs: 'main'
-      .when '/datasets',
-        templateUrl: 'views/datasets.html'
-        controller: 'DatasetsCtrl'
-        contrallerAs: 'datasets'
+      .when '/data',
+        templateUrl: 'views/data.html'
+        controller: 'DataCtrl'
+        contrallerAs: 'data'
       .when '/about',
         templateUrl: 'views/about.html'
         controller: 'AboutCtrl'
