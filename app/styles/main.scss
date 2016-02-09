@@ -4,8 +4,9 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 // endbower
 @import 'govuk_frontend_toolkit/stylesheets/_conditionals';
 @import 'govuk_frontend_toolkit/stylesheets/_typography';
+@import 'govuk_frontend_toolkit/stylesheets/_grid_layout';
 @import 'govuk_frontend_toolkit/stylesheets/design-patterns/_buttons';
-@import 'govuk_frontend_toolkit/stylesheets/design-patterns/_alpha-beta.scss';
+@import 'govuk_frontend_toolkit/stylesheets/design-patterns/_alpha-beta';
 
 
 html, body {
@@ -24,10 +25,6 @@ html, body, div, h1, h2, h3, h4, h5, h6, article, aside, footer, header, hgroup,
 
 main {
     display: block; 
-}
-
-.button{
-    @include button;
 }
 
 .group:before,
@@ -64,7 +61,7 @@ html {
     /* 1 */
     -ms-text-size-adjust: 100%;
     /* 1 */
-    background-color: #dee0e2; 
+    //background-color: #dee0e2; 
 }
 
 /*
@@ -346,6 +343,116 @@ a:focus {
     }
 }
 
+/** 
+ * Button Styling 
+ */
+.button{
+    @include button;
+}
+
+.button-start,
+.button-get-started {
+    font-family: "nta", Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1.2;
+    font-weight: 700;
+    text-transform: none;
+    background-image: url("/images/govuk/icon-pointer.png");
+    background-repeat: no-repeat;
+    background-position: 100% 50%;
+    padding: 0.3684210526em 2.1578947368em 0.2105263158em 0.8421052632em;
+}
+
+/** 
+ * Grid Layout Styling 
+ */
+.column-half {
+    @include grid-column( 1/2 );
+}
+
+/**
+ *
+ */
+.list {
+  padding: 0;
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+
+.list li {
+  margin-bottom: 5px;
+}
+
+.list-number {
+  list-style-type: decimal;
+  padding-left: 20px;
+}
+
+.list-alpha {
+  list-style-type: lower-alpha;
+  padding-left: 20px;    
+}
+
+.list-no-point {
+    list-style-type: none;
+}
+
+/**
+ * Table Styling
+ */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+
+table th,
+table td {
+  font-family: "nta", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.1428571429;
+  font-weight: 400;
+  text-transform: none;
+  padding: 0.75em 1.25em 0.5625em 0;
+  text-align: left;
+  color: #0b0c0c;
+  border-bottom: 1px solid #bfc1c3;
+}
+
+@media (min-width: 641px) {
+  table th,
+  table td {
+    font-size: 16px;
+    line-height: 1.25;
+  }
+}
+
+table th {
+  font-weight: 700;
+}
+
+table th.numeric {
+  text-align: right;
+}
+
+table td.numeric {
+  font-family: "ntatabularnumbers", "nta", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.1428571429;
+  font-weight: 400;
+  text-transform: none;
+  text-align: right;
+}
+
+@media (min-width: 641px) {
+  table td.numeric {
+    font-size: 16px;
+    line-height: 1.25;
+  }
+}
+
+
+
 // END OF GOV UK STYLES STUFF
 
 mapContainer {
@@ -380,7 +487,6 @@ mapContainer {
 }
 
 .modal-body {
-    /* 100% = dialog height, 120px = header + footer */
     height: calc(100% - 120px);
 }
 
