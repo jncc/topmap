@@ -1,1 +1,174 @@
-<p>This is the about view.</p>
+<main id="content" role="main">
+    <br/>
+    <h4 id="background" class="heading-small">Background</h4>
+    <div>
+        <p>
+            The node is a product of the Earth Observation Centre of Excellence 
+            (EOCoE); DEFRA and the UK Space Agency jointly agreed a 'road map' 
+            for realising benefits from earth observation data. The EOCoE looks 
+            to maximise on potential benefits from applying earth observation 
+            data, as received from the European Space Agency/European 
+            Commission's Copernicus initiative, and is running 11 
+            investigations to this end. This node will capture EO data from 
+            various sources: ESA satellites, satellites hosted by individual 
+            member states, UK in-situ sensors.   
+        </p>
+        <p>
+            This node will also help to share key GI datasets across DEFRA; in 
+            line with DEFRA's GI strategy. The DEFRA group all require access 
+            to satellite data, cartographic data, and other GI datasets, and at 
+            present will largely manage individual copies of each dataset 
+            locally. There is a significant overlap in the specific datasets 
+            managed by each member of the group; this node will enable central 
+            management and deployment of key datasets, reducing management 
+            costs and improving consistency (dataset versioning).
+        </p>
+    </div>
+    <h4 id="about" class="heading-small">About the node</h4>
+    <div>
+        <p>
+            This portal has been created to share earth observation data and 
+            other widely used geographic information (GI) datasets across the 
+            DEFRA Group. Delivering centrally managed datasets is expected to 
+            save time and money as group members will not have to manage these 
+            large datasets in-house. The node will also allow for cloud-hosted 
+            data processing facilities which should enable larger scale data 
+            processing which again does not have to be hosted and managed 
+            through local infrastructure; the outputs of which can be readily 
+            shared where appropriate.
+        </p>
+        <p>
+            <span style="color:red; font-weight: bold;">
+                The portal is in the very early stages of development
+            </span> 
+            and we need your help to make it fit for your purpose. As you use 
+            this portal, please send us your comments on how to improve the 
+            service it provides, and make it fit for your purposes. We welcome 
+            comments on any aspect of the system: functionality, content, 
+            interface and layout, and we will feed these into the development 
+            and release cycle (see <a href="/#/about#roadmap">Roadmap</a>). 
+        </p>
+        <p>
+            Users should be aware that this site will undergo rapid development 
+            of both content and functionality is in progress. There will also 
+            be changes to the interface. Major planned and delivered changes 
+            will be tracked through the <a href="/#/about#roadmap">Roadmap</a>.
+        </p>
+        <p>
+            User should also be aware that there are a number of EO data 
+            portals, both live and in development, which are acquiring similar 
+            EO datasets. Where the cost of managing a dataset becomes greater 
+            than an external service delivering the same product, this service 
+            will no longer supply the data. Therefore this node will be 
+            influenced by competing services and will only continue as long 
+            as there is justification for the investment.
+        </p>
+    </div>
+    <h4 id="using" class="heading-small">Using the node</h4>
+    <div>
+        <p>
+            At present, the data contained within this node may only be viewed 
+            through this site, using the mapper facilities. It will very soon 
+            be able to be downloaded from this site; the download function is 
+            scheduled for imminent release.
+        </p>
+        <p>
+            The data contained within this site can also be used within GI 
+            software, through web feature services (WFS) or web mapping 
+            services (WMS). 
+        </p>
+        <div class="column-half">
+            <h4>QGIS</h4>
+            <ol class="list list-number">
+                <li>Select one of the following:</li>
+                <li class="list-no-point"> 
+                    <ol class="list list-alpha">
+                        <li>Add WFS Layer from a Server</li>
+                        <li>Add WCS Layer from a Server</li>
+                        <li>Add WMS Layer from a Server</li>
+                    </ol>
+                </li>
+                <li value="2">Give the connection a title e.g. 'Pilot collaboration node'</li>
+                <li>Enter the URL:</li>
+                <li class="list-no-point">
+                    <ol class="list list-alpha">
+                        <li>For WFS - {{wfs_capabilities_url}}</li>
+                        <li>For WCS - {{wcs_capabilities_url}}</li>
+                        <li>For WMS - {{wms_capabilities_url}}</li>
+                    </ol>
+                </li>                
+                <li value="4">Click 'Connect' (you don't need  username or password)</li>
+                <li>Select the dataset of interest, then click 'Add'</li>
+            </ol>
+        </div>
+        <div class="column-half">
+            <h4>ArcMap</h4>
+            <ol class="list list-number">
+                <li>Select: 'File' – 'Add Data' – 'Add Data', then one of the following:</li>
+                <li class="list-no-point">
+                    <ol class="list list-alpha">
+                        <li>Add WCS Layer from a Server</li>
+                        <li>Add WMS Layer from a Server</li>
+                        <li>Add WMTS Layer from a Server</li>
+                    </ol>
+                </li>
+                <li value="2">Enter the following URL:</li>
+                <li class="list-no-point">
+                    <ol class="list list-alpha">
+                        <li>For WCS - {{wcs_capabilities_url}}</li>
+                        <li>For WMS - {{wms_capabilities_url}}</li>
+                        <li>For WMTS - {{wmts_capabilities_url}}</li>
+                    </ol>
+                </li>                
+                <li value="3">Click 'Connect' (you don't need  username or password)</li>
+                <li>Drill down through the new connection link using 'Add'</li>
+            </ol>
+        </div>
+        <div style="clear:both;"></div>
+        <p>
+            It is intended that users will soon be able to set-up processing 
+            within the node, rather than downloading the data for local 
+            processing. There are also plans for large scale data processing 
+            through node to node transfer, for example for processing all of 
+            the available satellite data on a regular schedule. 
+        </p>
+    </div>
+    <h4 id="roadmap" class="heading-small">Roadmap</h4>
+    <div>
+        <p>
+            The major changes planned, for each iteration of the node, have 
+            been noted below. Please send us your comments on how the node can 
+            better serve your needs and we can look to accommodate the changes 
+            in the next iteration cycle.
+        </p>
+        <p>
+            <b>The next iteration cycle is expected to conclude by the end of 
+                March</b>. If you have pressing <b>requirements</b> then please 
+            send them to us <b>by the end of February</b> and we will try to 
+            accommodate them within the next cycle. Iteration cycles thereafter 
+            are expected to run over the course of a month, with new 
+            functionality and/or data being released soon after.
+        </p>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Area</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Details</th>
+                    <th scope="col">Progress</th>
+                    <th scope="col">Iteration</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in roadmap">
+                    <td>{{item.area}}</td>
+                    <td>{{item.item}}</td>
+                    <td>{{item.details}}</td>
+                    <td>{{item.progress}}</td>
+                    <td>{{item.iteration}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<div style="clear:both;"></div>
