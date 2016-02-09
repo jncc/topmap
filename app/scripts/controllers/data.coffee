@@ -8,7 +8,7 @@
  # Controller of the topMapApp
 ###
 angular.module 'topMapApp'
-  .controller 'DatasetsCtrl', ($scope, $q, usSpinnerService, ogc, config, store) ->
+  .controller 'DataCtrl', ($scope, $q, usSpinnerService, ogc, config, store) ->
     $scope.base_wms_url = config.ogc_datasources[0].url
   
     ###*
