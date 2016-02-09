@@ -35,6 +35,9 @@ angular.module 'topMapApp'
         scrollWheelZoom: true,
         attributionControl: true
       },
+      controls: {
+        scale: true
+      },
       bounds: {
         southWest: L.latLng(48.2369976053553, -10.5834521778756),
         northEast: L.latLng(63.8904084768698, 3.99789995551856)
