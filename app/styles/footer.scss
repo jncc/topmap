@@ -31,6 +31,10 @@
     color: #171819; 
 }
 
+a.crown-link:focus {
+    background-color: transparent;
+}
+
 #footer h2 {
     @include core-24($line-height: (5/4), $font-weight: (400));
     color: #171819;
