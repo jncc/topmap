@@ -22,7 +22,10 @@ angular
     'angularUtils.directives.dirPagination',
     'ui.bootstrap',
     'base64',
-    'slick'
+    'slick',
+    'ui.grid',
+    'ui.grid.resizeColumns',
+    'ui.grid.pagination'
   ]
   .config ($routeProvider) ->
     $routeProvider

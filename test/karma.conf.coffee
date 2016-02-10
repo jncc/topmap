@@ -42,6 +42,7 @@ module.exports = (config) ->
       'bower_components/leaflet-dist/leaflet.js'
       'bower_components/Leaflet.EasyButton/src/easy-button.js'
       'bower_components/leaflet-draw/dist/leaflet.draw-src.js'
+      'bower_components/angular-ui-grid/ui-grid.js'
       'bower_components/angular-mocks/angular-mocks.js'
       # endbower
       # bower:coffee
