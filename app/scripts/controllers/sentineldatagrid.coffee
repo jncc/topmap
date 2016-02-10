@@ -9,14 +9,18 @@
 
 #download/{{row.entity.title}}
 
+
+
 angular.module 'topMapApp'
   .controller 'sentinelDatagridCtrl', ($scope) ->
+    $scope.localEp = 'tosser'
+    
     $scope.titleColDef = 
       field: 'title', 
       displayName: 'Title',
       width: 300,
       cellTemplate: '<div class="non-overflowing-cell cell-padding">
-      <a target="_blank" ng-href="{{layerEndpoint}}download/{{row.entity.title}}" ng-bind-html="row.entity.title"></a>
+      <a target="_blank" ng-href="{{grid.appScope.layerEndpoint}}/download/{{row.entity.title}}" ng-bind-html="row.entity.title"></a>
       </div>'
   
     $scope.gridColDefs = [$scope.titleColDef,
@@ -51,3 +55,4 @@ angular.module 'topMapApp'
         
     $scope.$watch 'totalItems', ->
       $scope.gridOptions.totalItems = $scope.totalItems
+    
