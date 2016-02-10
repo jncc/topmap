@@ -24,7 +24,8 @@ angular.module 'topMapApp'
     $scope.notifications = {}
     $scope.paginationOptions =
       pageNumber: 1,
-      pageSize: 25,
+      pageSize: 25
+   
     
     # Hide the footer
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
