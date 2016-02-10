@@ -7,9 +7,19 @@
  # Controller of the topMapApp
 ###
 
+#download/{{row.entity.title}}
+
 angular.module 'topMapApp'
   .controller 'sentinelDatagridCtrl', ($scope) ->
-    $scope.gridColDefs = [{field: 'title'},
+    $scope.titleColDef = 
+      field: 'title', 
+      displayName: 'Title',
+      width: 300,
+      cellTemplate: '<div class="non-overflowing-cell cell-padding">
+      <a target="_blank" ng-href="{{layerEndpoint}}download/{{row.entity.title}}" ng-bind-html="row.entity.title"></a>
+      </div>'
+  
+    $scope.gridColDefs = [$scope.titleColDef,
     {field: 'platform'},
     {field: 'productType'},
     {field: 'orbitNo'},
@@ -38,3 +48,6 @@ angular.module 'topMapApp'
           $scope.getGridData($scope.layerEndpoint)
           return
         return
+        
+    $scope.$watch 'totalItems', ->
+      $scope.gridOptions.totalItems = $scope.totalItems

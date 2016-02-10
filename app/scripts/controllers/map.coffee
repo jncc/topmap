@@ -22,6 +22,7 @@ angular.module 'topMapApp'
     $scope.layerEndpoint = ''
     $scope.gridData = []
     $scope.notifications = {}
+    $scope.totalItems = 0
     $scope.paginationOptions =
       pageNumber: 1,
       pageSize: 25
@@ -146,8 +147,8 @@ angular.module 'topMapApp'
             $scope.gridData = gridData._embedded.sentinelResourceList
           else if $scope.layerName = 'landsat'
             $scope.gridData = gridData._embedded.landsatResourceList
-            $scope.gridOptions.totalItems = gridData.page.totalElements
-            
+          
+          $scope.totalItems = gridData.page.totalElements  
             # don't overwrite with earlier but slower queries!
             #if angular.equals result.query, query
             #    $scope.result = result
