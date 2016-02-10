@@ -23,6 +23,7 @@
         <link rel="stylesheet" href="styles/header.css">
         <link rel="stylesheet" href="styles/footer.css">
         <!-- endbuild -->
+        <base href="/">
     </head>
     <body ng-app="topMapApp"  style="height: 100%;">
         <!--[if lte IE 8]>
@@ -71,11 +72,11 @@
                         <div class="footer-meta-inner">
                             <h2 class="visuallyhidden">Support links</h2>
                             <ul>
-                                <li><a href="/help">Help</a></li>
-                                <li><a href="/help/cookies">Cookies</a></li>
-                                <li><a href="/contact">Contact</a></li>
-                                <li><a href="/help/terms-conditions">Terms and conditions</a></li>
-                                <li>Built by <a href="https://www.gov.uk/government/organisations/joint-nature-conservation-committee">JNCC</a></li>
+                                <li><a href="/#/help">Help</a></li>
+                                <li><a href="/#/help#cookies">Cookies</a></li>
+                                <li><a href="/#/contact">Contact</a></li>
+                                <li><a href="/#/help#terms-conditions">Terms and conditions</a></li>
+                                <li>Built by <a class="external-link" href="https://www.gov.uk/government/organisations/joint-nature-conservation-committee">JNCC</a></li>
                             </ul>
                             <div class="open-government-licence">
                                 <p class="logo"><a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence</a></p>
@@ -138,16 +139,12 @@
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/data.js"></script>
         <script src="scripts/controllers/about.js"></script>
+        <script src="scripts/controllers/help.js"></script>
         <script src="scripts/controllers/map.js"></script>
         <script src="scripts/services/ogc.js"></script>
         <script src="scripts/services/layer.js"></script>
         <script src="scripts/services/store.js"></script>
         <script src="scripts/services/config.js"></script>
         <script src="scripts/controllers/navbar.js"></script>
-        <!--        <script src="scripts/controllers/topsat.js"></script>
-                <script src="scripts/services/leafletfuncs.js"></script>
-                <script src="scripts/services/topsat.js"></script>
-                <script src="scripts/controllers/modalinstance.js"></script>-->
-        <!-- endbuild -->
     </body>
 </html>
