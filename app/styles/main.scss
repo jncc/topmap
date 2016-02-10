@@ -8,6 +8,9 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import 'govuk_frontend_toolkit/stylesheets/design-patterns/_buttons';
 @import 'govuk_frontend_toolkit/stylesheets/design-patterns/_alpha-beta';
 
+@import 'govuk-component/title.scss';
+@import 'helpers/header-styling.scss';
+
 
 html, body {
     height: 100%;
@@ -503,6 +506,7 @@ mapContainer {
 
 .row-hover:hover {
     background-color: lightgrey;
+    cursor: pointer;
 }
 
 .layer-list {
