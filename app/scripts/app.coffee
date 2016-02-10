@@ -24,7 +24,7 @@ angular
     'base64',
     'slick'
   ]
-  .config ($routeProvider) ->
+  .config ($routeProvider, $locationProvider) ->
     $routeProvider
       .when '/',
         templateUrl: 'views/main.html'
@@ -38,6 +38,10 @@ angular
         templateUrl: 'views/about.html'
         controller: 'AboutCtrl'
         controllerAs: 'about'
+      .when '/help',
+        templateUrl: 'views/help.html'
+        controller: 'HelpCtrl'
+        controllerAs: 'about'
       .when '/map',
         templateUrl: 'views/map.html'
         controller: 'MapCtrl'
@@ -49,4 +53,5 @@ angular
         controllerAs: 'roadmap'
       .otherwise
         redirectTo: '/'
+    #$locationProvider.html5Mode(true);    
 
