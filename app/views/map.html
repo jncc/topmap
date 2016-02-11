@@ -1,4 +1,5 @@
-<div class="mapContainer" style="height: 100%;">
+<div style="height: 100%">
+    <div class="mapContainer" ng-style="mapStyle">
     <div id="leafletContainer" style="height: 100%;">
         <leaflet bounds="bounds" layers="layers" markers="markers" width="100%" height="100%" ></leaflet>
     </div>
@@ -6,16 +7,6 @@
     <div id="legend" ng-show="showLegend" class="legendContainer check-element animate-show scroll">
         <h4>Legend</h4>
         <img ng-src="{{layer.base}}?service=WMS&REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER={{layer.name}}&legend_options=forceLabels:on" class="img-responsive" style="max-height: 100%;" alt="Legend Graphic"/>
-    </div>
-    
-        <!-- Data Grids --> 
-    <div ng-switch="layerName">
-            <div ng-switch-when="sentinel" class="modal-body scroll" ng-controller="sentinelDatagridCtrl">
-                    <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridOptions"></div>
-            </div>
-            <div ng-switch-when="landsat" class="modal-body scroll" ng-controller="landsatDatagridCtrl">
-                    <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridOptions"></div>
-            </div>
     </div>
     
     <span us-spinner="{radius:30, width:8, length: 16}" spinner-key="spinner-main"></span>
@@ -119,4 +110,14 @@
             <input class="button" type="submit" ng-click="ok()" value="Close" />
         </div>
     </script>   
+</div>
+        <!-- Data Grids --> 
+<div class="dataGrids" ng-switch="layerName">
+        <div ng-switch-when="sentinel" ng-controller="sentinelDatagridCtrl">
+                <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridOptions"></div>
+        </div>
+        <div ng-switch-when="landsat" ng-controller="landsatDatagridCtrl"> 
+                <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridOptions"></div>
+        </div>
+</div>
 </div>

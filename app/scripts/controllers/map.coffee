@@ -17,8 +17,13 @@ angular.module 'topMapApp'
     parameters = $location.search()
     hash = $location.hash()
     
+    $scope.mapStyle = {
+        height: "100%"
+    }
+    
     # Data grid config
     $scope.layerName = ''
+    
     $scope.layerEndpoint = ''
     $scope.gridData = []
     $scope.notifications = {}
@@ -183,6 +188,9 @@ angular.module 'topMapApp'
         if ep.layerName == layer.name
           $scope.layerEndpoint = config.topsat_api.url + ep.apiEndpoint
           $scope.layerName = ep.layer
+          $scope.mapStyle = {
+            height: "calc(100% - 347.3333px)"
+          }   
           $scope.getGridData()
 
     # Set up a set of buttons to do a few simple options
