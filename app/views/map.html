@@ -10,12 +10,11 @@
     
         <!-- Data Grids --> 
     <div ng-switch="layerName">
-            Data grids
             <div ng-switch-when="sentinel" class="modal-body scroll" ng-controller="sentinelDatagridCtrl">
                     <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridOptions"></div>
             </div>
             <div ng-switch-when="landsat" class="modal-body scroll" ng-controller="landsatDatagridCtrl">
-                    <div class="map-datagrid" ui-grid="gridOptions" ui-grid-pagination ui-grid-resize-columns></div>
+                    <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridOptions"></div>
             </div>
     </div>
     

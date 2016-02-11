@@ -23,7 +23,13 @@ angular.module 'topMapApp'
       </div>'
   
     $scope.gridColDefs = [$scope.guidColDef,
-    {field: 'platform'}]
+    {field: 'platform'},
+    {field: 'wrs2.path', displayName: 'WRS2 Path'},
+    {field: 'wrs2.row', displayName: 'WRS2 Row'},
+    {field: 'wrs2.mode', displayName: 'WRS2 Mode'},
+    {field: 'wrs2.area', displayName: 'WRS2 Area'},
+    {field: 'wrs2.perimeter', displayName: 'WRS2 Perimeter'},
+    {field: 'wrs2.sequence', displayName: 'WRS2 Sequence'}]
   
     #factor this out
     $scope.gridOptions =
