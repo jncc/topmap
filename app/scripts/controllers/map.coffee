@@ -163,8 +163,8 @@ angular.module 'topMapApp'
     $scope.removeOverlays = () ->
       $scope.layers.overlays = {}
       
-    $scope.getGridData = (apiEndpoint) ->
-      url = config.topsat_api.url + apiEndpoint + '/search' + '?page=' + $scope.paginationOptions.pageNumber + '&size=' + $scope.paginationOptions.pageSize
+    $scope.getGridData = () ->
+      url = $scope.layerEndpoint + '/search' + '?page=' + $scope.paginationOptions.pageNumber + '&size=' + $scope.paginationOptions.pageSize
       $http.get(url, true)
         .success (gridData) ->
           if $scope.layerName == 'sentinel'
@@ -181,9 +181,9 @@ angular.module 'topMapApp'
     $scope.configureDataGrid = (layer) ->
       for ep in config.topsat_layers
         if ep.layerName == layer.name
-          $scope.layerEndpoint = ep.apiEndpoint
+          $scope.layerEndpoint = config.topsat_api.url + ep.apiEndpoint
           $scope.layerName = ep.layer
-          $scope.getGridData(ep.apiEndpoint)
+          $scope.getGridData()
 
     # Set up a set of buttons to do a few simple options
     leafletData.getMap().then (map) ->

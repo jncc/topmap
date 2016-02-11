@@ -51,7 +51,7 @@ angular.module 'topMapApp'
         gridApi.pagination.on.paginationChanged $scope, (newPage, pageSize) ->
           $scope.paginationOptions.pageNumber = newPage
           $scope.paginationOptions.pageSize = pageSize
-          $scope.getGridData($scope.layerEndpoint)
+          $scope.getGridData()
     
     $scope.$watch 'totalItems', ->
       $scope.gridOptions.totalItems = $scope.totalItems
