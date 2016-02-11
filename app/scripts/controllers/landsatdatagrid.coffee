@@ -12,25 +12,20 @@
 
 
 angular.module 'topMapApp'
-  .controller 'sentinelDatagridCtrl', ($scope) ->
+  .controller 'landsatDatagridCtrl', ($scope) ->
     
-    $scope.titleColDef = 
-      field: 'title', 
-      displayName: 'Title',
+    $scope.guidColDef = 
+      field: 'guid', 
+      displayName: 'Guid',
       width: 300,
       cellTemplate: '<div class="non-overflowing-cell cell-padding">
-      <a target="_blank" ng-href="{{grid.appScope.layerEndpoint}}/download/{{row.entity.title}}" ng-bind-html="row.entity.title"></a>
+      <a target="_blank" ng-href="{{grid.appScope.layerEndpoint}}/download/{{row.entity.guid}}" ng-bind-html="row.entity.guid"></a>
       </div>'
   
-    $scope.gridColDefs = [$scope.titleColDef,
-    {field: 'platform'},
-    {field: 'productType'},
-    {field: 'orbitNo'},
-    {field: 'relOrbitNo'}
-    {field: 'ingestionDate'},
-    {field: 'beginPosition'},
-    {field: 'endPosition'}]
+    $scope.gridColDefs = [$scope.guidColDef,
+    {field: 'platform'}]
   
+    #factor this out
     $scope.gridOptions =
       data: 'gridData' 
       columnDefs: $scope.gridColDefs
@@ -56,7 +51,7 @@ angular.module 'topMapApp'
     # extend the blank query object to nulify blank parameters
     extendedQuery =
       platform: ''
-      product: ''
     
     $.extend $scope.blankQuery, extendedQuery
     
+

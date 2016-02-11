@@ -14,9 +14,9 @@
             <div ng-switch-when="sentinel" class="modal-body scroll" ng-controller="sentinelDatagridCtrl">
                     <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridOptions"></div>
             </div>
-            <!--<div ng-switch-when="landsat" class="modal-body scroll" ng-controller="landsatDatagridCtrl">
-                    <div class="map-datagrid" ui-grid="gridOptions" ui-grid-resize-columns ></div>
-            </div>-->
+            <div ng-switch-when="landsat" class="modal-body scroll" ng-controller="landsatDatagridCtrl">
+                    <div class="map-datagrid" ui-grid="gridOptions" ui-grid-pagination ui-grid-resize-columns></div>
+            </div>
     </div>
     
     <span us-spinner="{radius:30, width:8, length: 16}" spinner-key="spinner-main"></span>
