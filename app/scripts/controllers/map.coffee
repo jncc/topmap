@@ -163,14 +163,14 @@ angular.module 'topMapApp'
     $scope.removeOverlays = () ->
       $scope.layers.overlays = {}
       
-    $scope.getGridData = (apiEndpoint) ->
-      url = config.topsat_api.url + apiEndpoint + '/search' + '?page=' + $scope.paginationOptions.pageNumber + '&size=' + $scope.paginationOptions.pageSize
+    $scope.getGridData = () ->
+      url = $scope.layerEndpoint + '/search' + '?page=' + $scope.paginationOptions.pageNumber + '&size=' + $scope.paginationOptions.pageSize
       $http.get(url, true)
         .success (gridData) ->
-          if $scope.layerName = 'sentinel'
+          if $scope.layerName == 'sentinel'
             $scope.gridData = gridData._embedded.sentinelResourceList
-          else if $scope.layerName = 'landsat'
-            $scope.gridData = gridData._embedded.landsatResourceList
+          else if $scope.layerName == 'landsat'
+            $scope.gridData = gridData._embedded.landsatSceneResourceList
           
           $scope.totalItems = gridData.page.totalElements  
             # don't overwrite with earlier but slower queries!
