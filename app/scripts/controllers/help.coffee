@@ -8,7 +8,7 @@
  # Controller of the topMapApp
 ###
 angular.module 'topMapApp'
-  .controller 'HelpCtrl', ->
+  .controller 'HelpCtrl', ($scope) ->
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
       footer = angular.element '#footer'
       footer.removeClass 'hidden'

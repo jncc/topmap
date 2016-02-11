@@ -27,7 +27,7 @@ angular
     'ui.grid.resizeColumns',
     'ui.grid.pagination'
   ]
-  .config ($routeProvider) ->
+  .config ($routeProvider, $locationProvider) ->
     $routeProvider
       .when '/',
         templateUrl: 'views/main.html'
@@ -41,6 +41,10 @@ angular
         templateUrl: 'views/about.html'
         controller: 'AboutCtrl'
         controllerAs: 'about'
+      .when '/help',
+        templateUrl: 'views/help.html'
+        controller: 'HelpCtrl'
+        controllerAs: 'about'
       .when '/map',
         templateUrl: 'views/map.html'
         controller: 'MapCtrl'
@@ -48,4 +52,5 @@ angular
         reloadOnSearch: false
       .otherwise
         redirectTo: '/'
+    #$locationProvider.html5Mode(true);    
 
