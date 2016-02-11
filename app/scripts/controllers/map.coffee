@@ -26,7 +26,18 @@ angular.module 'topMapApp'
     $scope.paginationOptions =
       pageNumber: 1,
       pageSize: 25
-   
+      
+    $scope.blankQuery =
+      #default bounding box malarky
+      bn: 0
+      be: 0
+      bs: 0
+      bw: 0
+      
+    $scope.query = {}
+    
+    #TODO!!!!! only if no query string params
+    
     
     # Hide the footer
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
@@ -118,7 +129,20 @@ angular.module 'topMapApp'
       
       leafletData.getMap().then (map) ->
         map.fitBounds(L.latLngBounds([layer.bbox[0].lat, layer.bbox[0].lng], 
-          [layer.bbox[1].lat, layer.bbox[1].lng]))      
+          [layer.bbox[1].lat, layer.bbox[1].lng]))
+        
+        map.on 'moveend', ->
+          $scope.query.bs = layer.bbox[0].lat
+          $scope.query.bw = layer.bbox[0].lng
+          $scope.query.bn = layer.bbox[1].lat
+          $scope.query.be = layer.bbox[1].lng
+#          wkt = 'POLYGON((' + layer.bbox[0].lng + ' ' + layer.bbox[0].lat +
+#          ' ' + layer.bbox[1].lng + ' ' + layer.bbox[0].lat + 
+#          ' ' + layer.bbox[1].lng + ' ' + layer.bbox[1].lat + 
+#          ' ' + layer.bbox[0].lng + layer.bbox[1].lat + 
+#          ' ' + layer.bbox[0].lng + ' ' + layer.bbox[0].lat + '))'
+#          $scope.gridArgs.push({ param: "wkt", arg: wkt });
+          
       
       # Add overlay
       $scope.layers.overlays['wms'] = {
@@ -140,7 +164,7 @@ angular.module 'topMapApp'
       $scope.layers.overlays = {}
       
     $scope.getGridData = (apiEndpoint) ->
-      url = config.topsat_api.url + apiEndpoint + '?page=' + $scope.paginationOptions.pageNumber + '&size=' + $scope.paginationOptions.pageSize
+      url = config.topsat_api.url + apiEndpoint + '/search' + '?page=' + $scope.paginationOptions.pageNumber + '&size=' + $scope.paginationOptions.pageSize
       $http.get(url, true)
         .success (gridData) ->
           if $scope.layerName = 'sentinel'

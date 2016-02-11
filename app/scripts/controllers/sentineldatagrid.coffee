@@ -50,9 +50,14 @@ angular.module 'topMapApp'
           $scope.paginationOptions.pageNumber = newPage
           $scope.paginationOptions.pageSize = pageSize
           $scope.getGridData($scope.layerEndpoint)
-          return
-        return
-        
+    
     $scope.$watch 'totalItems', ->
       $scope.gridOptions.totalItems = $scope.totalItems
+    
+    # extend the blank query object to nulify blank parameters
+    extendedQuery =
+      platform: ''
+      product: ''
+    
+    $.extend $scope.blankQuery, extendedQuery
     
