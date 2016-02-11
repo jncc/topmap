@@ -179,10 +179,11 @@ angular.module 'topMapApp'
         .error (e) -> $scope.notifications.add 'Oops! ' + e.message
      
     $scope.configureDataGrid = (layer) ->
-      if $scope.apiSearchable(layer)
-        $scope.layerEndpoint = ep.apiEndpoint
-        $scope.layerName = ep.layer
-        $scope.getGridData(ep.apiEndpoint)
+      for ep in config.topsat_layers
+        if ep.layerName == layer.name
+          $scope.layerEndpoint = config.topsat_api.url + ep.apiEndpoint
+          $scope.layerName = ep.layer
+          $scope.getGridData()
 
     $scope.apiSearchable = (layer) ->
       for ep in config.topsat_layers
