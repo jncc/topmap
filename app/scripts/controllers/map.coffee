@@ -10,12 +10,34 @@
  # form of url parameters
 ###
 angular.module 'topMapApp'
-  .controller 'MapCtrl', ($q, $scope, $location, $route, leafletData, ogc, store, 
-    config, Layer, $modal, $log, $base64, usSpinnerService) ->    
+  .controller 'MapCtrl', ($q, $scope, $location, $route, $http, leafletData, ogc, store, 
+    config, Layer, $modal, $log, $base64, usSpinnerService, uiGridConstants) ->    
     # Grab the initial parameters and hash values before they get changed by the
     # map being set up
     parameters = $location.search()
     hash = $location.hash()
+    
+    # Data grid config
+    $scope.layerName = ''
+    $scope.layerEndpoint = ''
+    $scope.gridData = []
+    $scope.notifications = {}
+    $scope.totalItems = 0
+    $scope.paginationOptions =
+      pageNumber: 1,
+      pageSize: 25
+      
+    $scope.blankQuery =
+      #default bounding box malarky
+      bn: 0
+      be: 0
+      bs: 0
+      bw: 0
+      
+    $scope.query = {}
+    
+    #TODO!!!!! only if no query string params
+    
     
     # Hide the footer
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
@@ -107,7 +129,20 @@ angular.module 'topMapApp'
       
       leafletData.getMap().then (map) ->
         map.fitBounds(L.latLngBounds([layer.bbox[0].lat, layer.bbox[0].lng], 
-          [layer.bbox[1].lat, layer.bbox[1].lng]))      
+          [layer.bbox[1].lat, layer.bbox[1].lng]))
+        
+        map.on 'moveend', ->
+          $scope.query.bs = layer.bbox[0].lat
+          $scope.query.bw = layer.bbox[0].lng
+          $scope.query.bn = layer.bbox[1].lat
+          $scope.query.be = layer.bbox[1].lng
+#          wkt = 'POLYGON((' + layer.bbox[0].lng + ' ' + layer.bbox[0].lat +
+#          ' ' + layer.bbox[1].lng + ' ' + layer.bbox[0].lat + 
+#          ' ' + layer.bbox[1].lng + ' ' + layer.bbox[1].lat + 
+#          ' ' + layer.bbox[0].lng + layer.bbox[1].lat + 
+#          ' ' + layer.bbox[0].lng + ' ' + layer.bbox[0].lat + '))'
+#          $scope.gridArgs.push({ param: "wkt", arg: wkt });
+          
       
       # Add overlay
       $scope.layers.overlays['wms'] = {
@@ -127,6 +162,28 @@ angular.module 'topMapApp'
     # Remove all overlays from the map
     $scope.removeOverlays = () ->
       $scope.layers.overlays = {}
+      
+    $scope.getGridData = (apiEndpoint) ->
+      url = config.topsat_api.url + apiEndpoint + '/search' + '?page=' + $scope.paginationOptions.pageNumber + '&size=' + $scope.paginationOptions.pageSize
+      $http.get(url, true)
+        .success (gridData) ->
+          if $scope.layerName = 'sentinel'
+            $scope.gridData = gridData._embedded.sentinelResourceList
+          else if $scope.layerName = 'landsat'
+            $scope.gridData = gridData._embedded.landsatResourceList
+          
+          $scope.totalItems = gridData.page.totalElements  
+            # don't overwrite with earlier but slower queries!
+            #if angular.equals result.query, query
+            #    $scope.result = result
+        .error (e) -> $scope.notifications.add 'Oops! ' + e.message
+     
+    $scope.configureDataGrid = (layer) ->
+      for ep in config.topsat_layers
+        if ep.layerName == layer.name
+          $scope.layerEndpoint = ep.apiEndpoint
+          $scope.layerName = ep.layer
+          $scope.getGridData(ep.apiEndpoint)
 
     # Set up a set of buttons to do a few simple options
     leafletData.getMap().then (map) ->
@@ -162,14 +219,17 @@ angular.module 'topMapApp'
           if not bounds.error
             resObj.data = ogc.modifyBoundsTo(resObj.data, bounds)
 
-          $scope.addOverlay(Layer({
+          layer = Layer({
             name: resObj.data.Name,
             title: resObj.data.Title,
             abstract: resObj.data.Abstract,
             wms: resObj.data
           }, 
           decodeURIComponent(parameters.b), 
-          decodeURIComponent(parameters.v)))
+          decodeURIComponent(parameters.v))
+          $scope.addOverlay(layer)
+
+          $scope.configureDataGrid(layer)
 
         usSpinnerService.stop('spinner-main')  
     else if store.hasData('layer')
@@ -178,7 +238,9 @@ angular.module 'topMapApp'
       bounds = ogc.getBoundsFromFragment($location.hash())
       if not bounds.error
         layer = ogc.modifyBoundsTo(layer, bounds)
-      $scope.addOverlay(layer)  
+      $scope.addOverlay(layer)
+      # Populate grid
+      $scope.configureDataGrid(layer)
 
     $scope.$on 'leafletDirectiveMap.moveend', (e, wrap) ->
       bounds = wrap.leafletEvent.target.getBounds()

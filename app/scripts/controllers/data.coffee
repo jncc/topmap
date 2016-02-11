@@ -8,8 +8,7 @@
  # Controller of the topMapApp
 ###
 angular.module 'topMapApp'
-  .controller 'DataCtrl', ($scope, $q, $modal, $location, usSpinnerService, 
-    ogc, config, store, Layer) ->
+  .controller 'DataCtrl', ($scope, $q, $modal, $location, usSpinnerService, ogc, config, store, Layer) ->
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
       footer = angular.element '#footer'
       footer.removeClass 'hidden'
