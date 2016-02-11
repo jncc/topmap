@@ -24,6 +24,8 @@ angular.module 'topMapApp'
   
     $scope.gridColDefs = [$scope.guidColDef,
     {field: 'platform'},
+    {field: 'captureDate'},
+    {field: 'cloudCover'},
     {field: 'wrs2.path', displayName: 'WRS2 Path'},
     {field: 'wrs2.row', displayName: 'WRS2 Row'},
     {field: 'wrs2.mode', displayName: 'WRS2 Mode'},
