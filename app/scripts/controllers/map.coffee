@@ -189,7 +189,7 @@ angular.module 'topMapApp'
           $scope.layerEndpoint = config.topsat_api.url + ep.apiEndpoint
           $scope.layerName = ep.layer
           $scope.mapStyle = {
-            height: "calc(100% - 347.3333px)"
+            height: "calc(100% - 348px)"
           }   
           $scope.getGridData()
 
@@ -211,11 +211,8 @@ angular.module 'topMapApp'
         $scope.openLayerInfo()
       ).addTo(map)
       # API searchable layer found
-      if $scope.layer is not undefined and $scope.apiSearchable($scope.layer)
+      if $scope.apiSearchable($scope.layer)
         L.easyButton('glyphicon glyphicon-search', (btn, map) ->
-          
-        ).addTo(map)
-        L.easyButton('glyphicon glyphicon-th', (btn, map) ->
           
         ).addTo(map)
       
