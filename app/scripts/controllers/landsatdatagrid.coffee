@@ -38,6 +38,7 @@ angular.module 'topMapApp'
       columnDefs: $scope.gridColDefs
       
     gridHelper.applyStandardGridOptions($scope)
+
     
     $scope.$watch 'totalItems', ->
       $scope.gridOptions.totalItems = $scope.totalItems

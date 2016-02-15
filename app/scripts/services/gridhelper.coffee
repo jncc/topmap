@@ -26,7 +26,7 @@ angular.module 'topMapApp'
         onRegisterApi: (gridApi) ->
           $scope.gridApi = gridApi
           gridApi.pagination.on.paginationChanged $scope, (newPage, pageSize) ->
-            $scope.paginationOptions.pageNumber = newPage
+            $scope.paginationOptions.pageNumber = newPage - 1
             $scope.paginationOptions.pageSize = pageSize
             $scope.getGridData()
       

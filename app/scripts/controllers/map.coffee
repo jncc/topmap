@@ -165,7 +165,7 @@ angular.module 'topMapApp'
         name: layer.title,
         type: 'wms',
         visible: true,
-        url: layer.base,
+        url: layer.base + '?tiled=true',
         layerParams: {
           layers: layer.name,
           version: layer.version,
@@ -200,7 +200,7 @@ angular.module 'topMapApp'
           $scope.layerEndpoint = config.topsat_api.url + ep.apiEndpoint
           $scope.layerName = ep.layer
           $scope.mapStyle = {
-            height: "calc(100% - 347.3333px)"
+            height: "calc(100% - 348px)"
           }   
           $scope.getGridData()
 
@@ -215,6 +215,11 @@ angular.module 'topMapApp'
       L.easyButton('glyphicon glyphicon-globe', (btn, map) ->
         $scope.openLayerInfo()
       ).addTo(map)
+      # API searchable layer found
+      if $scope.apiSearchable($scope.layer)
+        L.easyButton('glyphicon glyphicon-search', (btn, map) ->
+          
+        ).addTo(map)
       
     # Set up the overlays on the map, either by a given b (base url), l (layer 
     # name), v (wms version), or via a passed in Layer stored from the MainCtrl
