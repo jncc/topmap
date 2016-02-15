@@ -38,9 +38,13 @@ angular.module 'topMapApp'
       $scope.gridOptions.totalItems = $scope.totalItems
     
     # extend the blank query object to nulify blank parameters
-    extendedQuery =
+    sentinelQueryParameters =
       platform: ''
       product: ''
     
-    $.extend $scope.blankQuery, extendedQuery
+    $.extend $scope.blankQuery, sentinelQueryParameters
+    
+    #watch query apply filters to query object and refrsh grid data
+    
+    
     

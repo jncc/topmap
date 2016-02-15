@@ -32,6 +32,17 @@ angular.module 'topMapApp'
       pageNumber: 1,
       pageSize: 25
       
+    #await configuration complete
+    #get query string
+    #populate standard query object
+    #watch query object for changes and 
+    #  change query string
+    #  append to wms query 
+    #  refresh map
+    #  append to grid query
+    #  refresh grid
+    
+      
     $scope.blankQuery =
       #default bounding box malarky
       bn: 0
