@@ -11,8 +11,8 @@
 angular.module 'topMapApp'
   .service 'gridHelper', () ->
   
-    applyStandardGridOptions: ($scope) ->
-      standardOptions = 
+    getStandardGridOptions: (pageScope) ->
+      return standardOptions = 
         data: 'gridData' 
         enableGridMenu: true
         enableSorting: false
@@ -24,10 +24,8 @@ angular.module 'topMapApp'
         paginationPageSize: 25
         useExternalPagination: true
         onRegisterApi: (gridApi) ->
-          $scope.gridApi = gridApi
-          gridApi.pagination.on.paginationChanged $scope, (newPage, pageSize) ->
-            $scope.paginationOptions.pageNumber = newPage - 1
-            $scope.paginationOptions.pageSize = pageSize
-            $scope.getGridData()
-      
-      $scope.gridOptions = $.extend $scope.gridOptions, standardOptions
+          pageScope.gridApi = gridApi
+          gridApi.pagination.on.paginationChanged pageScope, (newPage, pageSize) ->
+            pageScope.paginationOptions.pageNumber = newPage - 1
+            pageScope.paginationOptions.pageSize = pageSize
+            pageScope.getGridData()

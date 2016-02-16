@@ -112,12 +112,7 @@
     </script>   
 </div>
         <!-- Data Grids --> 
-<div class="dataGrids" ng-switch="layerName">
-        <div ng-switch-when="sentinel" ng-controller="sentinelDatagridCtrl">
-                <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridOptions"></div>
-        </div>
-        <div ng-switch-when="landsat" ng-controller="landsatDatagridCtrl"> 
-                <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridOptions"></div>
-        </div>
+<div ng-show="showDatagrid" class="dataGrids">
+    <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridOptions"></div>
 </div>
 </div>

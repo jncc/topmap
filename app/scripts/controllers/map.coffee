@@ -11,7 +11,10 @@
 ###
 angular.module 'topMapApp'
   .controller 'MapCtrl', ($q, $scope, $location, $route, $http, leafletData, ogc, store, 
-    config, Layer, $modal, $log, $base64, usSpinnerService, uiGridConstants) ->    
+    config, Layer, $modal, $log, $base64, usSpinnerService, uiGridConstants, datasetHelperFactory, gridHelper) ->    
+    
+    $scope.initComplete = false
+    
     # Grab the initial parameters and hash values before they get changed by the
     # map being set up
     parameters = $location.search()
@@ -20,11 +23,14 @@ angular.module 'topMapApp'
     $scope.mapStyle = {
         height: "100%"
     }
+
     
     # Data grid config
+    $scope.showDatagrid = false
     $scope.layerName = ''
-    
-    $scope.layerEndpoint = ''
+ 
+    $scope.apiQueryString = ''
+    $scope.apiEndpoint = ''
     $scope.gridData = []
     $scope.notifications = {}
     $scope.totalItems = 0
@@ -32,29 +38,11 @@ angular.module 'topMapApp'
       pageNumber: 1,
       pageSize: 25
       
-    #await configuration complete
-    #get query string
-    #populate standard query object
-    #watch query object for changes and 
-    #  change query string
-    #  append to wms query 
-    #  refresh map
-    #  append to grid query
-    #  refresh grid
-    
-      
-    $scope.blankQuery =
-      #default bounding box malarky
-      bn: 0
-      be: 0
-      bs: 0
-      bw: 0
-      
-    $scope.query = {}
-    
-    #TODO!!!!! only if no query string params
-    
-    
+    $scope.query = 
+      baseUrl: '',
+      layer: '',
+      ogcVersion: ''
+   
     # Hide the footer
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
       footer = angular.element '#footer'
@@ -145,20 +133,7 @@ angular.module 'topMapApp'
       
       leafletData.getMap().then (map) ->
         map.fitBounds(L.latLngBounds([layer.bbox[0].lat, layer.bbox[0].lng], 
-          [layer.bbox[1].lat, layer.bbox[1].lng]))
-        
-        map.on 'moveend', ->
-          $scope.query.bs = layer.bbox[0].lat
-          $scope.query.bw = layer.bbox[0].lng
-          $scope.query.bn = layer.bbox[1].lat
-          $scope.query.be = layer.bbox[1].lng
-#          wkt = 'POLYGON((' + layer.bbox[0].lng + ' ' + layer.bbox[0].lat +
-#          ' ' + layer.bbox[1].lng + ' ' + layer.bbox[0].lat + 
-#          ' ' + layer.bbox[1].lng + ' ' + layer.bbox[1].lat + 
-#          ' ' + layer.bbox[0].lng + layer.bbox[1].lat + 
-#          ' ' + layer.bbox[0].lng + ' ' + layer.bbox[0].lat + '))'
-#          $scope.gridArgs.push({ param: "wkt", arg: wkt });
-          
+          [layer.bbox[1].lat, layer.bbox[1].lng]))         
       
       # Add overlay
       $scope.layers.overlays['wms'] = {
@@ -180,7 +155,8 @@ angular.module 'topMapApp'
       $scope.layers.overlays = {}
       
     $scope.getGridData = () ->
-      url = $scope.layerEndpoint + '/search' + '?page=' + $scope.paginationOptions.pageNumber + '&size=' + $scope.paginationOptions.pageSize
+      queryOptions = $.param $scope.query, true
+      url = $scope.apiEndpoint + '/search' + '?page=' + $scope.paginationOptions.pageNumber + '&size=' + $scope.paginationOptions.pageSize + '&' + queryOptions
       $http.get(url, true)
         .success (gridData) ->
           if $scope.layerName == 'sentinel'
@@ -188,21 +164,11 @@ angular.module 'topMapApp'
           else if $scope.layerName == 'landsat'
             $scope.gridData = gridData._embedded.landsatSceneResourceList
           
-          $scope.totalItems = gridData.page.totalElements  
-            # don't overwrite with earlier but slower queries!
+          $scope.gridOptions.totalItems = gridData.page.totalElements  
+            #todo: don't overwrite with earlier but slower queries!
             #if angular.equals result.query, query
             #    $scope.result = result
         .error (e) -> $scope.notifications.add 'Oops! ' + e.message
-     
-    $scope.configureDataGrid = (layer) ->
-      for ep in config.topsat_layers
-        if ep.layerName == layer.name
-          $scope.layerEndpoint = config.topsat_api.url + ep.apiEndpoint
-          $scope.layerName = ep.layer
-          $scope.mapStyle = {
-            height: "calc(100% - 348px)"
-          }   
-          $scope.getGridData()
 
     $scope.apiSearchable = (layer) ->
       for ep in config.topsat_layers
@@ -210,7 +176,23 @@ angular.module 'topMapApp'
           return true
       return false
       
-    # Set up a set of buttons to do a few simple options
+    readQueryString = (rawQueryParams) ->
+      for key in rawQueryParams.keys
+        $scope.query[key] = decodeURIComponent(rawQueryParams[key])
+    
+    # Select the helper (landsat, sentinel, none)
+    $scope.datasetHelper = datasetHelperFactory($scope.query.layer) 
+    
+    if $scope.datasetHelper
+      $scope.datasetHelper.addParameters ($scope.query)
+      
+      #If we have a helper assume we're showing a grid
+      $scope.mapStyle = {
+          height: "calc(100% - 348px)"
+        } 
+      
+    readQueryString (parameters)
+    
     leafletData.getMap().then (map) ->
       L.easyButton('glyphicon glyphicon-folder-open', (btn, map) ->
         $scope.showLayerList()
@@ -227,18 +209,19 @@ angular.module 'topMapApp'
           
         ).addTo(map)
       
-    # Set up the overlays on the map, either by a given b (base url), l (layer 
+        # Set up the overlays on the map, either by a given b (base url), l (layer 
     # name), v (wms version), or via a passed in Layer stored from the MainCtrl
     # controller
-    if 'b' of parameters and 'l' of parameters and 'v' of parameters
+    if $scope.query.baseUrl and $scope.query.layer and $scope.query.ogcVersion
+    
       usSpinnerService.spin('spinner-main')
 
       ogc.fetchWMSCapabilities(
-        ogc.getCapabilitiesURL(decodeURIComponent(parameters.b), 
+        ogc.getCapabilitiesURL($scope.query.baseUrl, 
           'wms', 
-          decodeURIComponent(parameters.v))).then (data) ->
+          $scope.query.ogcVersion)).then (data) ->
         resObj = ogc.extractLayerFromCapabilities(
-          decodeURIComponent(parameters.l), 
+          $scope.query.layer, 
           data
         )
 
@@ -251,12 +234,12 @@ angular.module 'topMapApp'
 
           layer = Layer({
             name: resObj.data.Name,
-            title: resObj.data.Title,
+            title: r$scope.getGridDataesObj.data.Title,
             abstract: resObj.data.Abstract,
             wms: resObj.data
           }, 
-          decodeURIComponent(parameters.b), 
-          decodeURIComponent(parameters.v))
+          $scope.query.baseUrl, 
+          $scope.query.ogcVersion)
           $scope.addOverlay(layer)
 
           $scope.configureDataGrid(layer)
@@ -270,8 +253,8 @@ angular.module 'topMapApp'
         layer = ogc.modifyBoundsTo(layer, bounds)
       $scope.addOverlay(layer)
       # Populate grid
-      $scope.configureDataGrid(layer)
-
+      #$scope.configureDataGrid(layer)
+      
     $scope.$on 'leafletDirectiveMap.moveend', (e, wrap) ->
       bounds = wrap.leafletEvent.target.getBounds()
       $location.hash(bounds._southWest.lat + ',' + 
@@ -355,6 +338,46 @@ angular.module 'topMapApp'
       else 
         # Display list
         $scope.displayLayerList()
+
+    #Configure the grid if we have an api end point
+    if $scope.datasetHelper and $scope.datasetHelper.config.apiEndpoint
+      $scope.showDatagrid = true
+      $scope.gridOptions = gridHelper.getStandardGridOptions($scope)
+      $scope.gridOptions.gridColDefs = datasetHelper.config.gridColDefs
+      $scope.apiEndpoint = datasetHelper.config.apiEndpoint
+      
+      $scope.getGridData()
+      
+    
+    $scope.initComplete = true
+    
+    
+    
+   
+    # Initialise the map
+      # - Set base url version etc etc
+      # - Extend with paramters from the query object using the helper
+      # Map displays stuff!
+    # Initialise the grid
+      # - Set statndard configuration
+      # - Extend configuration with additionl items from helper
+      # - Formulate api query string using helper 
+      # - Get data
+      # Grid displays stuff
+    # Add watch on query object
+    
+    ## Query object change
+    # Reformulate page url query string 
+    # Apply update to map - use helper
+    # Apply update to grid - use helper
+    
+    
+    
+        
+    
+
+
+
         
 ###*
  # @ngdoc function

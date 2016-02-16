@@ -34,7 +34,34 @@ angular.module 'topMapApp'
       url: 'http://eodip.jncc.gov.uk/api/'
     },
     topsat_layers: [
-      {layer: 'sentinel', layerName: 'EODIP:sentinelview', apiEndpoint: 'sentinel'},
-      {layer:'landsat', layerName: 'EODIP:landsat_coverage', apiEndpoint: 'landsat'}
-    ]
+      {layer: 'sentinel', 
+      layerName: 'EODIP:sentinelview', 
+      apiEndpoint: 'sentinel',
+      gridColDefs: [{field: 'title', displayName: 'Title', width: 300, cellTemplate: '<div class="non-overflowing-cell cell-padding"><a target="_blank" ng-href="{{grid.appScope.layerEndpoint}}/download/{{row.entity.title}}" ng-bind-html="row.entity.title"></a></div>'},
+        {field: 'platform'},
+        {field: 'productType'},
+        {field: 'orbitNo'},
+        {field: 'relOrbitNo'}
+        {field: 'ingestionDate'},
+        {field: 'beginPosition'},
+        {field: 'endPosition'}],
+      QueryParameters: {
+        platform: '',
+        product: ''}},
+      {layer:'landsat', 
+      layerName: 'EODIP:landsat_coverage', 
+      apiEndpoint: 'landsat',
+      gridColDefs: [{field: 'guid', displayName: 'Guid', width: 300, cellTemplate: '<div class="non-overflowing-cell cell-padding"><a target="_blank" ng-href="{{grid.appScope.layerEndpoint}}/download/{{row.entity.guid}}" ng-bind-html="row.entity.guid"></a></div>'},
+        {field: 'platform'},
+        {field: 'captureDate'},
+        {field: 'cloudCover'},
+        {field: 'wrs2.path', displayName: 'WRS2 Path'},
+        {field: 'wrs2.row', displayName: 'WRS2 Row'},
+        {field: 'wrs2.mode', displayName: 'WRS2 Mode'},
+        {field: 'wrs2.area', displayName: 'WRS2 Area'},
+        {field: 'wrs2.perimeter', displayName: 'WRS2 Perimeter'},
+        {field: 'wrs2.sequence', displayName: 'WRS2 Sequence'}],
+      QueryParameters: {
+        platform: ''}}
+      ]
 }
