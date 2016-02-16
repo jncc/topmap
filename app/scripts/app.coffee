@@ -39,7 +39,7 @@ angular
         contrallerAs: 'data'
       .when '/about',
         templateUrl: 'views/about.html'
-        controller: 'AboutCtrl'
+        controller: 'DefaultCtrl'
         controllerAs: 'about'
       .when '/help',
         templateUrl: 'views/help.html'
@@ -54,7 +54,14 @@ angular
         templateUrl: 'views/roadmap.html'
         controller: 'RoadmapCtrl'
         controllerAs: 'roadmap'
+      .when '/feedback',
+        templateUrl: 'views/feedback.html'
+        controller: 'DefaultCtrl'
+        controllerAs: 'feedback'
+      .when '/terms',
+        templateUrl: 'views/terms.html'
+        controller: 'DefaultCtrl'
+        controllerAs: 'terms'
       .otherwise
         redirectTo: '/'
     #$locationProvider.html5Mode(true);    
-
