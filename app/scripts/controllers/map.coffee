@@ -193,6 +193,12 @@ angular.module 'topMapApp'
           }   
           $scope.getGridData()
 
+    $scope.apiSearchable = (layer) ->
+      for ep in config.topsat_layers
+        if ep.layerName == layer.name
+          return true
+      return false
+      
     # Set up a set of buttons to do a few simple options
     leafletData.getMap().then (map) ->
       L.easyButton('glyphicon glyphicon-folder-open', (btn, map) ->
