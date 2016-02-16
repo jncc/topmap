@@ -117,5 +117,76 @@
             </tbody>
         </table>
     </section>
+    <h4 id="using" class="heading-medium">Using the node</h4>
+    <section>
+        <div>
+            <p>
+                At present, the data contained within this node may only be viewed 
+                through this site, using the mapper facilities. It will very soon 
+                be able to be downloaded from this site; the download function is 
+                scheduled for imminent release.
+            </p>
+            <p>
+                The data contained within this site can also be used within GI 
+                software, through web feature services (WFS) or web mapping 
+                services (WMS). 
+            </p>
+            <div class="column-half">
+                <h4>QGIS</h4>
+                <ol class="list list-number">
+                    <li>Select one of the following:</li>
+                    <li class="list-no-point"> 
+                        <ol class="list list-alpha">
+                            <li>Add WFS Layer from a Server</li>
+                            <li>Add WCS Layer from a Server</li>
+                            <li>Add WMS Layer from a Server</li>
+                        </ol>
+                    </li>
+                    <li value="2">Give the connection a title e.g. 'Pilot collaboration node'</li>
+                    <li>Enter the URL:</li>
+                    <li class="list-no-point">
+                        <ol class="list list-alpha">
+                            <li>For WFS - {{wfs_capabilities_url}}</li>
+                            <li>For WCS - {{wcs_capabilities_url}}</li>
+                            <li>For WMS - {{wms_capabilities_url}}</li>
+                        </ol>
+                    </li>                
+                    <li value="4">Click 'Connect' (you don't need  username or password)</li>
+                    <li>Select the dataset of interest, then click 'Add'</li>
+                </ol>
+            </div>
+            <div class="column-half">
+                <h4>ArcMap</h4>
+                <ol class="list list-number">
+                    <li>Select: 'File' – 'Add Data' – 'Add Data', then one of the following:</li>
+                    <li class="list-no-point">
+                        <ol class="list list-alpha">
+                            <li>Add WCS Layer from a Server</li>
+                            <li>Add WMS Layer from a Server</li>
+                            <li>Add WMTS Layer from a Server</li>
+                        </ol>
+                    </li>
+                    <li value="2">Enter the following URL:</li>
+                    <li class="list-no-point">
+                        <ol class="list list-alpha">
+                            <li>For WCS - {{wcs_capabilities_url}}</li>
+                            <li>For WMS - {{wms_capabilities_url}}</li>
+                            <li>For WMTS - {{wmts_capabilities_url}}</li>
+                        </ol>
+                    </li>                
+                    <li value="3">Click 'Connect' (you don't need  username or password)</li>
+                    <li>Drill down through the new connection link using 'Add'</li>
+                </ol>
+            </div>
+            <div style="clear:both;"></div>
+            <p>
+                It is intended that users will soon be able to set-up processing 
+                within the node, rather than downloading the data for local 
+                processing. There are also plans for large scale data processing 
+                through node to node transfer, for example for processing all of 
+                the available satellite data on a regular schedule. 
+            </p>
+        </div>    
+    </section>
     <br/>
 </main>

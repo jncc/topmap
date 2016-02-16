@@ -5,21 +5,11 @@
             <thead>
                 <tr>
                     <th class="layer-title">Layer Name</th>
-                    <th class="layer-column">WMS</th>
-                    <th class="layer-column">WFS</th>
                 </tr>
             </thead>
             <tbody dir-paginate="layer in srcLayers | itemsPerPage: 10">
                 <tr ng-click="selLayer(layer)" class="row-hover">
                     <td class="layer-title">{{layer.title}}</td>
-                    <td class="layer-column">
-                        <span ng-if="layer.wms !== undefined" class="glyphicon glyphicon-ok"></span>
-                        <span ng-if="layer.wms === undefined" class="glyphicon glyphicon-remove"></span>
-                    </td>
-                    <td class="layer-column">
-                        <span ng-if="layer.wfs !== undefined" class="glyphicon glyphicon-ok"></span>
-                        <span ng-if="layer.wfs === undefined" class="glyphicon glyphicon-remove"></span>
-                    </td>
                 </tr>
             </tbody>
         </table>
@@ -48,13 +38,27 @@
                 <th>Layer Name</th>
                 <td>{{layer.name}}</td>
             </tr>
+            <tr>
+                <th>WMS <a href="/#/help#using"><span class="glyphicon glyphicon-question-sign"></span></a></th>
+                <td>
+                    <span ng-if="layer.wms !== undefined" class="glyphicon glyphicon-ok"></span>
+                    <span ng-if="layer.wms === undefined" class="glyphicon glyphicon-remove"></span>
+                </td>
+            </tr>
+            <tr>
+                <th>WFS <a href="/#/help#using"><span class="glyphicon glyphicon-question-sign"></span></a></th>
+                <td>
+                    <span ng-if="layer.wfs !== undefined" class="glyphicon glyphicon-ok"></span>
+                    <span ng-if="layer.wfs === undefined" class="glyphicon glyphicon-remove"></span>
+                </td>                
+            </tr>
         </table>
         <div class="modal-footer">
             <input class="button left button-back" ng-class="{'hidden': !displayLayerInfo}" type="submit" ng-click="back()" value="Back" />
             <input class="button button-start" type="submit" ng-click="add()" value="View Layer" />
         </div>
     </div>
-    <div>
+    <div ng-class="{'hidden': displayLayerInfo}">
         <h4 id="contributing" class="heading-small">Contributing data to the node</h4>
         <p>
             If you have a dataset which would be useful to the DEFRA Group, is 
@@ -76,5 +80,6 @@
             use will be made available soon through dataset metadata and the 
             download facility.
         </p>
+        <br/>
     </div>
 </main>

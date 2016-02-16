@@ -31,7 +31,7 @@ angular.module 'topMapApp'
       {
         'area': 'Mapper',
         'item': 'Enable filtering of datasets by location and date range',
-        'details': 'Draw a polygon boundary on the map as a precursor to enabling filtering of datasets by geographic area.',
+        'details': 'Once a user has drawn a polygon on the map, display a filtered dataset list with only the datasets which overlap the specified geographic area ie the polygon.',
         'progress': 'None',
         'iteration': 'Not assessed'
       },

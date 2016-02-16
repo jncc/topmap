@@ -43,8 +43,8 @@ angular
         controllerAs: 'about'
       .when '/help',
         templateUrl: 'views/help.html'
-        controller: 'HelpCtrl'
-        controllerAs: 'about'
+        controller: 'DefaultCtrl'
+        controllerAs: 'help'
       .when '/map',
         templateUrl: 'views/map.html'
         controller: 'MapCtrl'
