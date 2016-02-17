@@ -12,7 +12,7 @@
 
 
 angular.module 'topMapApp'
-  .controller 'landsatDatagridCtrl', ($scope) ->
+  .controller 'landsatDatagridCtrl', ($scope, gridHelper) ->
     
     $scope.guidColDef = 
       field: 'guid', 
@@ -34,24 +34,11 @@ angular.module 'topMapApp'
     {field: 'wrs2.sequence', displayName: 'WRS2 Sequence'}]
   
     #factor this out
-    $scope.gridOptions =
-      data: 'gridData' 
+    $scope.gridOptions = 
       columnDefs: $scope.gridColDefs
-      enableGridMenu: true
-      enableSorting: false
-      paginationPageSizes: [
-        25
-        50
-        75
-      ]
-      paginationPageSize: 25
-      useExternalPagination: true
-      onRegisterApi: (gridApi) ->
-        $scope.gridApi = gridApi
-        gridApi.pagination.on.paginationChanged $scope, (newPage, pageSize) ->
-          $scope.paginationOptions.pageNumber = newPage - 1
-          $scope.paginationOptions.pageSize = pageSize
-          $scope.getGridData()
+      
+    gridHelper.applyStandardGridOptions($scope)
+
     
     $scope.$watch 'totalItems', ->
       $scope.gridOptions.totalItems = $scope.totalItems

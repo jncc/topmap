@@ -7,12 +7,10 @@
  # Controller of the topMapApp
 ###
 
-#download/{{row.entity.title}}
-
-
 
 angular.module 'topMapApp'
-  .controller 'sentinelDatagridCtrl', ($scope) ->
+  .controller 'sentinelDatagridCtrl', ($scope, gridHelper) ->
+    
     
     $scope.titleColDef = 
       field: 'title', 
@@ -32,31 +30,21 @@ angular.module 'topMapApp'
     {field: 'endPosition'}]
   
     $scope.gridOptions =
-      data: 'gridData' 
       columnDefs: $scope.gridColDefs
-      enableGridMenu: true
-      enableSorting: false
-      paginationPageSizes: [
-        25
-        50
-        75
-      ]
-      paginationPageSize: 25
-      useExternalPagination: true
-      onRegisterApi: (gridApi) ->
-        $scope.gridApi = gridApi
-        gridApi.pagination.on.paginationChanged $scope, (newPage, pageSize) ->
-          $scope.paginationOptions.pageNumber = newPage - 1
-          $scope.paginationOptions.pageSize = pageSize
-          $scope.getGridData()
+      
+    gridHelper.applyStandardGridOptions($scope)
     
     $scope.$watch 'totalItems', ->
       $scope.gridOptions.totalItems = $scope.totalItems
     
     # extend the blank query object to nulify blank parameters
-    extendedQuery =
+    sentinelQueryParameters =
       platform: ''
       product: ''
     
-    $.extend $scope.blankQuery, extendedQuery
+    $.extend $scope.blankQuery, sentinelQueryParameters
+    
+    #watch query apply filters to query object and refrsh grid data
+    
+    
     

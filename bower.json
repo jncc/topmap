@@ -20,7 +20,7 @@
     "angular-slick": "0.2.1",
     "angular-utils-pagination": "0.9.1",
     "Leaflet.EasyButton": "~1.1.2",
-    "leaflet-draw": "^0.2.4",
+    "leaflet-draw": "leaflet.draw#^0.2.4",
     "angular-ui-grid": "~3.1.1",
     "govuk_frontend_toolkit": "git://github.com/alphagov/govuk_frontend_toolkit#v4.7.0"
   },
