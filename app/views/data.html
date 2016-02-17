@@ -20,6 +20,7 @@
     <div id="list" ng-class="{'hidden': !displayLayerInfo}">
         <table>
             <tr>
+                <th rowspan="2">Dataset</th>
                 <th>Layer Title</th>
                 <td>{{layer.title}}</td>
             </tr>
@@ -28,6 +29,7 @@
                 <td>{{layer.abstract}}</td>
             </tr>
             <tr>
+                <th rowspan="5">Services</th>
                 <th rowspan="2">Bounding Box</th>
                 <td>South : {{layer.wms.EX_GeographicBoundingBox.southBoundLatitude}}, West : {{layer.wms.EX_GeographicBoundingBox.westBoundLongitude}}</td>
             </tr>
@@ -73,13 +75,6 @@
             <li>Styling file for displaying the data ie layer file, stylesheet.</li>
             <li>Licensing covering the DEFRA Group and contractors, either under OGL or proprietary licence.</li>
         </ol>
-        <p>
-            Also this note on licensing: <br/> To note: Some of these datasets 
-            are available for use under the Open Government Licence, and some 
-            come with more stringent use restrictions. More information on data 
-            use will be made available soon through dataset metadata and the 
-            download facility.
-        </p>
         <br/>
     </div>
 </main>
