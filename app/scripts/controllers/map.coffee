@@ -11,7 +11,7 @@
 ###
 angular.module 'topMapApp'
   .controller 'MapCtrl', ($q, $scope, $location, $route, $http, leafletData, ogc, store, 
-    config, Layer, $modal, $log, $base64, usSpinnerService, uiGridConstants) ->    
+    config, Layer, $modal, $log, $base64, usSpinnerService, uiGridConstants, leafletHelper) ->    
     # Grab the initial parameters and hash values before they get changed by the
     # map being set up
     parameters = $location.search()
@@ -74,7 +74,7 @@ angular.module 'topMapApp'
         attributionControl: true
       },
       controls: {
-        scale: true
+        #scale: true
       },
       bounds: {
         southWest: L.latLng(48.2369976053553, -10.5834521778756),
@@ -91,7 +91,16 @@ angular.module 'topMapApp'
             }
           }
         },
-        overlays: {}
+        overlays: {
+          draw: {
+            name: 'draw',
+            type: 'group',
+            visible: true,
+            layerParams: {
+              showOnSelector: false
+            }
+          }
+        }
       }
     })
     
@@ -146,20 +155,7 @@ angular.module 'topMapApp'
       leafletData.getMap().then (map) ->
         map.fitBounds(L.latLngBounds([layer.bbox[0].lat, layer.bbox[0].lng], 
           [layer.bbox[1].lat, layer.bbox[1].lng]))
-        
-        map.on 'moveend', ->
-          $scope.query.bs = layer.bbox[0].lat
-          $scope.query.bw = layer.bbox[0].lng
-          $scope.query.bn = layer.bbox[1].lat
-          $scope.query.be = layer.bbox[1].lng
-#          wkt = 'POLYGON((' + layer.bbox[0].lng + ' ' + layer.bbox[0].lat +
-#          ' ' + layer.bbox[1].lng + ' ' + layer.bbox[0].lat + 
-#          ' ' + layer.bbox[1].lng + ' ' + layer.bbox[1].lat + 
-#          ' ' + layer.bbox[0].lng + layer.bbox[1].lat + 
-#          ' ' + layer.bbox[0].lng + ' ' + layer.bbox[0].lat + '))'
-#          $scope.gridArgs.push({ param: "wkt", arg: wkt });
           
-      
       # Add overlay
       $scope.layers.overlays['wms'] = {
         name: layer.title,
@@ -180,7 +176,10 @@ angular.module 'topMapApp'
       $scope.layers.overlays = {}
       
     $scope.getGridData = () ->
-      url = $scope.layerEndpoint + '/search' + '?page=' + $scope.paginationOptions.pageNumber + '&size=' + $scope.paginationOptions.pageSize
+      url = $scope.layerEndpoint + '/search' + '?page=' + ($scope.paginationOptions.pageNumber - 1) + '&size=' + $scope.paginationOptions.pageSize
+      if $scope.drawnlayerwkt
+        url = url + '&wkt=' + encodeURIComponent($scope.drawnlayerwkt)
+      
       $http.get(url, true)
         .success (gridData) ->
           if $scope.layerName == 'sentinel'
@@ -189,8 +188,8 @@ angular.module 'topMapApp'
             $scope.gridData = gridData._embedded.landsatSceneResourceList
           
           $scope.totalItems = gridData.page.totalElements  
-            # don't overwrite with earlier but slower queries!
-            #if angular.equals result.query, query
+            # dont overwrite with earlier but slower queries!
+            # if angular.equals result.query, query
             #    $scope.result = result
         .error (e) -> $scope.notifications.add 'Oops! ' + e.message
      
@@ -203,6 +202,12 @@ angular.module 'topMapApp'
             height: "calc(100% - 348px)"
           }   
           $scope.getGridData()
+          $scope.controls.draw = draw: {
+            polygon: false,
+            polyline: false,
+            circle: false,
+            marker: false
+          }
 
     $scope.apiSearchable = (layer) ->
       for ep in config.topsat_layers
@@ -222,10 +227,44 @@ angular.module 'topMapApp'
         $scope.openLayerInfo()
       ).addTo(map)
       # API searchable layer found
-      if $scope.apiSearchable($scope.layer)
-        L.easyButton('glyphicon glyphicon-search', (btn, map) ->
-          
-        ).addTo(map)
+#      if $scope.apiSearchable($scope.layer)
+#        L.easyButton('glyphicon glyphicon-search', (btn, map) ->
+#          
+#        ).addTo(map)
+
+      # Setup 
+      leafletData.getMap().then (map) ->
+        map.on('draw:created', (e) ->
+          leafletData.getLayers().then (baselayers) ->
+            
+            drawnItems = baselayers.overlays.draw
+            # Remove old drawn layer
+            layers = drawnItems.getLayers()
+
+            for layer in layers
+              drawnItems.removeLayer(layer)
+            # Add new drawn area as layer
+            layer = e.layer
+            drawnItems.addLayer(layer)
+        
+            $scope.drawnlayercql = leafletHelper.toCQLBBOX(layer)
+            $scope.drawnlayerwkt = leafletHelper.toWKT(layer)
+        )
+        
+        $scope.$watch 'drawnlayerwkt', (newValue, oldValue) ->
+          if newValue 
+            # Update WMS
+            if $scope.layerName == 'sentinel'
+              geom = 'footprint_geom'
+            else if $scope.layerName == 'landsat'
+              geom = 'wkb_geometry'
+            cqlfilter = 'BBOX(' + geom + ',' + $scope.drawnlayercql + ')'
+            $scope.layers.overlays.wms.doRefresh = true
+            $scope.layers.overlays.wms.url =  $scope.layer.base + '?tiled=true&CQL_FILTER=' + encodeURIComponent(cqlfilter)
+            
+            # Update Grid
+            if $scope.layerName
+              $scope.getGridData()
       
     # Set up the overlays on the map, either by a given b (base url), l (layer 
     # name), v (wms version), or via a passed in Layer stored from the MainCtrl
