@@ -13,6 +13,8 @@ You will need to run `npm install` and `bower install` to install dependencies
 
 You will also need to have a working ruby / compass install on the machine to compile the SASS files during the build to do this install ruby (I would recommend using [RVM](https://rvm.io/) to control ruby installs and then you just need to install the compass gem;
 
+NOTE: On windows you probably want to use a windows installer i.e. [rubyinstaller](http://rubyinstaller.org/)
+
 `gem install compass` 
 
 After everything is set up run `grunt clean build` for building and `grunt serve` for preview.
