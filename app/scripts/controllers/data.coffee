@@ -14,6 +14,7 @@ angular.module 'topMapApp'
       footer.removeClass 'hidden'
     
     $scope.base_wms_url = config.ogc_datasources[0].url
+    $scope.wms_version = config.ogc_datasources[0].wms.version
     $scope.displayLayerInfo = false
   
     ###*
@@ -35,8 +36,9 @@ angular.module 'topMapApp'
     $scope.displayLayerInfo = false;
     
     $scope.add = () ->
-      store.storeData('layer', Layer($scope.layer, $scope.base_wms_url, config.ogc_datasources[0].wms.version))   
+      #store.storeData('layer', Layer($scope.layer, $scope.base_wms_url, config.ogc_datasources[0].wms.version))   
       $location.path('/map')
+      $location.search('l', encodeURIComponent($scope.layer.name))
       
     $scope.selLayer = (layer) ->
       $scope.layer = layer      

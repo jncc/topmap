@@ -269,7 +269,8 @@ angular.module 'topMapApp'
     # Set up the overlays on the map, either by a given b (base url), l (layer 
     # name), v (wms version), or via a passed in Layer stored from the MainCtrl
     # controller
-    if 'b' of parameters and 'l' of parameters and 'v' of parameters
+    
+    if 'l' of parameters
       usSpinnerService.spin('spinner-main')
 
       ogc.fetchWMSCapabilities(
@@ -294,8 +295,8 @@ angular.module 'topMapApp'
             abstract: resObj.data.Abstract,
             wms: resObj.data
           }, 
-          decodeURIComponent(parameters.b), 
-          decodeURIComponent(parameters.v))
+          config.ogc_datasources[0].url,
+          config.ogc_datasources[0].wms.version)
           $scope.addOverlay(layer)
 
           $scope.configureDataGrid(layer)

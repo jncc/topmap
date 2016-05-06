@@ -46,10 +46,14 @@ angular
         controller: 'HelpCtrl'
         controllerAs: 'about'
       .when '/map',
-        templateUrl: 'views/map.html'
-        controller: 'MapCtrl'
+        templateUrl: 'scripts/components/map/views/map.html'
+        controller: 'mapPageController'
         controllerAs: 'map'
         reloadOnSearch: false
+#        templateUrl: 'views/map.html'
+#        controller: 'MapCtrl'
+#        controllerAs: 'map'
+#        reloadOnSearch: false
       .otherwise
         redirectTo: '/'
     #$locationProvider.html5Mode(true);    
