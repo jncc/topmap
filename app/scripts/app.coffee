@@ -25,7 +25,8 @@ angular
     'slick',
     'ui.grid',
     'ui.grid.resizeColumns',
-    'ui.grid.pagination'
+    'ui.grid.pagination',
+    'topmap.map'
   ]
   .config ($routeProvider, $locationProvider) ->
     $routeProvider

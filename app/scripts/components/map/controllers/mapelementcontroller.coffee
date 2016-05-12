@@ -1,20 +1,17 @@
+'use strict'
 angular.module 'topMapApp'
-  .controller 'mapElementController', ($scope, leafletHelper, leafletData, ogc, config) ->
+  .controller 'mapElementController', ($scope, $location, Layer, leafletHelper, leafletData, ogc, config, usSpinnerService) ->
 
+    console.log('config out')
+    console.log(config)
+    
     $scope.parameters = {}
-  
-    $scope.mapStyle = {
-          height: "100%"
-      }
   
     angular.extend($scope, {
       # OGC Browser Variables
       srcLayers: undefined,
       base_wms_url: config.ogc_datasources[0].url,
-      # Make Leaflet map fit to page height automatically
-      contentDivHeight: {
-        height: "calc(100% - 120px)"
-      },
+      base_wms_version: config.ogc_datasources[0].wms.version,
       # Setup basic Leaflet view
       defaults: {
         scrollWheelZoom: true,
@@ -50,7 +47,7 @@ angular.module 'topMapApp'
         }
       }
     })
-    
+
     # Set up some basic settings, hide the legend and add an empty features
     # array
     $scope.showLegend = false
@@ -122,10 +119,6 @@ angular.module 'topMapApp'
         
     $scope.removeOverlays = () ->
       $scope.layers.overlays = {}
-      
-    #Handle the parameter update event
-    $scope.$on 'parameterUpdate', (event, parameters) ->
-      $scope.parameters = parameters
       
     $scope.$on 'leafletDirectiveMap.moveend', (e, wrap) ->
       bounds = wrap.leafletEvent.target.getBounds()
@@ -259,37 +252,40 @@ angular.module 'topMapApp'
     # Set up the overlays on the map, either by a given b (base url), l (layer 
     # name), v (wms version)
     $scope.$on 'parameterUpdate', (event, parameters) ->
-      $scope.parameters = parameters
-    
-      if 'b' of parameters and 'l' of parameters and 'v' of parameters
-        usSpinnerService.spin('spinner-main')
+      $scope.parameters = parameters     
+      
+      if !('l' of parameters)
+        alert('no layer supplied')
+        return
+        
+      usSpinnerService.spin('spinner-main')
 
-        ogc.fetchWMSCapabilities(
-          ogc.getCapabilitiesURL(decodeURIComponent(parameters.b), 
-            'wms', 
-            decodeURIComponent(parameters.v))).then (data) ->
-          resObj = ogc.extractLayerFromCapabilities(
-            decodeURIComponent(parameters.l), 
-            data
-          )
+      ogc.fetchWMSCapabilities(
+        ogc.getCapabilitiesURL($scope.base_wms_url, 
+          'wms', 
+          $scope.base_wms_version)).then (data) ->
+        resObj = ogc.extractLayerFromCapabilities(
+          decodeURIComponent(parameters.l), 
+          data
+        )
 
-          if resObj.error
-            alert resObj.msg
-          else
-            bounds = ogc.getBoundsFromFragment(parameters.hash)
-            if not bounds.error
-              resObj.data = ogc.modifyBoundsTo(resObj.data, bounds)
+        if resObj.error
+          alert resObj.msg
+        else
+          bounds = ogc.getBoundsFromFragment(parameters.hash)
+          if not bounds.error
+            resObj.data = ogc.modifyBoundsTo(resObj.data, bounds)
 
-            layer = Layer({
-              name: resObj.data.Name,
-              title: resObj.data.Title,
-              abstract: resObj.data.Abstract,
-              wms: resObj.data
-            }, 
-            decodeURIComponent(parameters.b), 
-            decodeURIComponent(parameters.v))
-            $scope.addOverlay(layer)
+          layer = Layer({
+            name: resObj.data.Name,
+            title: resObj.data.Title,
+            abstract: resObj.data.Abstract,
+            wms: resObj.data
+          }, 
+          $scope.base_wms_url,
+          $scope.base_wms_version)
+          $scope.addOverlay(layer)
 
-          usSpinnerService.stop('spinner-main')  
+        usSpinnerService.stop('spinner-main')  
 
       
