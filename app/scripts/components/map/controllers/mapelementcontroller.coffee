@@ -1,6 +1,6 @@
 'use strict'
 angular.module 'topMapApp'
-  .controller 'mapElementController', ($scope, $location, Layer, leafletHelper, leafletData, ogc, config, usSpinnerService) ->
+  .controller 'mapElementController', ($scope, $location, Layer, leafletHelper, leafletData, ogc, config, usSpinnerService, parameterHelper) ->
 
     console.log('config out')
     console.log(config)
@@ -100,18 +100,23 @@ angular.module 'topMapApp'
         map.fitBounds(L.latLngBounds([layer.bbox[0].lat, layer.bbox[0].lng], 
           [layer.bbox[1].lat, layer.bbox[1].lng]))
           
+      lp = {
+        layers: layer.name,
+        version: layer.version,
+        format: 'image/png',
+        transparent: true
+      }
+      
+      if layer.vendorParams
+        lp = angular.extend(lp, layer.vendorParams)
+      
       # Add overlay
       $scope.layers.overlays['wms'] = {
         name: layer.title,
         type: 'wms',
         visible: true,
         url: layer.base + '?tiled=true',
-        layerParams: {
-          layers: layer.name,
-          version: layer.version,
-          format: 'image/png',
-          transparent: true
-        },
+        layerParams: lp
         doRefresh: true
       }
       
@@ -188,8 +193,8 @@ angular.module 'topMapApp'
     $scope.showLayerList = () ->
       if $scope.srcLayers is undefined
         usSpinnerService.spin('spinner-main')
-        wms_capabilities_url = ogc.getCapabilitiesURL($scope.base_wms_url, 'wms', config.ogc_datasources[0].wms.version)
-        wfs_capabilities_url = ogc.getCapabilitiesURL($scope.base_wms_url, 'wfs', config.ogc_datasources[0].wfs.version)
+        wms_capabilities_url = ogc.getCapabilitiesURL($scope.base_wms_url, 'wms', $scope.base_wms_version)
+        wfs_capabilities_url = ogc.getCapabilitiesURL($scope.base_wms_url, 'wfs', $scope.base_wms_version)
 
         wmsPromise = ogc.fetchWMSCapabilities(wms_capabilities_url)
         wfsPromise = ogc.fetchWFSCapabilities(wfs_capabilities_url)
@@ -259,6 +264,9 @@ angular.module 'topMapApp'
         return
         
       usSpinnerService.spin('spinner-main')
+      
+      #get copy of params without l and hash which are addressed directly
+      filteredParams = parameterHelper.getLimitedCopy(parameters, ["l","hash"])
 
       ogc.fetchWMSCapabilities(
         ogc.getCapabilitiesURL($scope.base_wms_url, 
@@ -280,7 +288,8 @@ angular.module 'topMapApp'
             name: resObj.data.Name,
             title: resObj.data.Title,
             abstract: resObj.data.Abstract,
-            wms: resObj.data
+            wms: resObj.data,
+            vendorParams: filteredParams
           }, 
           $scope.base_wms_url,
           $scope.base_wms_version)

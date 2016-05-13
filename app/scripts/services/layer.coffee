@@ -23,9 +23,10 @@ angular.module 'topMapApp'
         @version = version
         @wms = config.wms
         @wfs = config.wfs
+        @vendorParams = config.vendorParams
         
       toJSON: () ->
-        return {
+        result =  {
           name: @name,
           title: @title,
           abstract: @abstract,
@@ -34,6 +35,11 @@ angular.module 'topMapApp'
           base: @base,
           version: @version
         }
+        
+        if @vendorParams
+          result = angular.extend(result, @vendorParams)
+        
+        return result 
         
     (config, base, version) ->
       new Layer config, base, version

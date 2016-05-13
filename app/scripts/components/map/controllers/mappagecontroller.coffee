@@ -20,6 +20,9 @@ angular.module 'topMapApp'
       footer = angular.element '#footer'
       footer.addClass 'hidden'
 
+    $scope.$on '$parameterChange', (newParameters) -> 
+      #todo: update url from parameters with no relaod
+      $scope.broadcastParameterChange(newParameters)
       
     #Trigger query change event in timout to ensure all handlers have registered.
     $timeout (->
