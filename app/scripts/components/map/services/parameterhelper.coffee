@@ -2,6 +2,13 @@
 
 angular.module 'topMapApp'
   .service 'parameterHelper', ->
+    getDecodedParmeters: (rawParams) ->
+      result = {}
+      for p of rawParams
+        result[p] = decodeURIComponent(rawParams[p])
+        
+      return result
+        
     getLimitedCopy: (parameters, excludedProps) ->
       names = Object.getOwnPropertyNames(parameters)
       

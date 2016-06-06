@@ -111,13 +111,15 @@
         </div>
     </script>   
     </div>
-    <!-- Data Grids --> 
-    <div class="dataGrids" ng-switch="layerName">
-            <div ng-switch-when="sentinel" ng-controller="sentinelDatagridCtrl">
-                    <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridOptions"></div>
+    <!-- Data Grids -->
+    {{pageParameters}}
+    
+    <div class="dataGrids" ng-switch="pageParameters.l">
+            <div ng-switch-when="EODIP:sentinelview" ng-controller="sentinelDatagridCtrl">
+                <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridOptions"></div>
             </div>
             <div ng-switch-when="landsat" ng-controller="landsatDatagridCtrl"> 
-                    <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridOptions"></div>
+                <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridOptions"></div>
             </div>
     </div>
 </div>
