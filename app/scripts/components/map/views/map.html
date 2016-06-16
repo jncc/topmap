@@ -113,11 +113,10 @@
 
     <div class="dataGrids" ng-switch="pageParameters.dataParameters.layer">
             <div ng-switch-when="sentinel" ng-controller="sentinelDatagridCtrl">
-                sdg
-                <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridOptions"></div>
+                <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridConfig"></div>
             </div>
             <div ng-switch-when="landsat" ng-controller="landsatDatagridCtrl"> 
-                <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridOptions"></div>
+                <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridConfig"></div>
             </div>
     </div>
 </div>

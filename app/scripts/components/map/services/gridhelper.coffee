@@ -3,9 +3,9 @@
 angular.module 'topMapApp'
   .service 'gridHelper', ($http, $q) ->
   
-    applyStandardGridOptions: (gridOptions) ->
+    applyStandardGridConfig: (gridConfig) ->
     
-      standardOptions = 
+      standardConfig = 
         data: 'gridData' 
         enableGridMenu: true
         enableSorting: false
@@ -17,7 +17,7 @@ angular.module 'topMapApp'
         paginationPageSize: 25
         useExternalPagination: true
         
-      return $.extend gridOptions, standardOptions
+      return $.extend gridConfig, standardConfig
       
     getGridData: (pageParams, gridParams) ->
       dataParams = pageParams.dataParameters
@@ -37,6 +37,7 @@ angular.module 'topMapApp'
 
       $http.get(url, true)
         .success (gridData) ->
+          
           result.gridData = gridData._embedded[dataParams.resourceListName] 
           result.totalItems = gridData.page.totalElements
           result.error = false

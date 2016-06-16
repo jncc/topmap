@@ -14,12 +14,11 @@ angular.module 'topMapApp'
     $scope.gridData = []
     $scope.pageParameters = {}
     
-    $scope.sentinelGridParams = 
-      pageNumber : 1,
-      pageSize : 50,
-      totalItems: 0
-      layerConfig: {}
-    
+#    $scope.sentinelGridParams = 
+#      pageNumber : 1,
+#      pageSize : 50,
+#      totalItems: 0
+#    
     $scope.titleColDef = 
       field: 'title', 
       displayName: 'Title',
@@ -37,30 +36,26 @@ angular.module 'topMapApp'
     {field: 'beginPosition'},
     {field: 'endPosition'}]
   
-    $scope.gridOptions =
+    $scope.gridConfig =
+      pageNumber : 1
+      pageSize : 50
       columnDefs: $scope.gridColDefs
       onRegisterApi: (gridApi) ->
           $scope.gridApi = gridApi
           gridApi.pagination.on.paginationChanged $scope, (newPage, pageSize) ->
-            $scope.sentinelGridParams.pageNumber = newPage - 1
-            $scope.sentinelGridParams.pageSize = pageSize
+            $scope.gridConfig.pageNumber = newPage - 1
+            $scope.gridConfig.pageSize = pageSize
             $scope.getGridData()
       
     $scope.getGridData = () ->
-      gridHelper.getGridData($scope.pageParameters, $scope.sentinelGridParams).then ((result) ->
-        console.log('get result', result)
-        
+      gridHelper.getGridData($scope.pageParameters, $scope.gridConfig).then ((result) ->
+      
         if !result.error
           $scope.gridData = result.gridData
-          $scope.sentinelGridParams.totalItems = result.totalItems
-        )
-      
-      
-      if !result.error
-        $scope.gridData = result.gridData
-        $scope.sentinelGridParams.totalItems = result.totalItems
+          $scope.gridConfig.totalItems = result.totalItems
+      )
         
-    $scope.gridOptions = gridHelper.applyStandardGridOptions($scope.gridOptions)
+    $scope.gridOptions = gridHelper.applyStandardGridConfig($scope.gridConfig)
     
 #    $scope.$watch 'totalItems', ->
 #      $scope.gridOptions.totalItems = $scope.totalItems
