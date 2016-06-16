@@ -1,11 +1,17 @@
 angular.module 'topMapApp'
-  .controller 'mapPageController', ($scope, $location, $route, $timeout, $modal, parameterHelper) ->    
+  .controller 'mapPageController', ($scope, $location, $route, $timeout, $modal, parameterHelper, configHelper) ->    
     $scope.broadcastParameterChange = (parameters) -> 
       $scope.$broadcast 'parameterUpdate', parameters
-  
+      
+    $scope.pageParameters =
+      urlParameters: {}
+      layerParameters: {}
+      
     #Init Page
-    $scope.pageParameters = parameterHelper.getDecodedParmeters($location.search())
-    angular.extend $scope.pageParameters, {hash : $location.hash()}
+    urlParameters = parameterHelper.getDecodedParmeters($location.search())
+    angular.extend urlParameters, {hash : $location.hash()}
+    $scope.pageParameters.urlParameters = urlParamters
+    $scope.layerParameters = configHelper.getLayerConfig(pageParameters.layerParameters.l)
     
     angular.extend($scope, {
     # Make Leaflet map fit to page height automatically

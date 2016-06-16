@@ -9,16 +9,16 @@
 
 
 angular.module 'topMapApp'
-  .controller 'sentinelDatagridCtrl', ($scope, gridHelper) ->
-    
+  .controller 'sentinelDatagridCtrl', ($scope, gridHelper, configHelper) ->
+    console.log('sentinel grid start')
     $scope.gridData = {}
     $scope.pageParameters = {}
     
-    $scope.sentinelGridParams = {
+    $scope.sentinelGridParams = 
       pageNumber : 1,
       pageSize : 50,
       totalItems: 0
-    }
+      layerConfig: {}
     
     $scope.titleColDef = 
       field: 'title', 
@@ -53,15 +53,13 @@ angular.module 'topMapApp'
         $scope.gridData = result.gridData
         $scope.sentinelGridParams.totalItems = result.totalItems
         
-    gridHelper.applyStandardGridOptions($scope)
+
+    $scope.gridOptions = gridHelper.applyStandardGridOptions($scope.gridOptions)
     
 #    $scope.$watch 'totalItems', ->
 #      $scope.gridOptions.totalItems = $scope.totalItems
 #    
     #watch query apply filters to query object and refrsh grid data
     $scope.$on 'parameterUpdate', (event, pageParameters) ->
-      $scope.pageParameters = pateParameters
+      $scope.pageParameters = pageParameters
       $scope.getGridData()
-
-    
- 

@@ -1,17 +1,10 @@
 'use strict'
-###*
- # @ngdoc function
- # @name topMapApp.service:gridHelper
- # @description
- # # gridHelper
- # Service for providing standard grid config
-###
-
 
 angular.module 'topMapApp'
   .service 'gridHelper', () ->
   
-    applyStandardGridOptions: ($scope) ->
+    applyStandardGridOptions: (gridOptions) ->
+    
       standardOptions = 
         data: 'gridData' 
         enableGridMenu: true
@@ -24,10 +17,9 @@ angular.module 'topMapApp'
         paginationPageSize: 25
         useExternalPagination: true
         
+      return $.extend gridOptions, standardOptions
       
-      $scope.gridOptions = $.extend $scope.gridOptions, standardOptions
-      
-    getGridData = (pageParams, gridParams) ->
+    getGridData: (pageParams, gridParams) ->
       url = gridParams.layerEndpoint + '/search' + '?page=' + (gridParams.pageNumber - 1) + '&size=' + gridParams.pageSize
       if gridParams.drawnlayerwkt
         url = url + '&wkt=' + encodeURIComponent(pageParams.drawnlayerwkt)
@@ -59,18 +51,19 @@ angular.module 'topMapApp'
       return result
           
      
-    $scope.configureDataGrid = (layer) ->
-      for ep in config.topsat_layers
-        if ep.layerName == layer.name
-          $scope.layerEndpoint = config.topsat_api.url + ep.apiEndpoint
-          $scope.layerName = ep.layer
-          $scope.mapStyle = {
-            height: "calc(100% - 348px)"
-          }   
-          $scope.getGridData()
-          $scope.controls.draw = draw: {
-            polygon: false,
-            polyline: false,
-            circle: false,
-            marker: false
-          }
+#    configureDataGrid: (layer) ->
+#      for ep in config.topsat_layers
+#        if ep.layerName == layer.name
+#          
+#          $scope.layerEndpoint = config.topsat_api.url + ep.apiEndpoint
+#          $scope.layerName = ep.layer
+#          $scope.mapStyle = {
+#            height: "calc(100% - 348px)"
+#          }   
+#          $scope.getGridData()
+#          $scope.controls.draw = draw: {
+#            polygon: false,
+#            polyline: false,
+#            circle: false,
+#            marker: false
+#          }

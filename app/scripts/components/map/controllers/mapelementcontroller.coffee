@@ -256,31 +256,31 @@ angular.module 'topMapApp'
               
     # Set up the overlays on the map, either by a given b (base url), l (layer 
     # name), v (wms version)
-    $scope.$on 'parameterUpdate', (event, parameters) ->
-      $scope.parameters = parameters     
+    $scope.$on 'parameterUpdate', (event, pageParameters) ->
+      $scope.parameters = pageParamters.urlParameters     
       
-      if !('l' of parameters)
+      if !('l' of $scope.parameters)
         alert('no layer supplied')
         return
         
       usSpinnerService.spin('spinner-main')
       
       #get copy of params without l and hash which are addressed directly
-      filteredParams = parameterHelper.getLimitedCopy(parameters, ["l","hash"])
+      filteredParams = parameterHelper.getLimitedCopy($scope.parameters, ["l","hash"])
 
       ogc.fetchWMSCapabilities(
         ogc.getCapabilitiesURL($scope.base_wms_url, 
           'wms', 
           $scope.base_wms_version)).then (data) ->
         resObj = ogc.extractLayerFromCapabilities(
-          decodeURIComponent(parameters.l), 
+          decodeURIComponent($scope.parameters.l), 
           data
         )
 
         if resObj.error
           alert resObj.msg
         else
-          bounds = ogc.getBoundsFromFragment(parameters.hash)
+          bounds = ogc.getBoundsFromFragment($scope.parameters.hash)
           if not bounds.error
             resObj.data = ogc.modifyBoundsTo(resObj.data, bounds)
 
