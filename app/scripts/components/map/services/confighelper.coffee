@@ -2,7 +2,11 @@
 
 angular.module 'topMapApp'
   .service 'configHelper', (config) ->
-    getLayerConfig: (layerName) ->
-      for ep in config.topsat_layers
-        if ep.layerName == layerName
-          return ep
+    getDataConfig: (layerName) ->
+      
+      for layer in config.topsat_layers
+        if layer.layerName == layerName
+          layer.layerUrl = config.topsat_api.url
+          return layer
+          
+      return {layer: 'none'}

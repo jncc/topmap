@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'topMapApp'
-  .service 'gridHelper', () ->
+  .service 'gridHelper', ($http, $q) ->
   
     applyStandardGridOptions: (gridOptions) ->
     
@@ -20,36 +20,40 @@ angular.module 'topMapApp'
       return $.extend gridOptions, standardOptions
       
     getGridData: (pageParams, gridParams) ->
-      url = gridParams.layerEndpoint + '/search' + '?page=' + (gridParams.pageNumber - 1) + '&size=' + gridParams.pageSize
-      if gridParams.drawnlayerwkt
-        url = url + '&wkt=' + encodeURIComponent(pageParams.drawnlayerwkt)
+      dataParams = pageParams.dataParameters
       
-      result = {
-        gridData: {},
+      url = dataParams.layerUrl + dataParams.apiEndpoint + '/search' + '?page=' + (gridParams.pageNumber - 1) + '&size=' + gridParams.pageSize
+      if pageParams.urlParameters.wkt
+        url = url + '&wkt=' + encodeURIComponent(pageParams.urlParameters.wkt)
+        #todo: handle arbitary parametersiation here
+      
+      result =
+        gridData: [],
         totalItems: 0,
         error: false
         errorMessage: ''
-      }
-      
+        
+      deferedResult = $q.defer()
+
       $http.get(url, true)
         .success (gridData) ->
-          if pageParams.layerName == 'sentinel'
-            result.gridData = gridData._embedded.sentinelResourceList
-          else if pageParams.layerName == 'landsat'
-            result.gridData = gridData._embedded.landsatSceneResourceList
-          
+          result.gridData = gridData._embedded[dataParams.resourceListName] 
           result.totalItems = gridData.page.totalElements
-          result.success = true
+          result.error = false
+          
+          deferedResult.resolve(result)
           
             # dont overwrite with earlier but slower queries!
             # if angular.equals result.query, query
             #    $scope.result = result
         .error (e) -> 
+          console.log('data error',e)
           result.errorMessage = 'Oops! ' + e.message
           result.error = true
-      
-      return result
           
+          deferedResult.resolve(result)
+      
+      return deferedResult.promise;
      
 #    configureDataGrid: (layer) ->
 #      for ep in config.topsat_layers

@@ -10,8 +10,8 @@
 
 angular.module 'topMapApp'
   .controller 'sentinelDatagridCtrl', ($scope, gridHelper, configHelper) ->
-    console.log('sentinel grid start')
-    $scope.gridData = {}
+    
+    $scope.gridData = []
     $scope.pageParameters = {}
     
     $scope.sentinelGridParams = 
@@ -47,19 +47,26 @@ angular.module 'topMapApp'
             $scope.getGridData()
       
     $scope.getGridData = () ->
-      result = gridHelper.getGridData($scope.pageParameters, $scope.sentinelGridParams)
+      gridHelper.getGridData($scope.pageParameters, $scope.sentinelGridParams).then ((result) ->
+        console.log('get result', result)
+        
+        if !result.error
+          $scope.gridData = result.gridData
+          $scope.sentinelGridParams.totalItems = result.totalItems
+        )
+      
       
       if !result.error
         $scope.gridData = result.gridData
         $scope.sentinelGridParams.totalItems = result.totalItems
         
-
     $scope.gridOptions = gridHelper.applyStandardGridOptions($scope.gridOptions)
     
 #    $scope.$watch 'totalItems', ->
 #      $scope.gridOptions.totalItems = $scope.totalItems
 #    
     #watch query apply filters to query object and refrsh grid data
-    $scope.$on 'parameterUpdate', (event, pageParameters) ->
-      $scope.pageParameters = pageParameters
+    $scope.$on 'parameterUpdate', (event, parameters) ->
+      console.log('sentinal grid triggered')
+      $scope.pageParameters = parameters
       $scope.getGridData()

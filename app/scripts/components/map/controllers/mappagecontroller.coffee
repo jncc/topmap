@@ -5,13 +5,13 @@ angular.module 'topMapApp'
       
     $scope.pageParameters =
       urlParameters: {}
-      layerParameters: {}
+      dataParameters: {}
       
-    #Init Page
+    #Init Page Parameters
     urlParameters = parameterHelper.getDecodedParmeters($location.search())
     angular.extend urlParameters, {hash : $location.hash()}
     $scope.pageParameters.urlParameters = urlParameters
-    $scope.pageParameters.layerParameters = configHelper.getLayerConfig($scope.pageParameters.l)
+    $scope.pageParameters.dataParameters = configHelper.getDataConfig($scope.pageParameters.urlParameters.l)
     
     angular.extend($scope, {
     # Make Leaflet map fit to page height automatically
