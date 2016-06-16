@@ -256,8 +256,8 @@ angular.module 'topMapApp'
               
     # Set up the overlays on the map, either by a given b (base url), l (layer 
     # name), v (wms version)
-    $scope.$on 'parameterUpdate', (event, pageParameters) ->
-      $scope.parameters = pageParamters.urlParameters     
+    $scope.$on 'parameterUpdate', (event, parameters) ->
+      $scope.parameters = parameters.urlParameters     
       
       if !('l' of $scope.parameters)
         alert('no layer supplied')
