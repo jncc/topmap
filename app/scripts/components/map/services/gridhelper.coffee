@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'topMapApp'
-  .service 'gridHelper', ($http, $q) ->
+  .service 'gridHelper', ($http, $httpParamSerializer, $q, parameterHelper) ->
   
     applyStandardGridConfig: (gridConfig) ->
     
@@ -22,10 +22,14 @@ angular.module 'topMapApp'
     getGridData: (pageParams, gridParams) ->
       dataParams = pageParams.dataParameters
       
-      url = dataParams.layerUrl + dataParams.apiEndpoint + '/search' + '?page=' + (gridParams.pageNumber - 1) + '&size=' + gridParams.pageSize
-      if pageParams.urlParameters.wkt
-        url = url + '&wkt=' + encodeURIComponent(pageParams.urlParameters.wkt)
-        #todo: handle arbitary parametersiation here
+      #Get rid of the map only paramters to keep url length down.
+      urlParams = parameterHelper.getLimitedCopy(pageParams.urlParameters, ['l','b','v','hash'])
+      
+      console.log(urlParams)
+      
+      url = dataParams.layerUrl + dataParams.apiEndpoint + '/search' + '?page=' + (gridParams.pageNumber - 1) + '&size=' + gridParams.pageSize + $httpParamSerializer(urlParams)
+      
+      console.log('url:', url)
       
       result =
         gridData: [],

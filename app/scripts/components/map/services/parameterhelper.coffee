@@ -2,10 +2,11 @@
 
 angular.module 'topMapApp'
   .service 'parameterHelper', ->
-    getDecodedParmeters: (rawParams) ->
+    getDecodedParmeters: (encodedParams) ->
       result = {}
-      for p of rawParams
-        result[p] = decodeURIComponent(rawParams[p])
+      
+      for p of encodedParams
+        result[p] = decodeURIComponent(encodedParams[p])
         
       return result
         

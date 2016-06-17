@@ -11,7 +11,7 @@ angular.module 'topMapApp'
       displayName: 'Title',
       width: 300,
       cellTemplate: '<div class="non-overflowing-cell cell-padding">
-      <a target="_blank" ng-href="{{grid.appScope.layerEndpoint}}/download/{{row.entity.title}}" ng-bind-html="row.entity.title"></a>
+      <a target="_blank" ng-href="{{grid.appScope.pageParameters.dataParameters.apiEndpoint}}/download/{{row.entity.title}}" ng-bind-html="row.entity.title"></a>
       </div>'
   
     $scope.gridColDefs = [$scope.titleColDef,
