@@ -1,12 +1,4 @@
 'use strict'
-###*
- # @ngdoc function
- # @name topMapApp.controller:sentinelDatagridCtrl
- # @description
- # # sentinelDatagridCtrl
- # Controller of the topMapApp
-###
-
 
 angular.module 'topMapApp'
   .controller 'sentinelDatagridCtrl', ($scope, gridHelper, configHelper) ->
@@ -14,11 +6,6 @@ angular.module 'topMapApp'
     $scope.gridData = []
     $scope.pageParameters = {}
     
-#    $scope.sentinelGridParams = 
-#      pageNumber : 1,
-#      pageSize : 50,
-#      totalItems: 0
-#    
     $scope.titleColDef = 
       field: 'title', 
       displayName: 'Title',
@@ -48,19 +35,13 @@ angular.module 'topMapApp'
             $scope.getGridData()
       
     $scope.getGridData = () ->
-      gridHelper.getGridData($scope.pageParameters, $scope.gridConfig).then ((result) ->
-      
+      gridHelper.getGridData($scope.pageParameters, $scope.gridConfig).then (result) ->
         if !result.error
           $scope.gridData = result.gridData
           $scope.gridConfig.totalItems = result.totalItems
-      )
         
     $scope.gridOptions = gridHelper.applyStandardGridConfig($scope.gridConfig)
     
-#    $scope.$watch 'totalItems', ->
-#      $scope.gridOptions.totalItems = $scope.totalItems
-#    
-    #watch query apply filters to query object and refrsh grid data
     $scope.$on 'parameterUpdate', (event, parameters) ->
       console.log('sentinal grid triggered')
       $scope.pageParameters = parameters
