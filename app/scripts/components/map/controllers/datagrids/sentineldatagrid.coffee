@@ -43,6 +43,8 @@ angular.module 'topMapApp'
     $scope.gridOptions = gridHelper.applyStandardGridConfig($scope.gridConfig)
     
     $scope.$on 'parameterUpdate', (event, parameters) ->
-      console.log('sentinal grid triggered')
+      if parameters.trigger == this
+        return
+
       $scope.pageParameters = parameters
       $scope.getGridData()

@@ -1,6 +1,7 @@
 angular.module 'topMapApp'
   .controller 'mapPageController', ($scope, $location, $route, $timeout, $modal, parameterHelper, configHelper) ->    
     $scope.broadcastParameterChange = (parameters) -> 
+      parameters.trigger = this
       $scope.$broadcast 'parameterUpdate', parameters
       
     $scope.pageParameters =
