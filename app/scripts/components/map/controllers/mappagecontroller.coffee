@@ -1,8 +1,7 @@
 angular.module 'topMapApp'
   .controller 'mapPageController', ($scope, $location, $route, $timeout, $modal, parameterHelper, configHelper) ->    
-    $scope.broadcastParameterChange = (parameters) -> 
-      parameters.trigger = this
-      $scope.$broadcast 'parameterUpdate', parameters
+    $scope.broadcastParameterChange = () -> 
+      $scope.$broadcast 'parameterUpdate', $scope.pageParameters
       
     $scope.pageParameters =
       urlParameters: {}
@@ -27,14 +26,15 @@ angular.module 'topMapApp'
       footer = angular.element '#footer'
       footer.addClass 'hidden'
 
-    $scope.$on '$parameterChange', (newParameters) -> 
-      #todo: update url from parameters with no relaod
-      $scope.broadcastParameterChange(newParameters)
+    $scope.$on '$parameterChange', (newParameters) ->       
+      $scope.pageParameters = $.extend true, $scope.pageParameters, newParameters
+      $location.search($scope.pageParameters.urlParameters)
+      $scope.broadcastParameterChange()
       
     #Trigger query change event in timout to ensure all handlers have registered.
     $timeout (->
-      console.log('send trigger')
-      $scope.broadcastParameterChange($scope.pageParameters)
+      $scope.pageParameters.trigger = this
+      $scope.broadcastParameterChange()
     ), 0
 
 

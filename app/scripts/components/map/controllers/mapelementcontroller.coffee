@@ -253,10 +253,17 @@ angular.module 'topMapApp'
             $scope.layers.overlays.wms.doRefresh = true
             $scope.layers.overlays.wms.url =  $scope.layer.base + '?tiled=true&CQL_FILTER=' + encodeURIComponent(cqlfilter)
             
+            
+            $scope.parameters.urlParameters.wkt = $scope.drawnlayerwkt
+            $scope.parameters.trigger = this
             # Update Grid
-            if $scope.layerName
-              $scope.getGridData()
-              
+            $scope.broadcastParameterChange()
+    
+    
+    $scope.broadcastParameterChange = () ->
+      $scope.parameters.trigger = this
+      $scope.$emit 'parameterChange', $scope.parameters
+    
     # Set up the overlays on the map, either by a given b (base url), l (layer 
     # name), v (wms version)
     $scope.$on 'parameterUpdate', (event, parameters) ->
