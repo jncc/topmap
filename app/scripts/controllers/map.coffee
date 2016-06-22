@@ -11,7 +11,7 @@
 ###
 angular.module 'topMapApp'
   .controller 'MapCtrl', ($q, $scope, $location, $route, leafletData, ogc, store, 
-    config, Layer, $modal, $log, $base64, usSpinnerService) ->    
+    config, Layer, $modal, $log, $base64, usSpinnerService, sites) ->    
     # Grab the initial parameters and hash values before they get changed by the
     # map being set up
     parameters = $location.search()
@@ -23,9 +23,6 @@ angular.module 'topMapApp'
       footer.addClass 'hidden'
 
     angular.extend($scope, {
-      # OGC Browser Variables
-      srcLayers: undefined,
-      base_wms_url: config.ogc_datasources[0].url,
       # Make Leaflet map fit to page height automatically
       contentDivHeight: {
         height: "calc(100% - 120px)"
@@ -110,7 +107,7 @@ angular.module 'topMapApp'
           [layer.bbox[1].lat, layer.bbox[1].lng]))      
       
       # Add overlay
-      $scope.layers.overlays['wms'] = {
+      $scope.layers.overlays['wms-' + layer.name] = {
         name: layer.title,
         type: 'wms',
         visible: true,
@@ -130,55 +127,12 @@ angular.module 'topMapApp'
 
     # Set up a set of buttons to do a few simple options
     leafletData.getMap().then (map) ->
-      L.easyButton('glyphicon glyphicon-folder-open', (btn, map) ->
-        $scope.showLayerList()
-      ).addTo(map)
       L.easyButton('glyphicon glyphicon-list', (btn, map) ->
         $scope.showLegend = !$scope.showLegend
       ).addTo(map)
       L.easyButton('glyphicon glyphicon-globe', (btn, map) ->
         $scope.openLayerInfo()
       ).addTo(map)
-      
-    # Set up the overlays on the map, either by a given b (base url), l (layer 
-    # name), v (wms version), or via a passed in Layer stored from the MainCtrl
-    # controller
-    if 'b' of parameters and 'l' of parameters and 'v' of parameters
-      usSpinnerService.spin('spinner-main')
-
-      ogc.fetchWMSCapabilities(
-        ogc.getCapabilitiesURL(decodeURIComponent(parameters.b), 
-          'wms', 
-          decodeURIComponent(parameters.v))).then (data) ->
-        resObj = ogc.extractLayerFromCapabilities(
-          decodeURIComponent(parameters.l), 
-          data
-        )
-
-        if resObj.error
-          alert resObj.msg
-        else
-          bounds = ogc.getBoundsFromFragment(hash)
-          if not bounds.error
-            resObj.data = ogc.modifyBoundsTo(resObj.data, bounds)
-
-          $scope.addOverlay(Layer({
-            name: resObj.data.Name,
-            title: resObj.data.Title,
-            abstract: resObj.data.Abstract,
-            wms: resObj.data
-          }, 
-          decodeURIComponent(parameters.b), 
-          decodeURIComponent(parameters.v)))
-
-        usSpinnerService.stop('spinner-main')  
-    else if store.hasData('layer')
-      layer = store.getData('layer')
-      # Update bounds if supplied
-      bounds = ogc.getBoundsFromFragment($location.hash())
-      if not bounds.error
-        layer = ogc.modifyBoundsTo(layer, bounds)
-      $scope.addOverlay(layer)  
 
     $scope.$on 'leafletDirectiveMap.moveend', (e, wrap) ->
       bounds = wrap.leafletEvent.target.getBounds()
@@ -186,10 +140,6 @@ angular.module 'topMapApp'
         bounds._southWest.lng + ',' + 
         bounds._northEast.lat + ',' + 
         bounds._northEast.lng).replace();
-      if $scope.layer?
-        $location.search('b', encodeURIComponent($scope.layer.base)).replace();
-        $location.search('l', encodeURIComponent($scope.layer.name)).replace();
-        $location.search('v', encodeURIComponent($scope.layer.version)).replace();
 
     # Get Feature Info Request Handler
     $scope.$on 'leafletDirectiveMap.click', (e, wrap) ->
@@ -217,8 +167,11 @@ angular.module 'topMapApp'
           map, 
           $scope.layer, 
           map.options.crs.code
-        url = $scope.layer.base + params
-
+        if ($scope.layer.base.indexOf('?') > -1)
+          url = $scope.layer.base + '&' + params.substring(1)
+        else
+          url = $scope.layer.base + params.substring
+          
         ogc.getFeatureInfo(url).then (data) ->
           usSpinnerService.stop('spinner-main')
           $scope.features = data.features
@@ -226,43 +179,58 @@ angular.module 'topMapApp'
         , (error) -> 
           usSpinnerService.stop('spinner-main')
           alert 'Could not get feature info'
+    
+    $scope.getSite = (code) ->
+      return site for site in sites.list when site.code is code
+    
+    # Add base layers if we have a code supplied
+    if 'code' of parameters
+      usSpinnerService.spin('spinner-main')
 
-    ###*
-     # OGC Layers browser
-    ###
-    $scope.displayLayerList = () ->
-      modalInstance = $modal.open({
-        animation: true,
-        templateUrl: 'showOGCLayers.html',
-        controller: 'OGCModalInstanceCtrl',
-        size: 'lg',
-        scope: $scope,
-        resolve: {
-          data: () ->
-            return {
-              srcLayers: $scope.srcLayers,
-            }
-        }
-      });
+      ogc.fetchWMSCapabilities(
+        ogc.getCapabilitiesURL(
+          config.ogc_datasources[0].url, 
+          'wms', 
+          config.ogc_datasources[0].wms.version)).then (data) ->
+        mpa_layer = ogc.extractLayerFromCapabilities(
+          'MarineRecorder:ukmpa_param', 
+          data
+        )
+        species_point = ogc.extractLayerFromCapabilities(
+          'MarineRecorder:mr_species_mpa_points', 
+          data
+        )
+        
 
-    $scope.showLayerList = () ->
-      if $scope.srcLayers is undefined
-        usSpinnerService.spin('spinner-main')
-        wms_capabilities_url = ogc.getCapabilitiesURL($scope.base_wms_url, 'wms', config.ogc_datasources[0].wms.version)
-        wfs_capabilities_url = ogc.getCapabilitiesURL($scope.base_wms_url, 'wfs', config.ogc_datasources[0].wfs.version)
+        if mpa_layer.error
+          alert mpa_layer.msg
+        else if species_point.error
+          alert species_point.error
+        else
+          bounds = ogc.getBoundsFromFragment(hash)
+          if not bounds.error
+            mpa_layer.data = ogc.modifyBoundsTo(mpa_layer.data, bounds)
 
-        wmsPromise = ogc.fetchWMSCapabilities(wms_capabilities_url)
-        wfsPromise = ogc.fetchWFSCapabilities(wfs_capabilities_url)
+          $scope.addOverlay(Layer({
+            name: 'MarineRecorder:ukmpa_param',
+            title: $scope.getSite(parameters.code).name,
+            abstract: '',
+            wms: mpa_layer.data
+          }, 
+          config.ogc_datasources[0].url + '?viewparams=code:' + parameters.code, 
+          config.ogc_datasources[0].wms.version))
+          
+          $scope.addOverlay(Layer({
+            name: 'MarineRecorder:mr_species_mpa_points',
+            title: $scope.getSite(parameters.code).name + ' Species Points',
+            abstract: '',
+            wms: species_point.data
+          }, 
+          config.ogc_datasources[0].url + '?viewparams=code:' + parameters.code, 
+          config.ogc_datasources[0].wms.version))
 
-        $q.all([wmsPromise, wfsPromise]).then (data) ->
-          $scope.srcLayers = ogc.joinCapabilitiesLists(data[0], data[1])
-          usSpinnerService.stop('spinner-main')
-          $scope.displayLayerList()
-        , (error) ->
-          alert 'Could not get capabilites from OGC server, please try again later'
-      else 
-        # Display list
-        $scope.displayLayerList()
+        usSpinnerService.stop('spinner-main')  
+
         
 ###*
  # @ngdoc function
