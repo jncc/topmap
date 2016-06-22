@@ -19,7 +19,7 @@ angular.module 'topMapApp'
     
     # Hide the footer
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
-      footer = angular.element '#footer'
+      footer = angular.element document.querySelector( '#footer' )
       footer.addClass 'hidden'
 
     angular.extend($scope, {
@@ -185,11 +185,11 @@ angular.module 'topMapApp'
       $location.hash(bounds._southWest.lat + ',' + 
         bounds._southWest.lng + ',' + 
         bounds._northEast.lat + ',' + 
-        bounds._northEast.lng)
+        bounds._northEast.lng).replace();
       if $scope.layer?
-        $location.search('b', encodeURIComponent($scope.layer.base))
-        $location.search('l', encodeURIComponent($scope.layer.name))
-        $location.search('v', encodeURIComponent($scope.layer.version))
+        $location.search('b', encodeURIComponent($scope.layer.base)).replace();
+        $location.search('l', encodeURIComponent($scope.layer.name)).replace();
+        $location.search('v', encodeURIComponent($scope.layer.version)).replace();
 
     # Get Feature Info Request Handler
     $scope.$on 'leafletDirectiveMap.click', (e, wrap) ->

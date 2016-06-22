@@ -1,19 +1,26 @@
 <main id="content" role="main">
-    <h1 class="heading-large">Defra EODIP Web Mapping Portal Service</h1>
+    <h1 class="heading-large">MPA -> Marine Recorder Snapshot Bridge</h1>
     <h3>This service is in development it should only be used by members of the development team and user group</h3>
     <br />
     <p>
-        This service is a light-weight tool through which to quickly explore spatial 
-        data offered through an OGC compliant web service primarily through its WMS 
-        (Web Mapping Service). It was developed by the Joint Nature Conservation 
-        Committee as part of the drive to offer an easy way to access and manage
-        our spatial data holdings. This portal has been created to manage Earth
-        Observation Datasets and deliver them to interested parties either via OGC
-        web-services (WMS, WFS, WCS, etc...) or via direct download where possible.
+        This service is a light-weight tool through which to quickly explore and
+        download Marine Recorder Snapshot data when filtered with an MPA
     </p>
     <p>
-        This service is still under development and feedback is appreciated while
-        we develop this service.
+        <ui-select ng-model="selected.value" on-select="onSelected($item)">
+            <ui-select-match placeholder="Search for/Select a site...">
+                {{$select.selected.name}}
+            </ui-select-match>
+            <ui-select-choices repeat="site in sites | props: {name: $select.search, code: $select.search, type: $select.search}">
+                <span ng-bind-html="site.name | highlight: $select.search"></span><br/>
+                <small>
+                    code: <span ng-bind-html="site.code | highlight: $select.search"></span>
+                    type: <span ng-bind-html="site.type | highlight: $select.search"></span>
+                </small>
+            </ui-select-choices>
+        </ui-select>
     </p>
-    
+    <a id="next" ng-disabled="disabled" class="button button-start disabled" ng-href="/#/map?code={{selected.code}}">View Records in site</a>
+    <br/>
+    <br/>
 </main>

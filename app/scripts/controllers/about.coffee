@@ -10,5 +10,5 @@
 angular.module 'topMapApp'
   .controller 'AboutCtrl', ->
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
-      footer = angular.element '#footer'
+      footer = angular.element document.querySelector( '#footer' )
       footer.removeClass 'hidden'

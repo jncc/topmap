@@ -22,7 +22,8 @@ angular
     'angularUtils.directives.dirPagination',
     'ui.bootstrap',
     'base64',
-    'slick'
+    'slick',
+    'ui.select'
   ]
   .config ($routeProvider) ->
     $routeProvider
@@ -30,10 +31,6 @@ angular
         templateUrl: 'views/main.html'
         controller: 'MainCtrl'
         controllerAs: 'main'
-      .when '/datasets',
-        templateUrl: 'views/datasets.html'
-        controller: 'DatasetsCtrl'
-        contrallerAs: 'datasets'
       .when '/about',
         templateUrl: 'views/about.html'
         controller: 'AboutCtrl'
@@ -45,4 +42,3 @@ angular
         reloadOnSearch: false
       .otherwise
         redirectTo: '/'
-
