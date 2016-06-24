@@ -44,21 +44,36 @@ angular.module 'topMapApp'
       usSpinnerService.stop('spinner-main')
     
     $scope.onSelected = (item) ->
-      button = angular.element document.querySelector( '#next' )
+      button = angular.element document.querySelector( '#next-hab' )
+      button.removeClass 'disabled'
+      button = angular.element document.querySelector( '#next-sp' )
       button.removeClass 'disabled'
       $scope.disabled = false
       $scope.selected = item
-      return true;
       
-    $scope.onNextClicked = () ->
-      button = angular.element document.querySelector( '#next' )
-      if !button.hasClass 'disabled'
-        path = 'map?code=' + $scope.selected.code
-        $location.path(path);
-        alert $location.path()
+      if item.code is 'UKMCZ0003'
+        $scope.testSiteSelected = true;
+      else
+        $scope.testSiteSelected = false;
+      
+      return true;
     
     $scope.sites = sites.list
+    $scope.habitatTest = sites.habitatTest
+    $scope.speciesTest = sites.speciesTest
     
     $scope.selected = null
+    $scope.selectedHabitat = ''
+    $scope.selectedSpecies = ''
+    
+    $scope.onSpeciesSelected = (item) ->
+      if $scope.selected != null && $scope.selected.code == 'UKMCZ0003'
+        $scope.selectedSpecies = item     
+      return true;    
+
+    $scope.onHabitatSelected = (item) ->
+      if $scope.selected != null && $scope.selected.code == 'UKMCZ0003'
+        $scope.selectedHabitat = item     
+      return true;    
 
     return

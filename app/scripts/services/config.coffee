@@ -13,7 +13,7 @@ angular.module 'topMapApp'
       {
         name: 'NAME',
         prettyName: 'NAME',
-        url: 'URL',
+        url: 'http://52.31.29.104/geoserver/wms',
         wms: {
           version: '1.3.0'
         },

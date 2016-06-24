@@ -43,6 +43,7 @@ module.exports = (config) ->
       'bower_components/Leaflet.EasyButton/src/easy-button.js'
       'bower_components/leaflet-draw/dist/leaflet.draw-src.js'
       'bower_components/angular-ui-select/dist/select.js'
+      'bower_components/angular-url-encode/dist/angular-url-encode.js'
       'bower_components/angular-mocks/angular-mocks.js'
       # endbower
       # bower:coffee

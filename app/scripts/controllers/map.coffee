@@ -11,12 +11,24 @@
 ###
 angular.module 'topMapApp'
   .controller 'MapCtrl', ($q, $scope, $location, $route, leafletData, ogc, store, 
-    config, Layer, $modal, $log, $base64, usSpinnerService, sites) ->    
+    config, Layer, $modal, $log, $base64, usSpinnerService, sites, $window, $filter, $http) ->    
     # Grab the initial parameters and hash values before they get changed by the
     # map being set up
-    parameters = $location.search()
-    hash = $location.hash()
-    
+    $scope.parameters = $location.search()
+    $scope.hash = $location.hash()
+
+    $scope.downloadSpecies = () ->
+      cql = ''
+      if 'mode' of $scope.parameters and $scope.parameters.mode == 'species' and $scope.cql.startsWith('&CQL_FILTER=species')
+        cql = $scope.cql
+      $window.open(ogc.ogcDownloadSHPLink(config.ogc_datasources[0].url, 'MarineRecorder:mr_species_mpa_points', 'code:' + $scope.parameters.code, cql), '_blank')
+
+    $scope.downloadHabitat = () ->
+      cql = ''
+      if 'mode' of $scope.parameters and $scope.parameters.mode == 'habitat' and $scope.cql.startsWith('&CQL_FILTER=habitat')
+        cql = $scope.cql  
+      $window.open(ogc.ogcDownloadSHPLink(config.ogc_datasources[0].url, 'MarineRecorder:mr_habitat_mpa_points', 'code:' + $scope.parameters.code, cql), '_blank')        
+
     # Hide the footer
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
       footer = angular.element document.querySelector( '#footer' )
@@ -51,7 +63,8 @@ angular.module 'topMapApp'
           }
         },
         overlays: {}
-      }
+      },
+      geojson: {}      
     })
     
     # Set up some basic settings, hide the legend and add an empty features
@@ -91,8 +104,7 @@ angular.module 'topMapApp'
         }
       })   
    
-    # Add and overlayer layer, currently only copes with one layer in the future
-    # we should be able to add multiple layers in the same way
+    # Add and overlayer layer, hacked a little to work on multiple layers
     $scope.addOverlay = (layer) ->
       $scope.layer = layer
       
@@ -140,6 +152,21 @@ angular.module 'topMapApp'
         bounds._southWest.lng + ',' + 
         bounds._northEast.lat + ',' + 
         bounds._northEast.lng).replace();
+        
+    leafletData.getMap().then (map) ->
+      new L.Control.Button({
+        'text': 'Download Species Points as Shapefile',
+        'onClick': $scope.downloadSpecies,
+        'hideText': false,
+        'styleClasses': 'button button-start'
+        }).setPosition('bottomleft').addTo(map);
+    
+      new L.Control.Button({
+        'text': 'Download Habitat Points as Shapefile',
+        'onClick': $scope.downloadHabitat,
+        'hideText': false,
+        'styleClasses': 'button button-start'
+        }).setPosition('bottomleft').addTo(map);
 
     # Get Feature Info Request Handler
     $scope.$on 'leafletDirectiveMap.click', (e, wrap) ->
@@ -184,7 +211,7 @@ angular.module 'topMapApp'
       return site for site in sites.list when site.code is code
     
     # Add base layers if we have a code supplied
-    if 'code' of parameters
+    if 'code' of $scope.parameters
       usSpinnerService.spin('spinner-main')
 
       ogc.fetchWMSCapabilities(
@@ -207,30 +234,44 @@ angular.module 'topMapApp'
         else if species_point.error
           alert species_point.error
         else
-          bounds = ogc.getBoundsFromFragment(hash)
+          bounds = ogc.getBoundsFromFragment($scope.hash)
           if not bounds.error
             mpa_layer.data = ogc.modifyBoundsTo(mpa_layer.data, bounds)
 
           $scope.addOverlay(Layer({
             name: 'MarineRecorder:ukmpa_param',
-            title: $scope.getSite(parameters.code).name,
+            title: $scope.getSite($scope.parameters.code).name,
             abstract: '',
             wms: mpa_layer.data
           }, 
-          config.ogc_datasources[0].url + '?viewparams=code:' + parameters.code, 
+          config.ogc_datasources[0].url + '?viewparams=code:' + $scope.parameters.code, 
           config.ogc_datasources[0].wms.version))
+          $scope.cql = ''
           
-          $scope.addOverlay(Layer({
-            name: 'MarineRecorder:mr_species_mpa_points',
-            title: $scope.getSite(parameters.code).name + ' Species Points',
-            abstract: '',
-            wms: species_point.data
-          }, 
-          config.ogc_datasources[0].url + '?viewparams=code:' + parameters.code, 
-          config.ogc_datasources[0].wms.version))
+          if $location.search().mode is 'habitat'
+            if 'cql' of $scope.parameters and $scope.parameters.cql != ''
+              $scope.cql = '&CQL_FILTER=habitat%3D\'' + $filter('bcEncode')($scope.parameters.cql) + '\''
+            $scope.addOverlay(Layer({
+              name: 'MarineRecorder:mr_habitat_mpa_points',
+              title: $scope.getSite($scope.parameters.code).name + ' Habitat Points',
+              abstract: '',
+              wms: species_point.data
+            }, 
+            config.ogc_datasources[0].url + '?viewparams=code:' + $scope.parameters.code + $scope.cql, 
+            config.ogc_datasources[0].wms.version))            
+          else
+            if 'cql' of $scope.parameters and $scope.parameters.cql != ''
+              $scope.cql = '&CQL_FILTER=species%3D\'' + $filter('bcEncode')($scope.parameters.cql) + '\''
+            $scope.addOverlay(Layer({
+              name: 'MarineRecorder:mr_species_mpa_points',
+              title: $scope.getSite($scope.parameters.code).name + ' Species Points',
+              abstract: '',
+              wms: species_point.data
+            }, 
+            config.ogc_datasources[0].url + '?viewparams=code:' + $scope.parameters.code + $scope.cql, 
+            config.ogc_datasources[0].wms.version))
 
         usSpinnerService.stop('spinner-main')  
-
         
 ###*
  # @ngdoc function

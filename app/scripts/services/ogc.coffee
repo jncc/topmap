@@ -146,3 +146,9 @@ angular.module 'topMapApp'
           }
       
       return layers      
+    
+    ogcDownloadSHPLink: (base, layer, code, cql) ->
+      url = base + '?service=WFS&version=1.0.0&request=GetFeature&typeName=' + layer + '&outputFormat=SHAPE-ZIP&viewparams=' + code
+      if cql != null and cql != ''
+        url = url + cql
+      return url

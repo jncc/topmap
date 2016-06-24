@@ -23,7 +23,8 @@ angular
     'ui.bootstrap',
     'base64',
     'slick',
-    'ui.select'
+    'ui.select',
+    'bc.AngularUrlEncode'
   ]
   .config ($routeProvider) ->
     $routeProvider

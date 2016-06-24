@@ -9,7 +9,7 @@
     <p>
         <ui-select ng-model="selected.value" on-select="onSelected($item)">
             <ui-select-match placeholder="Search for/Select a site...">
-                {{$select.selected.name}}
+                {{selected.value.name}}
             </ui-select-match>
             <ui-select-choices repeat="site in sites | props: {name: $select.search, code: $select.search, type: $select.search}">
                 <span ng-bind-html="site.name | highlight: $select.search"></span><br/>
@@ -20,7 +20,45 @@
             </ui-select-choices>
         </ui-select>
     </p>
-    <a id="next" ng-disabled="disabled" class="button button-start disabled" ng-href="/#/map?code={{selected.code}}">View Records in site</a>
+    <br/>
+    <div style="width:100%">
+        <div ng-show="testSiteSelected" style="float:left; width:60%;">
+            <ui-select ng-model="selectedSpecies" on-select="onSpeciesSelected($item)">
+                <ui-select-match placeholder="Select a species...">
+                    {{selectedSpecies}}
+                </ui-select-match>
+                <ui-select-choices repeat="species in speciesTest | filter: $select.search">
+                    <span ng-bind-html="species | highlight: $select.search"></span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+<!--        <div style="float:left;">
+            <button type="button" ng-click="selectedSpecies = ''" class="btn btn-default">
+              <span class="glyphicon glyphicon-trash"></span>
+            </button>            
+        </div>-->
+        <a style="float:right;" id="next-sp" ng-disabled="disabled" class="button button-start disabled" ng-href="/#/map?code={{selected.code}}&mode=species&cql={{selectedSpecies | bcEncode}}">View Species Records in site</a>
+    </div>
+    <br/>
+    <br/>
+    <div style="width:100%">
+        <div ng-show="testSiteSelected" style="float:left; width:60%;">
+            <ui-select ng-model="selectedHabitat" on-select="onHabitatSelected($item)">
+                <ui-select-match placeholder="Select a habitat...">
+                    {{selectedHabitat}}
+                </ui-select-match>
+                <ui-select-choices repeat="habitat in habitatTest | filter: $select.search">
+                    <span ng-bind-html="habitat | highlight: $select.search"></span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+<!--        <div style="float:left;">
+            <button type="button" ng-click="selectedHabitat = ''" class="btn btn-default">
+                <span class="glyphicon glyphicon-trash"></span>
+            </button>
+        </div>            -->
+        <a style="float:right;" id="next-hab" ng-disabled="disabled" class="button button-start disabled" ng-href="/#/map?code={{selected.code}}&mode=habitat&cql={{selectedHabitat | bcEncode}}">View Habitat Records in site</a>
+    </div>
     <br/>
     <br/>
 </main>
