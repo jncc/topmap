@@ -11,7 +11,8 @@
 ###
 angular.module 'topMapApp'
   .controller 'MapCtrl', ($q, $scope, $location, $route, leafletData, ogc, store, 
-    config, Layer, $modal, $log, $base64, usSpinnerService, sites, $window, $filter, $http) ->    
+    config, Layer, $modal, $log, $base64, usSpinnerService, sites, $window, 
+    $filter, $http, $timeout) ->    
     # Grab the initial parameters and hash values before they get changed by the
     # map being set up
     $scope.parameters = $location.search()
@@ -109,14 +110,14 @@ angular.module 'topMapApp'
       $scope.layer = layer
       
       # Update bounds and fit the map to the given bounds
-      $scope.bounds = {
-        southWest: layer.bbox[0],
-        northEast: layer.bbox[1]
-      }
-      
-      leafletData.getMap().then (map) ->
-        map.fitBounds(L.latLngBounds([layer.bbox[0].lat, layer.bbox[0].lng], 
-          [layer.bbox[1].lat, layer.bbox[1].lng]))      
+#      $scope.bounds = {
+#        southWest: layer.bbox[0],
+#        northEast: layer.bbox[1]
+#      }
+##      
+#      leafletData.getMap().then (map) ->
+#        map.fitBounds(L.latLngBounds([layer.bbox[0].lat, layer.bbox[0].lng], 
+#          [layer.bbox[1].lat, layer.bbox[1].lng]))      
       
       # Add overlay
       $scope.layers.overlays['wms-' + layer.name] = {
@@ -167,111 +168,121 @@ angular.module 'topMapApp'
         'hideText': false,
         'styleClasses': 'button button-start'
         }).setPosition('bottomleft').addTo(map);
+   
+    $scope.clicked = (e, wrap) ->
 
-    # Get Feature Info Request Handler
-    $scope.$on 'leafletDirectiveMap.click', (e, wrap) ->
-      usSpinnerService.spin('spinner-main')
-
-      $scope.clicked = {
-        x: Math.round(wrap.leafletEvent.containerPoint.x),
-        y: Math.round(wrap.leafletEvent.containerPoint.y)
-      }
-
-      $scope.markers = {
-        click: {
-          lat: wrap.leafletEvent.latlng.lat,
-          lng: wrap.leafletEvent.latlng.lng
-          focus: false,
-          message: "Lat, Lon : " + 
-            wrap.leafletEvent.latlng.lat + ", " + 
-            wrap.leafletEvent.latlng.lng
-          draggable: false
-        }
-      }
-      
-      leafletData.getMap().then (map) ->
-        params = ogc.getFeatureInfoUrl wrap.leafletEvent.latlng, 
-          map, 
-          $scope.layer, 
-          map.options.crs.code
-        if ($scope.layer.base.indexOf('?') > -1)
-          url = $scope.layer.base + '&' + params.substring(1)
-        else
-          url = $scope.layer.base + params.substring
-          
-        ogc.getFeatureInfo(url).then (data) ->
-          usSpinnerService.stop('spinner-main')
-          $scope.features = data.features
-          $scope.openGetFeatureInfo()
-        , (error) -> 
-          usSpinnerService.stop('spinner-main')
-          alert 'Could not get feature info'
     
+#    # Get Feature Info Request Handler
+#    $scope.$on 'leafletDirectiveMap.click', (e, wrap) ->
+#      $scope.clicked(e, wrap)
+      
     $scope.getSite = (code) ->
       return site for site in sites.list when site.code is code
     
-    # Add base layers if we have a code supplied
-    if 'code' of $scope.parameters
-      usSpinnerService.spin('spinner-main')
+    #timeout to prevent map even firing early, not sure why the event is firing
+    #before map is ready
+    $timeout(() ->
+      leafletData.getMap().then (map) ->
+        # Add base layers if we have a code supplied
+        if 'code' of $scope.parameters      
+          mpa = $q.defer()
+          url = config.ogc_datasources[0].url + '?service=WFS&version=2.0.0&request=GetFeature&typeName=MarineRecorder:ukmpa_param&format=text/javascript&outputFormat=json&format_options=callback:loadGeoJson'
+          url = url + '&viewparams=code:' + $scope.parameters.code
+          usSpinnerService.spin('spinner-main')
 
-      ogc.fetchWMSCapabilities(
-        ogc.getCapabilitiesURL(
-          config.ogc_datasources[0].url, 
-          'wms', 
-          config.ogc_datasources[0].wms.version)).then (data) ->
-        mpa_layer = ogc.extractLayerFromCapabilities(
-          'MarineRecorder:ukmpa_param', 
-          data
-        )
-        species_point = ogc.extractLayerFromCapabilities(
-          'MarineRecorder:mr_species_mpa_points', 
-          data
-        )
-        
+          $http.get(url).success((data) ->
+            geojsonLayer = L.geoJson(data).addTo(map);
+            geojsonLayer.on('click', (e) ->
+              usSpinnerService.spin('spinner-main')
 
-        if mpa_layer.error
-          alert mpa_layer.msg
-        else if species_point.error
-          alert species_point.error
-        else
-          bounds = ogc.getBoundsFromFragment($scope.hash)
-          if not bounds.error
-            mpa_layer.data = ogc.modifyBoundsTo(mpa_layer.data, bounds)
+              $scope.clicked = {
+                x: Math.round(e.containerPoint.x),
+                y: Math.round(e.containerPoint.y)
+              }
 
-          $scope.addOverlay(Layer({
-            name: 'MarineRecorder:ukmpa_param',
-            title: $scope.getSite($scope.parameters.code).name,
-            abstract: '',
-            wms: mpa_layer.data
-          }, 
-          config.ogc_datasources[0].url + '?viewparams=code:' + $scope.parameters.code, 
-          config.ogc_datasources[0].wms.version))
-          $scope.cql = ''
-          
-          if $location.search().mode is 'habitat'
-            if 'cql' of $scope.parameters and $scope.parameters.cql != ''
-              $scope.cql = '&CQL_FILTER=habitat%3D\'' + $filter('bcEncode')($scope.parameters.cql) + '\''
-            $scope.addOverlay(Layer({
-              name: 'MarineRecorder:mr_habitat_mpa_points',
-              title: $scope.getSite($scope.parameters.code).name + ' Habitat Points',
-              abstract: '',
-              wms: species_point.data
-            }, 
-            config.ogc_datasources[0].url + '?viewparams=code:' + $scope.parameters.code + $scope.cql, 
-            config.ogc_datasources[0].wms.version))            
-          else
-            if 'cql' of $scope.parameters and $scope.parameters.cql != ''
-              $scope.cql = '&CQL_FILTER=species%3D\'' + $filter('bcEncode')($scope.parameters.cql) + '\''
-            $scope.addOverlay(Layer({
-              name: 'MarineRecorder:mr_species_mpa_points',
-              title: $scope.getSite($scope.parameters.code).name + ' Species Points',
-              abstract: '',
-              wms: species_point.data
-            }, 
-            config.ogc_datasources[0].url + '?viewparams=code:' + $scope.parameters.code + $scope.cql, 
-            config.ogc_datasources[0].wms.version))
+              $scope.markers = {
+                click: {
+                  lat: e.latlng.lat,
+                  lng: e.latlng.lng
+                  focus: false,
+                  message: "Lat, Lon : " + 
+                    e.latlng.lat + ", " + 
+                    e.latlng.lng
+                  draggable: false
+                }
+              }
 
-        usSpinnerService.stop('spinner-main')  
+              leafletData.getMap().then (map) ->
+                params = ogc.getFeatureInfoUrl e.latlng, 
+                  map, 
+                  $scope.layer, 
+                  map.options.crs.code
+                if ($scope.layer.base.indexOf('?') > -1)
+                  url = $scope.layer.base + '&' + params.substring(1)
+                else
+                  url = $scope.layer.base + params.substring
+
+                ogc.getFeatureInfo(url).then (data) ->
+                  usSpinnerService.stop('spinner-main')
+                  $scope.features = data.features
+                  $scope.openGetFeatureInfo()
+                , (error) -> 
+                  usSpinnerService.stop('spinner-main')
+                  alert 'Could not get feature info'
+            )
+            bounds = geojsonLayer.getBounds();
+            $scope.bounds = {
+              southWest: geojsonLayer._southWest,
+              northEast: geojsonLayer._northEast
+            }
+
+            map.fitBounds(geojsonLayer.getBounds());
+
+            ogc.fetchWMSCapabilities(
+              ogc.getCapabilitiesURL(
+                config.ogc_datasources[0].url, 
+                'wms', 
+                config.ogc_datasources[0].wms.version)).then (data) ->
+              species_point = ogc.extractLayerFromCapabilities(
+                'MarineRecorder:mr_species_mpa_points', 
+                data
+              )
+
+              if species_point.error
+                alert species_point.error
+              else
+                bounds = ogc.getBoundsFromFragment($scope.hash)
+                $scope.cql = ''
+
+                if $location.search().mode is 'habitat'
+                  if 'cql' of $scope.parameters and $scope.parameters.cql != ''
+                    $scope.cql = '&CQL_FILTER=habitat%3D\'' + $filter('bcEncode')($scope.parameters.cql) + '\''
+                  $scope.addOverlay(Layer({
+                    name: 'MarineRecorder:mr_habitat_mpa_points',
+                    title: $scope.getSite($scope.parameters.code).name + ' Habitat Points',
+                    abstract: '',
+                    wms: species_point.data
+                  }, 
+                  config.ogc_datasources[0].url + '?viewparams=code:' + $scope.parameters.code + $scope.cql, 
+                  config.ogc_datasources[0].wms.version))            
+                else
+                  if 'cql' of $scope.parameters and $scope.parameters.cql != ''
+                    $scope.cql = '&CQL_FILTER=species%3D\'' + $filter('bcEncode')($scope.parameters.cql) + '\''
+                  $scope.addOverlay(Layer({
+                    name: 'MarineRecorder:mr_species_mpa_points',
+                    title: $scope.getSite($scope.parameters.code).name + ' Species Points',
+                    abstract: '',
+                    wms: species_point.data
+                  }, 
+                  config.ogc_datasources[0].url + '?viewparams=code:' + $scope.parameters.code + $scope.cql, 
+                  config.ogc_datasources[0].wms.version))          
+
+              usSpinnerService.stop('spinner-main')  
+
+          ).error((data) ->
+            features.reject 'Failed to retrieve features'
+          )
+    ,100);
         
 ###*
  # @ngdoc function

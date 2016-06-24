@@ -31,6 +31,11 @@
                     <span ng-bind-html="species | highlight: $select.search"></span>
                 </ui-select-choices>
             </ui-select>
+            
+            <select ng-model="selectedSpecies">
+                <option value="">Select a species to filter by....</option>
+                <option ng-repeat="species in speciesTest" value="{{species}}">{{species}}</option>
+            </select>
         </div>
 <!--        <div style="float:left;">
             <button type="button" ng-click="selectedSpecies = ''" class="btn btn-default">
@@ -51,6 +56,10 @@
                     <span ng-bind-html="habitat | highlight: $select.search"></span>
                 </ui-select-choices>
             </ui-select>
+            <select ng-model="selectedHabitat">
+                <option value="">Select a habitat to filter by....</option>
+                <option ng-repeat="habitat in habitatTest" value="{{habitat}}">{{habitat}}</option>
+            </select>
         </div>
 <!--        <div style="float:left;">
             <button type="button" ng-click="selectedHabitat = ''" class="btn btn-default">
