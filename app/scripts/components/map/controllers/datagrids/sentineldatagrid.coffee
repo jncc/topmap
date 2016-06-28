@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'topMapApp'
-  .controller 'sentinelDatagridCtrl', ($scope, gridHelper, configHelper) ->
+  .controller 'sentinelDatagridCtrl', ($scope, gridHelper, configHelper, uiGridConstants) ->
     
     $scope.gridData = []
     $scope.pageParameters = {}

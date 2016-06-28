@@ -1,4 +1,4 @@
-
+'use strict'
 angular.module('topmap.map', [])
 #  .config((injectables) ->
 #  # provider-injector

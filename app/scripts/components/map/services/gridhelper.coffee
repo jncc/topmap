@@ -25,11 +25,7 @@ angular.module 'topMapApp'
       #Get rid of the map only paramters to keep url length down.
       urlParams = parameterHelper.getLimitedCopy(pageParams.urlParameters, ['l','b','v','hash'])
       
-      console.log(urlParams)
-      
       url = dataParams.layerUrl + dataParams.apiEndpoint + '/search' + '?page=' + (gridParams.pageNumber - 1) + '&size=' + gridParams.pageSize + $httpParamSerializer(urlParams)
-      
-      console.log('url:', url)
       
       result =
         gridData: [],

@@ -1,10 +1,8 @@
 'use strict'
 angular.module 'topMapApp'
-  .controller 'mapElementController', ($scope, $location, Layer, leafletHelper, leafletData, ogc, config, usSpinnerService, parameterHelper) ->
-
-    console.log('config out')
-    console.log(config)
+  .controller 'mapElementController', ($scope, $location, $modal,  Layer, leafletHelper, leafletData, ogc, config, usSpinnerService, parameterHelper) ->
     
+
     $scope.drawnlayerwkt = ''
     $scope.drawnlayercql = ''
     $scope.parameters = {}
@@ -20,7 +18,7 @@ angular.module 'topMapApp'
         attributionControl: true
       },
       controls: {
-        #scale: true
+      
       },
       bounds: {
         southWest: L.latLng(48.2369976053553, -10.5834521778756),
@@ -129,6 +127,7 @@ angular.module 'topMapApp'
       
     $scope.$on 'leafletDirectiveMap.moveend', (e, wrap) ->
       bounds = wrap.leafletEvent.target.getBounds()
+      #do this here because we don't want to trigger a grid update
       $location.hash(bounds._southWest.lat + ',' + 
         bounds._southWest.lng + ',' + 
         bounds._northEast.lat + ',' + 
@@ -222,7 +221,7 @@ angular.module 'topMapApp'
       L.easyButton('glyphicon glyphicon-globe', (btn, map) ->
         $scope.openLayerInfo()
       ).addTo(map)
-
+      
       leafletData.getMap().then (map) ->
         map.on('draw:created', (e) ->
           leafletData.getLayers().then (baselayers) ->
@@ -245,21 +244,23 @@ angular.module 'topMapApp'
         $scope.$watch 'drawnlayerwkt', (newValue, oldValue) ->
           if newValue 
             # Update WMS
-            if $scope.layerName == 'sentinel'
-              geom = 'footprint_geom'
-            else if $scope.layerName == 'landsat'
-              geom = 'wkb_geometry'
+            geom = $scope.parameters.dataParameters.geomField
+            
             cqlfilter = 'BBOX(' + geom + ',' + $scope.drawnlayercql + ')'
             $scope.layers.overlays.wms.doRefresh = true
             $scope.layers.overlays.wms.url =  $scope.layer.base + '?tiled=true&CQL_FILTER=' + encodeURIComponent(cqlfilter)
             
-            
             $scope.parameters.urlParameters.wkt = $scope.drawnlayerwkt
-            $scope.parameters.trigger = this
             # Update Grid
             $scope.broadcastParameterChange()
-    
-    
+            
+    $scope.controls.draw = draw: {
+      polygon: false,
+      polyline: false,
+      circle: false,
+      marker: false
+    }
+
     $scope.broadcastParameterChange = () ->
       $scope.parameters.trigger = this
       $scope.$emit 'parameterChange', $scope.parameters
@@ -270,30 +271,30 @@ angular.module 'topMapApp'
       if parameters.trigger == this
         return
       
-      $scope.parameters = parameters.urlParameters     
+      $scope.parameters = parameters
       
-      if !('l' of $scope.parameters)
+      if !('l' of $scope.parameters.urlParameters)
         alert('no layer supplied')
         return
         
       usSpinnerService.spin('spinner-main')
       
       #get copy of params without l and hash which are addressed directly
-      filteredParams = parameterHelper.getLimitedCopy($scope.parameters, ["l","hash"])
+      filteredParams = parameterHelper.getLimitedCopy($scope.parameters.urlParameters, ["l","hash"])
 
       ogc.fetchWMSCapabilities(
         ogc.getCapabilitiesURL($scope.base_wms_url, 
           'wms', 
           $scope.base_wms_version)).then (data) ->
         resObj = ogc.extractLayerFromCapabilities(
-          decodeURIComponent($scope.parameters.l), 
+          decodeURIComponent($scope.parameters.urlParameters.l), 
           data
         )
 
         if resObj.error
           alert resObj.msg
         else
-          bounds = ogc.getBoundsFromFragment($scope.parameters.hash)
+          bounds = ogc.getBoundsFromFragment($scope.parameters.urlParameters.hash)
           if not bounds.error
             resObj.data = ogc.modifyBoundsTo(resObj.data, bounds)
 
@@ -307,6 +308,14 @@ angular.module 'topMapApp'
           $scope.base_wms_url,
           $scope.base_wms_version)
           $scope.addOverlay(layer)
+          
+          if parameters.dataParameters.layer != 'none'        
+            $scope.controls.draw.rectangle = true
+          else
+            $scope.controls.draw.rectangle = false
+            
+        #if $scope.paramters.urlParameters.wkt
+          
 
         usSpinnerService.stop('spinner-main')  
 

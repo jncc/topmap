@@ -26,8 +26,9 @@ angular.module 'topMapApp'
       footer = angular.element '#footer'
       footer.addClass 'hidden'
 
-    $scope.$on '$parameterChange', (newParameters) ->       
+    $scope.$on 'parameterChange', (newParameters) ->       
       $scope.pageParameters = $.extend true, $scope.pageParameters, newParameters
+      #todo - exclude hash
       $location.search($scope.pageParameters.urlParameters)
       $scope.broadcastParameterChange()
       

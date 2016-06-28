@@ -34,7 +34,7 @@ angular.module 'topMapApp'
       url: 'http://eodip.jncc.gov.uk/api/'
     },
     topsat_layers: [
-      {layer: 'sentinel', layerName: 'EODIP:sentinelview', apiEndpoint: 'sentinel', resourceListName: 'sentinelResourceList'},
-      {layer:'landsat', layerName: 'EODIP:landsat_coverage', apiEndpoint: 'landsat', resourceListName: 'landsatSceneResourceList'}
+      {layer: 'sentinel', layerName: 'EODIP:sentinelview', apiEndpoint: 'sentinel', resourceListName: 'sentinelResourceList', geomField: 'footprint_geom'},
+      {layer:'landsat', layerName: 'EODIP:landsat_coverage', apiEndpoint: 'landsat', resourceListName: 'landsatSceneResourceList', geomField: 'landsat'}
     ]
 }
