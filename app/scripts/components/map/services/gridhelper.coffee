@@ -55,6 +55,14 @@ angular.module 'topMapApp'
           deferedResult.resolve(result)
       
       return deferedResult.promise;
+      
+    registerGridApi: (scope, gridApi) ->
+      scope.gridApi = gridApi
+      
+      gridApi.pagination.on.paginationChanged scope, (newPage, pageSize) ->
+        scope.gridConfig.pageNumber = newPage - 1
+        scope.gridConfig.pageSize = pageSize
+        scope.getGridData()
      
 #    configureDataGrid: (layer) ->
 #      for ep in config.topsat_layers

@@ -23,16 +23,12 @@ angular.module 'topMapApp'
     {field: 'beginPosition'},
     {field: 'endPosition'}]
   
-    $scope.gridConfig =
+    $scope.gridConfig = 
       pageNumber : 1
       pageSize : 50
       columnDefs: $scope.gridColDefs
       onRegisterApi: (gridApi) ->
-          $scope.gridApi = gridApi
-          gridApi.pagination.on.paginationChanged $scope, (newPage, pageSize) ->
-            $scope.gridConfig.pageNumber = newPage - 1
-            $scope.gridConfig.pageSize = pageSize
-            $scope.getGridData()
+        gridHelper.registerGridApi($scope, gridApi)
       
     $scope.getGridData = () ->
       gridHelper.getGridData($scope.pageParameters, $scope.gridConfig).then (result) ->
@@ -43,7 +39,6 @@ angular.module 'topMapApp'
     $scope.gridOptions = gridHelper.applyStandardGridConfig($scope.gridConfig)
     
     $scope.$on 'parameterUpdate', (event, parameters) ->
-      console.log('sentinal grid triggered')
       $scope.pageParameters = parameters
       $scope.getGridData()
 
