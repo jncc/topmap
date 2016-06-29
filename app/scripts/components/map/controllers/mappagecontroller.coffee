@@ -9,7 +9,7 @@ angular.module 'topMapApp'
       
     #Init Page Parameters
     urlParameters = parameterHelper.getDecodedParmeters($location.search())
-    angular.extend urlParameters, {hash : $location.hash()}
+    $scope.pageParameters.urlHash = $location.hash()
     $scope.pageParameters.urlParameters = urlParameters
     $scope.pageParameters.dataParameters = configHelper.getDataConfig($scope.pageParameters.urlParameters.l)
     
@@ -28,8 +28,8 @@ angular.module 'topMapApp'
 
     $scope.$on 'parameterChange', (newParameters) ->       
       $scope.pageParameters = $.extend true, $scope.pageParameters, newParameters
-      #todo - exclude hash
       $location.search($scope.pageParameters.urlParameters)
+      $location.hash($scope.pageParameters.urlHash)
       $scope.broadcastParameterChange()
       
     #Trigger query change event in timout to ensure all handlers have registered.

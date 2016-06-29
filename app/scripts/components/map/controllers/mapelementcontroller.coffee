@@ -2,7 +2,7 @@
 angular.module 'topMapApp'
   .controller 'mapElementController', ($scope, $location, $modal,  Layer, leafletHelper, leafletData, ogc, config, usSpinnerService, parameterHelper) ->
     
-
+    $scope.this = this
     $scope.drawnlayerwkt = ''
     $scope.drawnlayercql = ''
     $scope.parameters = {}
@@ -128,10 +128,13 @@ angular.module 'topMapApp'
     $scope.$on 'leafletDirectiveMap.moveend', (e, wrap) ->
       bounds = wrap.leafletEvent.target.getBounds()
       #do this here because we don't want to trigger a grid update
-      $location.hash(bounds._southWest.lat + ',' + 
+      $scope.parameters.urlHash = bounds._southWest.lat + ',' + 
         bounds._southWest.lng + ',' + 
         bounds._northEast.lat + ',' + 
-        bounds._northEast.lng)
+        bounds._northEast.lng
+        
+      $location.hash($scope.parameters.urlHash)
+        
       if $scope.layer?
         $location.search('b', encodeURIComponent($scope.layer.base))
         $location.search('l', encodeURIComponent($scope.layer.name))
@@ -265,10 +268,11 @@ angular.module 'topMapApp'
       $scope.parameters.trigger = this
       $scope.$emit 'parameterChange', $scope.parameters
     
+      
     # Set up the overlays on the map, either by a given b (base url), l (layer 
     # name), v (wms version)
     $scope.$on 'parameterUpdate', (event, parameters) ->
-      if parameters.trigger == this
+      if parameters.trigger == $scope.this
         return
       
       $scope.parameters = parameters
@@ -279,8 +283,8 @@ angular.module 'topMapApp'
         
       usSpinnerService.spin('spinner-main')
       
-      #get copy of params without l and hash which are addressed directly
-      filteredParams = parameterHelper.getLimitedCopy($scope.parameters.urlParameters, ["l","hash"])
+      #get copy of params without l
+      filteredParams = parameterHelper.getLimitedCopy($scope.parameters.urlParameters, ["l"])
 
       ogc.fetchWMSCapabilities(
         ogc.getCapabilitiesURL($scope.base_wms_url, 
@@ -294,7 +298,7 @@ angular.module 'topMapApp'
         if resObj.error
           alert resObj.msg
         else
-          bounds = ogc.getBoundsFromFragment($scope.parameters.urlParameters.hash)
+          bounds = ogc.getBoundsFromFragment($scope.parameters.urlHash)
           if not bounds.error
             resObj.data = ogc.modifyBoundsTo(resObj.data, bounds)
 
