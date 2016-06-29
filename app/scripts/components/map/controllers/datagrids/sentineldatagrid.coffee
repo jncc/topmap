@@ -3,6 +3,7 @@
 angular.module 'topMapApp'
   .controller 'sentinelDatagridCtrl', ($scope, gridHelper, configHelper, uiGridConstants) ->
     
+    $scope.this = this
     $scope.gridData = []
     $scope.pageParameters = {}
     
@@ -43,7 +44,7 @@ angular.module 'topMapApp'
     $scope.gridOptions = gridHelper.applyStandardGridConfig($scope.gridConfig)
     
     $scope.$on 'parameterUpdate', (event, parameters) ->
-      if parameters.trigger == this
+      if parameters.trigger == $scope.this
         return
 
       $scope.pageParameters = parameters

@@ -265,7 +265,7 @@ angular.module 'topMapApp'
     }
 
     $scope.broadcastParameterChange = () ->
-      $scope.parameters.trigger = this
+      $scope.parameters.trigger = $scope.this
       $scope.$emit 'parameterChange', $scope.parameters
     
       
