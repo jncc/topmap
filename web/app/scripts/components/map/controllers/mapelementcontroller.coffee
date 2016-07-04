@@ -282,8 +282,8 @@ angular.module 'topMapApp'
       leafletData.getMap().then (map) ->
         obj = wkt.toObject(map.defaults)
         
-        if !Wkt.isArray(obj)
-          map.
+        #if !Wkt.isArray(obj)
+         # map.
     
     # Set up the overlays on the map, either by a given b (base url), l (layer 
     # name), v (wms version)

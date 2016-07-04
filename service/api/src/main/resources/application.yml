@@ -4,8 +4,8 @@ spring:
 spring:
     profiles: default
 spring.datasource:
-    url: jdbc:postgresql://localhost:5432/topsat
-#    url: jdbc:postgresql://ec2-54-72-232-23.eu-west-1.compute.amazonaws.com:5432/topsat
+#    url: jdbc:postgresql://localhost:5432/topsat
+    url: jdbc:postgresql://ec2-54-72-232-23.eu-west-1.compute.amazonaws.com:5432/topsat
     username: admin
     password: admin_password
     maxActive: 20
