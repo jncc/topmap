@@ -264,6 +264,7 @@ angular.module 'topMapApp'
       marker: false
     }
 
+	#does something clever
     $scope.broadcastParameterChange = () ->
       $scope.parameters.trigger = $scope.this
       $scope.$emit 'parameterChange', $scope.parameters
