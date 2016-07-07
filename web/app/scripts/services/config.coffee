@@ -31,7 +31,8 @@ angular.module 'topMapApp'
     ],
     topsat_api: {
       name: 'JNCC TopSat API',
-      url: 'http://eodip.jncc.gov.uk/api/'
+      # url: 'http://eodip.jncc.gov.uk/api/'
+      url: 'http://localhost:8084/api/'
     },
     topsat_layers: [
       {layer: 'sentinel', layerName: 'EODIP:sentinelview', apiEndpoint: 'sentinel', resourceListName: 'sentinelResourceList', geomField: 'footprint_geom'},

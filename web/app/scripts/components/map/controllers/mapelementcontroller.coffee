@@ -264,24 +264,23 @@ angular.module 'topMapApp'
       marker: false
     }
 
-	#does something clever
     $scope.broadcastParameterChange = () ->
       $scope.parameters.trigger = $scope.this
       $scope.$emit 'parameterChange', $scope.parameters
     
-    reloadDrawnLayer = (wkt) ->
-      wkt = new (Wkt.Wkt)
+    #reloadDrawnLayer = (wkt) ->
+      #wkt = new (Wkt.Wkt)
             
-      try
-        wkt.read wkt
-      catch e
-        alert 'Could not read the WKT string from the url.'
-        
-      if wkt.type != 'polygon'
-        alert 'wkt must be a polygon'  
-      
-      leafletData.getMap().then (map) ->
-        obj = wkt.toObject(map.defaults)
+      #try
+      #  wkt.read wkt
+      #catch e
+      #  alert 'Could not read the WKT string from the url.'
+      #  
+      #if wkt.type != 'polygon'
+      #  alert 'wkt must be a polygon'  
+      #
+      #leafletData.getMap().then (map) ->
+      #  obj = wkt.toObject(map.defaults)
         
         #if !Wkt.isArray(obj)
          # map.
@@ -335,8 +334,8 @@ angular.module 'topMapApp'
           else
             $scope.controls.draw.rectangle = false
             
-        if $scope.paramters.urlParameters.wkt
-          reloadDrawnLayer($scope.paramters.urlParameters.wkt)
+        #if $scope.parameters.urlParameters.wkt
+        #  reloadDrawnLayer($scope.parameters.urlParameters.wkt)
           
         usSpinnerService.stop('spinner-main')  
 
