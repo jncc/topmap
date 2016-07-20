@@ -53,6 +53,36 @@ angular.module 'topMapApp'
     $scope.showLegend = false
     $scope.features = []
     
+    getFilterOptions = (dataParams) ->
+      url = encodeURI(dataParams.layerUrl + dataParams.apiEndpoint + '/parameters')
+      
+      result = []
+
+      $http.get(url, true)
+        .success (filterOptions) ->
+          result = filterOptions
+        .error (e) -> 
+          alert('Could not configure filter parameters')
+      
+      return result
+      
+    $scope.openFilterDialogue = () ->
+      if ($scope.parameters.dataParameters.layer == 'none')
+        alert('This layer does not have any filters')
+      else
+        modalInstance = $modal.open({
+          animation: true,
+          templateUrl: $scope.parameters.dataParameters.filterView,
+          controller: $scope.parameters.dataParameters.filterController,
+          size: 'lg',
+          resolve: {
+            parameters: () ->
+              return $scope.parameters
+            filterOptions: () ->
+              return getFilterOptions($scope.parameters.dataParameters)
+          }
+        })
+
     # Open a modal window for displaying features from a GetFeatureInfo request
     # on the map
     $scope.openGetFeatureInfo = () -> 
@@ -224,6 +254,9 @@ angular.module 'topMapApp'
       L.easyButton('glyphicon glyphicon-globe', (btn, map) ->
         $scope.openLayerInfo()
       ).addTo(map)
+      L.easyButton('glyphicon glyphicon-filter', (btn, map) ->
+        $scope.openFilterDialogue()
+      ).addTo(map)
       
       leafletData.getMap().then (map) ->
         map.on('draw:created', (e) ->
@@ -243,6 +276,8 @@ angular.module 'topMapApp'
             $scope.drawnlayerwkt = leafletHelper.toWKT(layer)
             
         )
+
+        
         
         $scope.$watch 'drawnlayerwkt', (newValue, oldValue) ->
           if newValue 

@@ -5,7 +5,7 @@ angular.module 'topMapApp'
       
     $scope.pageParameters =
       urlParameters: {}
-      dataParameters: {}
+      dataParameters: {layer: 'none'}
       
     #Init Page Parameters
     urlParameters = parameterHelper.getDecodedParmeters($location.search())

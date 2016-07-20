@@ -11,6 +11,27 @@
     
     <span us-spinner="{radius:30, width:8, length: 16}" spinner-key="spinner-main"></span>
 
+    <script type="text/ng-template" id="sentinelFilter.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Sentinel Filters</h3>
+        </div>
+        <div class="modal-body scroll">
+            <div>
+                Platform:
+                <br/>
+                <input type="text" ng-model="platform">
+            </div>
+            <div>
+                Product:
+                <br/>
+                <input type="text" ng-model="product" >
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input class="button" type="submit" ng-click="ok()" value="OK" />
+            <input class="button" type="reset" ng-click="undo()" value="Undo" />
+        </div>
+    </script>
     <script type="text/ng-template" id="getFeatureInfo.html">
         <div class="modal-header">
             <h3 class="modal-title">Feature Info</h3>

@@ -31,11 +31,27 @@ angular.module 'topMapApp'
     ],
     topsat_api: {
       name: 'JNCC TopSat API',
-      # url: 'http://eodip.jncc.gov.uk/api/'
-      url: 'http://localhost:8084/api/'
+      url: 'http://eodip.jncc.gov.uk/api/'
+      # url: 'http://localhost:8084/api/'
     },
     topsat_layers: [
-      {layer: 'sentinel', layerName: 'EODIP:sentinelview', apiEndpoint: 'sentinel', resourceListName: 'sentinelResourceList', geomField: 'footprint_geom'},
-      {layer:'landsat', layerName: 'EODIP:landsat_coverage', apiEndpoint: 'landsat', resourceListName: 'landsatSceneResourceList', geomField: 'landsat'}
+      {
+        layer: 'sentinel', 
+        layerName: 'EODIP:sentinelview', 
+        apiEndpoint: 'sentinel', 
+        resourceListName: 'sentinelResourceList', 
+        geomField: 'footprint_geom',
+        filterController: 'sentinelFilter',
+        filterView: 'sentinelFilter.html'
+      },
+      {
+        layer:'landsat', 
+        layerName: 'EODIP:landsat_coverage', 
+        apiEndpoint: 'landsat', 
+        resourceListName: 'landsatSceneResourceList', 
+        geomField: 'landsat'
+        filterController: 'landsatFilter',
+        filterView: 'landsatFilter.html'
+      }
     ]
 }
