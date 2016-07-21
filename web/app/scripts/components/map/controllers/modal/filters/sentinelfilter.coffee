@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'topMapApp'
-  .controller 'sentinelFilter', ($scope) ->
+  .controller 'sentinelFilter', ($scope, $http) ->
   
     $scope.parameters = {}
     $scope.this = this
@@ -17,7 +17,21 @@ angular.module 'topMapApp'
       if ('senprd' of $scope.parameters.urlParameters)
         $scope.product = $scope.parameters.urlParameters.senprd
       else
-        $scope.product = ''      
+        $scope.product = '' 
+
+    getOptionsList = (filterName, filters) ->
+      for fl in filters 
+        if (fl.name == filterName)
+          return fl
+
+    initFilters = () ->
+      url = encodeURI($scope.parameters.dataParameters.layerUrl + $scope.parameters.dataParameters.apiEndpoint + '/parameters')
+
+      $http.get(url, true)
+        .success (filterOptions) ->
+          productOpts = getOptionsList('product', filterOptions)
+        .error (e) -> 
+          alert('Could not configure filter parameter')
 
     $scope.ok = () ->
       $scope.parameters.urlParameters.senplt = $scope.platform
@@ -37,7 +51,9 @@ angular.module 'topMapApp'
         return
       $scope.parameters = parameters
       setParameters()
-      
+      initFilters()
+    
+
 
 
   
