@@ -1,6 +1,6 @@
 'use strict'
 angular.module 'topMapApp'
-  .controller 'mapElementController', ($scope, $location, $modal, $q, Layer, leafletHelper, leafletData, ogc, config, usSpinnerService, parameterHelper) ->
+  .controller 'mapElementController', ($scope, $location,  $http, $modal, $q, Layer, leafletHelper, leafletData, ogc, config, usSpinnerService, parameterHelper) ->
     
     $scope.this = this
     $scope.drawnlayerwkt = ''
@@ -55,33 +55,37 @@ angular.module 'topMapApp'
     
     getFilterOptions = (dataParams) ->
       url = encodeURI(dataParams.layerUrl + dataParams.apiEndpoint + '/parameters')
-      
-      result = []
 
       $http.get(url, true)
-        .success (filterOptions) ->
-          result = filterOptions
+        .success (response) ->
+          data = response.data
+          return data
         .error (e) -> 
           alert('Could not configure filter parameters')
-      
-      return result
+          return {}
       
     $scope.openFilterDialogue = () ->
       if ($scope.parameters.dataParameters.layer == 'none')
         alert('This layer does not have any filters')
       else
-        modalInstance = $modal.open({
-          animation: true,
-          templateUrl: $scope.parameters.dataParameters.filterView,
-          controller: $scope.parameters.dataParameters.filterController,
-          size: 'lg',
-          resolve: {
-            parameters: () ->
-              return $scope.parameters
-            filterOptions: () ->
-              return getFilterOptions($scope.parameters.dataParameters)
-          }
-        })
+        url = encodeURI($scope.parameters.dataParameters.layerUrl + $scope.parameters.dataParameters.apiEndpoint + '/parameters')
+
+        $http.get(url, true)
+          .success (filterOptions) ->
+            modalInstance = $modal.open({
+              animation: true,
+              templateUrl: $scope.parameters.dataParameters.filterView,
+              controller: $scope.parameters.dataParameters.filterController,
+              size: 'lg',
+              resolve: {
+                parameters: () ->
+                  return $scope.parameters
+                filterOptions: () ->
+                  return filterOptions
+              }
+            })
+          .error (e) -> 
+            alert('Could not configure filter parameters')
 
     # Open a modal window for displaying features from a GetFeatureInfo request
     # on the map
