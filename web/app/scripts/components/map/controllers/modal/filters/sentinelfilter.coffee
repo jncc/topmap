@@ -8,24 +8,36 @@ angular.module 'topMapApp'
     $scope.platform = ''
     $scope.product = ''
     
-    $scope.ok = () ->
-      $scope.parameters.urlParameters.s_pl = $scope.platform
-      $scope.parameters.urlParameters.s_pr = $scope.product
-    
-      $scope.parameters.trigger = $scope.this
-      $scope.$emit 'parameterChange', $scope.parameters
-      $modalInstance.close()
-      
-    $scope.undo = () ->
-      if ('s_pl' of $scope.parameters.urlParameters)
-        $scope.platform = $scope.parameters.urlParameters.s_pl
+    setParameters = () ->
+      if ('senplt' of $scope.parameters.urlParameters)
+        $scope.platform = $scope.parameters.urlParameters.senplt
       else
         $scope.platform = ''
         
-      if ('s_pr' of $scope.parameters.urlParameters)
-        $scope.product = $scope.parameters.urlParameters.s_pr
+      if ('senprd' of $scope.parameters.urlParameters)
+        $scope.product = $scope.parameters.urlParameters.senprd
       else
-        $scope.product = ''
+        $scope.product = ''      
+
+    $scope.ok = () ->
+      $scope.parameters.urlParameters.senplt = $scope.platform
+      $scope.parameters.urlParameters.senprd = $scope.product
+
+      $scope.parameters.pageState.showFilters = false
+
+      $scope.parameters.trigger = $scope.this
+      $scope.$emit 'parameterChange', $scope.parameters
+
+      
+    $scope.undo = () ->
+      setParameters()
+
+    $scope.$on 'parameterUpdate', (event, parameters) ->
+      if parameters.trigger == $scope.this
+        return
+      $scope.parameters = parameters
+      setParameters()
+      
 
 
   

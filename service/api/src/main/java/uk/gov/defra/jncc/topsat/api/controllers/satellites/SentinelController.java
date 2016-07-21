@@ -75,14 +75,14 @@ public class SentinelController {
             @ApiParam(value = "A WKT bounding box defined in WGS84 (EPSG:4326)")
             @RequestParam(name = "wkt", required = false) String wkt, 
             @ApiParam(value = "The sentinel platform from which the product was generated")
-            @RequestParam(name = "platform", required = false) String platform,
+            @RequestParam(name = "senplt", required = false) String senplt,
             @ApiParam(value = "The sentinel product type code")
-            @RequestParam(name = "product", required = false) String product) throws ParseException 
+            @RequestParam(name = "senprd", required = false) String senprd) throws ParseException 
         {
             SentinelParameters params = new SentinelParameters();
             params.BoundingBoxWkt = wkt;
-            params.Platform = platform;
-            params.Product = product;
+            params.Platform = senplt;
+            params.Product = senprd;
             
             BooleanExpression criteria = SentinelPredicateBuilder.buildPredicates(params);
             
