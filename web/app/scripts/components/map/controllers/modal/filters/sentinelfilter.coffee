@@ -1,9 +1,9 @@
 'use strict'
 
 angular.module 'topMapApp'
-  .controller 'sentinelFilter', ($scope, $modalInstance, parameters, filterOptions) ->
+  .controller 'sentinelFilter', ($scope) ->
   
-    $scope.parameters = parameters
+    $scope.parameters = {}
     $scope.this = this
     $scope.platform = ''
     $scope.product = ''

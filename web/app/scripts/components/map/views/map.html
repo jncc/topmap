@@ -131,6 +131,11 @@
             <input class="button" type="submit" ng-click="ok()" value="Close" />
         </div>
     </script>       <!-- Data Grids -->  
+    <div class="filters" ng-switch="pageParameters.dataParameters.layer" ng-show="showFilters">
+        <div ng-switch-when="sentinel" ng-controller="sentinelFilter">
+            filters
+        </div>
+    </div>
     <div class="dataGrids" ng-switch="pageParameters.dataParameters.layer">
             <div ng-switch-when="sentinel" ng-controller="sentinelDatagridCtrl">
                 <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridConfig" ></div>

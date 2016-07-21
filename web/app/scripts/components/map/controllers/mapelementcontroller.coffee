@@ -64,28 +64,30 @@ angular.module 'topMapApp'
           alert('Could not configure filter parameters')
           return {}
       
-    $scope.openFilterDialogue = () ->
-      if ($scope.parameters.dataParameters.layer == 'none')
-        alert('This layer does not have any filters')
-      else
-        url = encodeURI($scope.parameters.dataParameters.layerUrl + $scope.parameters.dataParameters.apiEndpoint + '/parameters')
+    $scope.toggleFilterDialogue = () ->
+      $scope.parameters.pageState.showFilters = !$scope.parameters.pageState.showFilters
+      $scope.broadcastParameterChange()
+      # if ($scope.parameters.dataParameters.layer == 'none')
+      #   alert('This layer does not have any filters')
+      # else
+      #   url = encodeURI($scope.parameters.dataParameters.layerUrl + $scope.parameters.dataParameters.apiEndpoint + '/parameters')
 
-        $http.get(url, true)
-          .success (filterOptions) ->
-            modalInstance = $modal.open({
-              animation: true,
-              templateUrl: $scope.parameters.dataParameters.filterView,
-              controller: $scope.parameters.dataParameters.filterController,
-              size: 'lg',
-              resolve: {
-                parameters: () ->
-                  return $scope.parameters
-                filterOptions: () ->
-                  return filterOptions
-              }
-            })
-          .error (e) -> 
-            alert('Could not configure filter parameters')
+      #   $http.get(url, true)
+      #     .success (filterOptions) ->
+      #       modalInstance = $modal.open({
+      #         animation: true,
+      #         templateUrl: $scope.parameters.dataParameters.filterView,
+      #         controller: $scope.parameters.dataParameters.filterController,
+      #         size: 'lg',
+      #         resolve: {
+      #           parameters: () ->
+      #             return $scope.parameters
+      #           filterOptions: () ->
+      #             return filterOptions
+      #         }
+      #       })
+      #     .error (e) -> 
+      #       alert('Could not configure filter parameters')
 
     # Open a modal window for displaying features from a GetFeatureInfo request
     # on the map
@@ -259,7 +261,7 @@ angular.module 'topMapApp'
         $scope.openLayerInfo()
       ).addTo(map)
       L.easyButton('glyphicon glyphicon-filter', (btn, map) ->
-        $scope.openFilterDialogue()
+        $scope.toggleFilterDialogue()
       ).addTo(map)
       
       leafletData.getMap().then (map) ->
