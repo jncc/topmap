@@ -128,8 +128,8 @@ public class SentinelController {
     {
         List<ParameterValueList> result = new ArrayList<>();
         
-        result.add(new ParameterValueList("platform", sentinelRepository.getAllPlatforms()));
-        result.add(new ParameterValueList("product", sentinelRepository.getAllProductTypes()));
+        result.add(new ParameterValueList("senplt", sentinelRepository.getAllPlatforms()));
+        result.add(new ParameterValueList("senprd", sentinelRepository.getAllProductTypes()));
         
         return new HttpEntity<>(result);
     }

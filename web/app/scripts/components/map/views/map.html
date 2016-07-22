@@ -140,12 +140,14 @@
                 <div>
                     Platform:
                     <br/>
-                    <input type="text" ng-model="platform">
+                    <select ng-options="platform as platform for platform in platforms" ng-model="platform">
+                    </select>
                 </div>
                 <div>
                     Product:
                     <br/>
-                    <input type="text" ng-model="product" >
+                    <select ng-options="product as product for product in products" ng-model="product">
+                    </select>
                 </div>
             </div>
             <div class="modal-footer">

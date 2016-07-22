@@ -2,11 +2,18 @@
 
 angular.module 'topMapApp'
   .controller 'sentinelFilter', ($scope, $http) ->
-  
+    
+
     $scope.parameters = {}
     $scope.this = this
-    $scope.platform = ''
-    $scope.product = ''
+
+    $scope.selectionDefault = 'Select item'
+
+    $scope.platform = $scope.selectionDefault
+    $scope.platforms = []
+    $scope.product = $scope.selectionDefault
+    $scope.products = []
+    
     
     setParameters = () ->
       if ('senplt' of $scope.parameters.urlParameters)
@@ -29,13 +36,29 @@ angular.module 'topMapApp'
 
       $http.get(url, true)
         .success (filterOptions) ->
-          productOpts = getOptionsList('product', filterOptions)
+
+          for fol in filterOptions
+            fol.values.unshift($scope.selectionDefault)
+            if (fol.parameter == 'product')
+              $scope.products = fol.values
+              $scope.product = $scope.products[0]
+            if (fol.parameter == 'platform')
+              $scope.platforms = fol.values
+              $scope.platform = $scope.platforms[0]
+
         .error (e) -> 
-          alert('Could not configure filter parameter')
+          alert('Could not get a list of filter options')
 
     $scope.ok = () ->
-      $scope.parameters.urlParameters.senplt = $scope.platform
-      $scope.parameters.urlParameters.senprd = $scope.product
+      if ($scope.platform == $scope.selectionDefault)
+        $scope.parameters.urlParameters.senplt = undefined
+      else
+        $scope.parameters.urlParameters.senplt = $scope.platform
+
+      if ($scope.product == $scope.selectionDefault)
+        $scope.parameters.urlParameters.senprd = undefined
+      else
+        $scope.parameters.urlParameters.senprd = $scope.product
 
       $scope.parameters.pageState.showFilters = false
 
