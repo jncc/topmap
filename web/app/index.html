@@ -26,7 +26,7 @@
         <!-- endbuild -->
         <base href="/">
     </head>
-    <body ng-app="topMapApp"  style="height: 100%;">
+    <body ng-app="topMap"  style="height: 100%;">
         <!--[if lte IE 8]>
           <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -148,20 +148,23 @@
         <script src="scripts/services/config.js"></script>
         <script src="scripts/controllers/navbar.js"></script>
 
-        <script src="scripts/components/map/controllers/datagrids/landsatdatagrid.js"></script>
-        <script src="scripts/components/map/controllers/datagrids/sentineldatagrid.js"></script>
-        <script src="scripts/components/map/controllers/modal/modalinstance.js"></script>
-        <script src="scripts/components/map/controllers/modal/ogcmodalinstance.js"></script>
-        <script src="scripts/components/map/controllers/modal/filters/sentinelfilter.js"></script>
-        <script src="scripts/components/map/controllers/mapelementcontroller.js"></script>
-        <script src="scripts/components/map/controllers/mappagecontroller.js"></script>
-        <script src="scripts/components/map/services/leaflethelper.js"></script>
-        <script src="scripts/components/map/services/parameterhelper.js"></script>
-        <script src="scripts/components/map/services/ogc.js"></script>
-        <script src="scripts/components/map/services/gridhelper.js"></script>
-        <script src="scripts/components/map/services/confighelper.js"></script>
-        <script src="scripts/components/map/modules/mapmodule.js"></script>
-        
+        <!--Map Module-->
+        <script src="scripts/components/map/datasets/landsat/datagrid/landsatdatagrid.js"></script>
+        <script src="scripts/components/map/datasets/sentinel/datagrid/sentineldatagrid.js"></script>
+        <script src="scripts/components/map/datasets/sentinel/filter/sentinelfiltercontroller.js"></script>
+        <script src="scripts/components/map/datasets/common/services/gridhelper.js"></script>
+
+        <script src="scripts/components/map/mapelement/services/leaflethelper.js"></script>
+        <script src="scripts/components/map/mapelement/services/ogc.js"></script>
+        <script src="scripts/components/map/mapelement/modal/modalinstance.js"></script>
+        <script src="scripts/components/map/mapelement/modal/ogcmodalinstance.js"></script>        
+        <script src="scripts/components/map/mapelement/mapelementcontroller.js"></script>
+
+        <script src="scripts/components/map/page/mappagecontroller.js"></script>
+        <script src="scripts/components/map/page/services/parameterhelper.js"></script>                
+        <script src="scripts/components/map/page/services/confighelper.js"></script>
+
+        <script src="scripts/components/map/mapmodule.js"></script>
         <!-- endbuild -->
     </body>
 </html>

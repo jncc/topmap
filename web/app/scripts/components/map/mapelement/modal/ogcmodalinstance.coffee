@@ -1,12 +1,12 @@
 ###*
  # @ngdoc function
- # @name topMapApp.controller:OGCModalInstanceCtrl
+ # @name topMap.controller:OGCModalInstanceCtrl
  # @description
  # # ModalInstanceCtrl
- # Controller of the topMapApp for displaying a basic modal dialog with a 
+ # Controller of the topMap for displaying a basic modal dialog with a 
  # provided data element for OGC Data Layers
 ###
-angular.module 'topMapApp'
+angular.module 'topmap.map'
   .controller 'OGCModalInstanceCtrl', ($scope, $modalInstance, data, Layer, config) ->
 
     $scope.data = data;

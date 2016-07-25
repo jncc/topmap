@@ -2,12 +2,12 @@
 
 ###*
  # @ngdoc function
- # @name topMapApp.controller:AboutCtrl
+ # @name topMap.controller:AboutCtrl
  # @description
  # # AboutCtrl
- # Controller of the topMapApp
+ # Controller of the topMap
 ###
-angular.module 'topMapApp'
+angular.module 'topMap'
   .controller 'AboutCtrl', ($scope) ->
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
       footer = angular.element '#footer'

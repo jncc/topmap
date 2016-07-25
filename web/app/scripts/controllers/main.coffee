@@ -2,12 +2,12 @@
 
 ###*
  # @ngdoc function
- # @name topMapApp.controller:MainCtrl
+ # @name topMap.controller:MainCtrl
  # @description
  # # MainCtrl
- # Controller of the topMapApp
+ # Controller of the topMap
 ###
-angular.module 'topMapApp'
+angular.module 'topMap'
   .controller 'MainCtrl', (leafletData, ogc, config, $q, $scope, Layer, usSpinnerService) ->  
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
       footer = angular.element '#footer'

@@ -2,14 +2,14 @@
 
 ###*
  # @ngdoc function
- # @name topMapApp.controller:MapCtrl
+ # @name topMap.controller:MapCtrl
  # @description
  # # MapCtrl
- # Controller of the topMapApp for Mapping data, typically passed data from the
+ # Controller of the topMap for Mapping data, typically passed data from the
  # MainCtrl in the form of a Layer object, but can also take in a layer in the 
  # form of url parameters
 ###
-angular.module 'topMapApp'
+angular.module 'topMap'
   .controller 'MapCtrl', ($q, $scope, $location, $route, $http, leafletData, ogc, store, 
     config, Layer, $modal, $log, $base64, usSpinnerService, uiGridConstants, leafletHelper) ->    
     # Grab the initial parameters and hash values before they get changed by the
@@ -397,13 +397,13 @@ angular.module 'topMapApp'
         
 ###*
  # @ngdoc function
- # @name topMapApp.controller:ModalInstanceCtrl
+ # @name topMap.controller:ModalInstanceCtrl
  # @description
  # # ModalInstanceCtrl
- # Controller of the topMapApp for displaying a basic modal dialog with a 
+ # Controller of the topMap for displaying a basic modal dialog with a 
  # provided data element
 ###
-angular.module 'topMapApp'
+angular.module 'topMap'
   .controller 'ModalInstanceCtrl', ($scope, $modalInstance, data) ->
 
     $scope.data = data;
@@ -419,13 +419,13 @@ angular.module 'topMapApp'
 
 ###*
  # @ngdoc function
- # @name topMapApp.controller:OGCModalInstanceCtrl
+ # @name topMap.controller:OGCModalInstanceCtrl
  # @description
  # # ModalInstanceCtrl
- # Controller of the topMapApp for displaying a basic modal dialog with a 
+ # Controller of the topMap for displaying a basic modal dialog with a 
  # provided data element for OGC Data Layers
 ###
-angular.module 'topMapApp'
+angular.module 'topMap'
   .controller 'OGCModalInstanceCtrl', ($scope, $modalInstance, data, Layer, config) ->
 
     $scope.data = data;

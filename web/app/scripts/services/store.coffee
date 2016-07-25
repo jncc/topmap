@@ -2,12 +2,12 @@
 
 ###*
  # @ngdoc service
- # @name topMapApp.store
+ # @name topMap.store
  # @description
  # # store
- # Service in the topMapApp.
+ # Service in the topMap.
 ###
-angular.module 'topMapApp'
+angular.module 'topMap'
   .service 'store', ->
     data = {};
     

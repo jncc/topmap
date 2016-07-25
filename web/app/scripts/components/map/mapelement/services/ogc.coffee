@@ -2,13 +2,13 @@
 
 ###*
  # @ngdoc service
- # @name topMapAppApp.ogc
+ # @name topMapApp.ogc
  # @description
  # # ogc
- # Factory in the topMapApp, a set of helpers based around OGC web services and
+ # Factory in the topMap, a set of helpers based around OGC web services and
  # other mapping functions
 ###
-angular.module 'topMapApp'
+angular.module 'topMap'
   .factory 'ogc', ($http, $q, x2js) ->     
     getBoundsFromFragment: (fragment) ->
       latlngPattern = /^([-]?[0-9]+\.?[0-9]+,){3}([-]?[0-9]+\.?[0-9]+)$/g 

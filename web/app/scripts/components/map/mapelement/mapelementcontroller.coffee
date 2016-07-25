@@ -1,5 +1,5 @@
 'use strict'
-angular.module 'topMapApp'
+angular.module 'topMap'
   .controller 'mapElementController', ($scope, $location,  $http, $modal, $q, Layer, leafletHelper, leafletData, ogc, config, usSpinnerService, parameterHelper) ->
     
     $scope.this = this

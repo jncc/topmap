@@ -3,7 +3,7 @@
 describe 'Controller: MapCtrl', ->
 
   # load the controller's module
-  beforeEach module 'topMapApp'
+  beforeEach module 'topMap'
 
   MapCtrl = {}
 

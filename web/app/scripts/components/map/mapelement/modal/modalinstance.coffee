@@ -1,12 +1,12 @@
 ###*
  # @ngdoc function
- # @name topMapApp.controller:ModalInstanceCtrl
+ # @name topMap.controller:ModalInstanceCtrl
  # @description
  # # ModalInstanceCtrl
- # Controller of the topMapApp for displaying a basic modal dialog with a 
+ # Controller of the topMap for displaying a basic modal dialog with a 
  # provided data element
 ###
-angular.module 'topMapApp'
+angular.module 'topmap.map'
   .controller 'ModalInstanceCtrl', ($scope, $modalInstance, data) ->
 
     $scope.data = data;

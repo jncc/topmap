@@ -28,7 +28,7 @@
     "angular-mocks": "^1.4.0"
   },
   "appPath": "app",
-  "moduleName": "topMapApp",
+  "moduleName": "topMap",
   "overrides": {
     "bootstrap": {
       "main": [

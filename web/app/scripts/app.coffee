@@ -2,14 +2,14 @@
 
 ###*
  # @ngdoc overview
- # @name topMapApp
+ # @name topMap
  # @description
- # # topMapApp
+ # # topMap
  #
  # Main module of the application.
 ###
 angular
-  .module 'topMapApp', [
+  .module 'topmap', [
     'ngAnimate',
     'ngCookies',
     'ngResource',
@@ -18,14 +18,10 @@ angular
     'ngTouch',
     'angularSpinner',
     'cb.x2js',
-    'leaflet-directive',
     'angularUtils.directives.dirPagination',
     'ui.bootstrap',
     'base64',
     'slick',
-    'ui.grid',
-    'ui.grid.resizeColumns',
-    'ui.grid.pagination',
     'topmap.map'
   ]
   .config ($routeProvider, $locationProvider) ->
@@ -46,11 +42,7 @@ angular
         templateUrl: 'views/help.html'
         controller: 'HelpCtrl'
         controllerAs: 'about'
-      .when '/map',
-        templateUrl: 'scripts/components/map/views/map.html'
-        controller: 'mapPageController'
-        controllerAs: 'map'
-        reloadOnSearch: false
+
 #        templateUrl: 'views/map.html'
 #        controller: 'MapCtrl'
 #        controllerAs: 'map'

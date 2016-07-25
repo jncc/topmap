@@ -2,12 +2,12 @@
 
 ###*
  # @ngdoc service
- # @name topMapApp.leafletHelper
+ # @name topMap.leafletHelper
  # @description
  # # leafletHelper
- # Service in the topMapApp.
+ # Service in the topMap.
 ###
-angular.module 'topMapApp'
+angular.module 'topmap.map'
   .service 'leafletHelper', ->
     toWKT: (layer) ->
       lng = []

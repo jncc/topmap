@@ -2,12 +2,12 @@
 
 ###*
  # @ngdoc service
- # @name topMapApp.config
+ # @name topMap.config
  # @description
  # # config
- # Constant in the topMapApp.
+ # Constant in the topMap.
 ###
-angular.module 'topMapApp'
+angular.module 'topMap'
   .constant 'config', {
     ogc_datasources: [
       {

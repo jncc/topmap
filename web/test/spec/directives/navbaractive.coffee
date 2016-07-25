@@ -3,7 +3,7 @@
 describe 'Directive: navbarActive', ->
 
   # load the directive's module
-  beforeEach module 'topMapApp'
+  beforeEach module 'topMap'
 
   scope = {}
 

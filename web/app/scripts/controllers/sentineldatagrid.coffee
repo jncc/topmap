@@ -1,14 +1,14 @@
 'use strict'
 ###*
  # @ngdoc function
- # @name topMapApp.controller:sentinelDatagridCtrl
+ # @name topMap.controller:sentinelDatagridCtrl
  # @description
  # # sentinelDatagridCtrl
- # Controller of the topMapApp
+ # Controller of the topMap
 ###
 
 
-angular.module 'topMapApp'
+angular.module 'topMap'
   .controller 'sentinelDatagridCtrl', ($scope, gridHelper) ->
     
     

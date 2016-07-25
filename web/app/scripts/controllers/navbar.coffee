@@ -2,12 +2,12 @@
 
 ###*
  # @ngdoc function
- # @name topMapApp.controller:NavbarCtrl
+ # @name topMap.controller:NavbarCtrl
  # @description
  # # NavbarCtrl
- # Controller of the topMapApp
+ # Controller of the topMap
 ###
-angular.module 'topMapApp'
+angular.module 'topMap'
   .controller 'NavbarCtrl', ($scope, $location) ->
      $scope.isCurrentPath = (path) ->
       return $location.path() == path

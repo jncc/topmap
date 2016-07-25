@@ -1,7 +1,7 @@
 'use strict'
 
-angular.module 'topMapApp'
-  .controller 'sentinelFilter', ($scope, $http) ->
+angular.module 'topmap.map'
+  .controller 'sentinelFilterController', ($scope, $http) ->
     
 
     $scope.parameters = {}

@@ -2,12 +2,12 @@
 
 ###*
  # @ngdoc function
- # @name topMapApp.controller:DatasetCtrl
+ # @name topMap.controller:DatasetCtrl
  # @description
  # # DatasetCtrl
- # Controller of the topMapApp
+ # Controller of the topMap
 ###
-angular.module 'topMapApp'
+angular.module 'topMap'
   .controller 'DataCtrl', ($scope, $q, $modal, $location, usSpinnerService, ogc, config, store, Layer) ->
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
       footer = angular.element '#footer'
@@ -49,13 +49,13 @@ angular.module 'topMapApp'
            
 ###*
  # @ngdoc function
- # @name topMapApp.controller:OGCModalInstanceCtrl
+ # @name topMap.controller:OGCModalInstanceCtrl
  # @description
  # # ModalInstanceCtrl
- # Controller of the topMapApp for displaying a basic modal dialog with a 
+ # Controller of the topMap for displaying a basic modal dialog with a 
  # provided data element for OGC Data Layers
 ###
-angular.module 'topMapApp'
+angular.module 'topMap'
   .controller 'OGCModalInstanceCtrl', ($scope, $modalInstance, data, Layer, config) ->
 
     $scope.data = data;

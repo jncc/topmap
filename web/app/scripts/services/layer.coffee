@@ -2,12 +2,12 @@
 
 ###*
  # @ngdoc service
- # @name topMapApp.layer
+ # @name topMap.layer
  # @description
  # # layer
- # Factory in the topMapApp.
+ # Factory in the topMap.
 ###
-angular.module 'topMapApp'
+angular.module 'topMap'
   .factory 'Layer', ->
     class Layer
       constructor: (config, base, version) ->

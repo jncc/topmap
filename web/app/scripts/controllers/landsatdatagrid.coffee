@@ -1,17 +1,17 @@
 'use strict'
 ###*
  # @ngdoc function
- # @name topMapApp.controller:sentinelDatagridCtrl
+ # @name topMap.controller:sentinelDatagridCtrl
  # @description
  # # sentinelDatagridCtrl
- # Controller of the topMapApp
+ # Controller of the topMap
 ###
 
 #download/{{row.entity.title}}
 
 
 
-angular.module 'topMapApp'
+angular.module 'topMap'
   .controller 'landsatDatagridCtrl', ($scope, gridHelper) ->
     
     $scope.guidColDef = 

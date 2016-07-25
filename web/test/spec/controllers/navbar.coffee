@@ -3,7 +3,7 @@
 describe 'Controller: NavbarCtrl', ->
 
   # load the controller's module
-  beforeEach module 'topMapApp'
+  beforeEach module 'topMap'
 
   NavbarCtrl = {}
 

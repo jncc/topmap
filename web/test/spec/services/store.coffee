@@ -3,7 +3,7 @@
 describe 'Service: store', ->
 
   # load the service's module
-  beforeEach module 'topMapApp'
+  beforeEach module 'topMap'
 
   # instantiate service
   store = {}

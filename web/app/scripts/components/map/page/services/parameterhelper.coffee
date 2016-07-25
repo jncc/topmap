@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module 'topMapApp'
+angular.module 'topmap.map'
   .service 'parameterHelper', ->
     getDecodedParmeters: (encodedParams) ->
       result = {}
