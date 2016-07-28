@@ -37,18 +37,19 @@ angular.module 'topmap.map'
       footer = angular.element '#footer'
       footer.addClass 'hidden'
 
-    $scope.$on 'parameterChange', (newParameters) ->       
-      $scope.pageParameters = $.extend true, $scope.pageParameters, newParameters
+    $scope.$watch 'pageParameters', (newValue, oldValue) ->       
+      # $scope.pageParameters = $.extend true, $scope.pageParameters, newParameters
       $location.search($scope.pageParameters.urlParameters)
       $location.hash($scope.pageParameters.urlHash)
       setShowFilters()
-      $scope.broadcastParameterChange()
 
-    #Trigger query change event in timout to ensure all handlers have registered.
-    $timeout (->
-      $scope.pageParameters.trigger = this
-      $scope.broadcastParameterChange()
-    ), 0
+      # $scope.broadcastParameterChange()
+
+    # #Trigger query change event in timout to ensure all handlers have registered.
+    # $timeout (->
+    #   $scope.pageParameters.trigger = this
+    #   $scope.broadcastParameterChange()
+    # ), 0
 
 
     

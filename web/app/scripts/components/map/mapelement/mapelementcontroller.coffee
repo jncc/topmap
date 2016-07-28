@@ -1,11 +1,10 @@
 'use strict'
-angular.module 'topMap'
+angular.module 'topmap.map'
   .controller 'mapElementController', ($scope, $location,  $http, $modal, $q, Layer, leafletHelper, leafletData, ogc, config, usSpinnerService, parameterHelper) ->
     
     $scope.this = this
     $scope.drawnlayerwkt = ''
     $scope.drawnlayercql = ''
-    $scope.parameters = {}
   
     angular.extend($scope, {
       # OGC Browser Variables
@@ -296,7 +295,6 @@ angular.module 'topMap'
             
             $scope.parameters.urlParameters.wkt = $scope.drawnlayerwkt
             # Update Grid
-            $scope.broadcastParameterChange()
             
     $scope.controls.draw = draw: {
       polygon: false,
@@ -305,9 +303,9 @@ angular.module 'topMap'
       marker: false
     }
 
-    $scope.broadcastParameterChange = () ->
-      $scope.parameters.trigger = $scope.this
-      $scope.$emit 'parameterChange', $scope.parameters
+    # $scope.broadcastParameterChange = () ->
+    #   $scope.parameters.trigger = $scope.this
+    #   $scope.$emit 'parameterChange', $scope.parameters
     
     #reloadDrawnLayer = (wkt) ->
       #wkt = new (Wkt.Wkt)
@@ -328,11 +326,11 @@ angular.module 'topMap'
     
     # Set up the overlays on the map, either by a given b (base url), l (layer 
     # name), v (wms version)
-    $scope.$on 'parameterUpdate', (event, parameters) ->
-      if parameters.trigger == $scope.this
-        return
+    # $scope.$on 'parameterUpdate', (event, parameters) ->
+    #   if parameters.trigger == $scope.this
+    #     return
       
-      $scope.parameters = parameters
+    $scope.$watch 'parameters', (newValue, oldValue) ->
       
       if !('l' of $scope.parameters.urlParameters)
         alert('no layer supplied')

@@ -7,7 +7,7 @@
  # # store
  # Service in the topMap.
 ###
-angular.module 'topMap'
+angular.module 'topmap.common'
   .service 'store', ->
     data = {};
     

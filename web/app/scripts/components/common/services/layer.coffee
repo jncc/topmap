@@ -7,7 +7,7 @@
  # # layer
  # Factory in the topMap.
 ###
-angular.module 'topMap'
+angular.module 'topmap.common'
   .factory 'Layer', ->
     class Layer
       constructor: (config, base, version) ->

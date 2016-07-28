@@ -7,7 +7,7 @@
  # # MainCtrl
  # Controller of the topMap
 ###
-angular.module 'topMap'
+angular.module 'topmap'
   .controller 'MainCtrl', (leafletData, ogc, config, $q, $scope, Layer, usSpinnerService) ->  
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
       footer = angular.element '#footer'

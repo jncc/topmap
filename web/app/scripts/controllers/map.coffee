@@ -9,7 +9,7 @@
  # MainCtrl in the form of a Layer object, but can also take in a layer in the 
  # form of url parameters
 ###
-angular.module 'topMap'
+angular.module 'topmap'
   .controller 'MapCtrl', ($q, $scope, $location, $route, $http, leafletData, ogc, store, 
     config, Layer, $modal, $log, $base64, usSpinnerService, uiGridConstants, leafletHelper) ->    
     # Grab the initial parameters and hash values before they get changed by the

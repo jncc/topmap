@@ -8,7 +8,7 @@
  # Factory in the topMap, a set of helpers based around OGC web services and
  # other mapping functions
 ###
-angular.module 'topMap'
+angular.module 'topmap.common'
   .factory 'ogc', ($http, $q, x2js) ->     
     getBoundsFromFragment: (fragment) ->
       latlngPattern = /^([-]?[0-9]+\.?[0-9]+,){3}([-]?[0-9]+\.?[0-9]+)$/g 

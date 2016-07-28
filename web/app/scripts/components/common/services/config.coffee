@@ -7,7 +7,7 @@
  # # config
  # Constant in the topMap.
 ###
-angular.module 'topMap'
+angular.module 'topmap.common'
   .constant 'config', {
     ogc_datasources: [
       {

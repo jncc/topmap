@@ -7,7 +7,7 @@
  # # DatasetCtrl
  # Controller of the topMap
 ###
-angular.module 'topMap'
+angular.module 'topmap'
   .controller 'DataCtrl', ($scope, $q, $modal, $location, usSpinnerService, ogc, config, store, Layer) ->
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
       footer = angular.element '#footer'

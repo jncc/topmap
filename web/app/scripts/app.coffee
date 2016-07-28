@@ -22,6 +22,7 @@ angular
     'ui.bootstrap',
     'base64',
     'slick',
+    'topmap.common'
     'topmap.map'
   ]
   .config ($routeProvider, $locationProvider) ->

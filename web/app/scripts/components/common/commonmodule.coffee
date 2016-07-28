@@ -1,6 +1,6 @@
 'use strict'
 angular
-  .module 'topmap.map', [
+  .module 'topmap.common', [
     'ngAnimate',
     'ngCookies',
     'ngResource',
@@ -17,12 +17,4 @@ angular
     'ui.grid',
     'ui.grid.resizeColumns',
     'ui.grid.pagination',
-    'topmap.common',
   ]
-  .config ($routeProvider, $locationProvider) ->
-    $routeProvider
-      .when '/map',
-        templateUrl: 'scripts/components/map/page/mappage.html'
-        controller: 'mapPageController'
-        controllerAs: 'map'
-        reloadOnSearch: false

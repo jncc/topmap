@@ -8,7 +8,7 @@
 ###
 
 
-angular.module 'topMap'
+angular.module 'topmap'
   .controller 'sentinelDatagridCtrl', ($scope, gridHelper) ->
     
     

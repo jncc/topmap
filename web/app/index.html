@@ -26,7 +26,7 @@
         <!-- endbuild -->
         <base href="/">
     </head>
-    <body ng-app="topMap"  style="height: 100%;">
+    <body ng-app="topmap"  style="height: 100%;">
         <!--[if lte IE 8]>
           <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -142,11 +142,15 @@
         <script src="scripts/controllers/data.js"></script>
         <script src="scripts/controllers/about.js"></script>
         <script src="scripts/controllers/help.js"></script>
-        <!--<script src="scripts/controllers/map.js"></script>-->
-        <script src="scripts/services/layer.js"></script>
-        <script src="scripts/services/store.js"></script>
-        <script src="scripts/services/config.js"></script>
         <script src="scripts/controllers/navbar.js"></script>
+
+        <!--<script src="scripts/controllers/map.js"></script>-->
+        <script src="scripts/components/common/services/layer.js"></script>
+        <script src="scripts/components/common/services/store.js"></script>
+        <script src="scripts/components/common/services/config.js"></script>
+        <script src="scripts/components/common/services/ogc.js"></script>
+        <script src="scripts/components/common/commonmodule.js"></script>
+        
 
         <!--Map Module-->
         <script src="scripts/components/map/datasets/landsat/datagrid/landsatdatagrid.js"></script>
@@ -159,6 +163,7 @@
         <script src="scripts/components/map/mapelement/modal/modalinstance.js"></script>
         <script src="scripts/components/map/mapelement/modal/ogcmodalinstance.js"></script>        
         <script src="scripts/components/map/mapelement/mapelementcontroller.js"></script>
+        <script src="scripts/components/map/mapelement/mapelement.js"></script>
 
         <script src="scripts/components/map/page/mappagecontroller.js"></script>
         <script src="scripts/components/map/page/services/parameterhelper.js"></script>                

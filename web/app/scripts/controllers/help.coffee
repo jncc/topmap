@@ -7,7 +7,7 @@
  # # HelpCtrl
  # Controller of the topMap
 ###
-angular.module 'topMap'
+angular.module 'topmap'
   .controller 'HelpCtrl', ($scope) ->
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
       footer = angular.element '#footer'

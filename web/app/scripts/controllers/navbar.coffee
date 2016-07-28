@@ -7,7 +7,7 @@
  # # NavbarCtrl
  # Controller of the topMap
 ###
-angular.module 'topMap'
+angular.module 'topmap'
   .controller 'NavbarCtrl', ($scope, $location) ->
      $scope.isCurrentPath = (path) ->
       return $location.path() == path

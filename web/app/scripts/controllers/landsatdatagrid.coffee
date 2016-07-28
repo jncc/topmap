@@ -11,7 +11,7 @@
 
 
 
-angular.module 'topMap'
+angular.module 'topmap'
   .controller 'landsatDatagridCtrl', ($scope, gridHelper) ->
     
     $scope.guidColDef = 
