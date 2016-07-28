@@ -3,7 +3,7 @@
 describe 'Controller: DatasetCtrl', ->
 
   # load the controller's module
-  beforeEach module 'topMap'
+  beforeEach module 'topmap'
 
   DatasetCtrl = {}
 

@@ -2,10 +2,10 @@
 
 ###*
  # @ngdoc function
- # @name topMap.controller:MapCtrl
+ # @name topmap.controller:MapCtrl
  # @description
  # # MapCtrl
- # Controller of the topMap for Mapping data, typically passed data from the
+ # Controller of the topmap for Mapping data, typically passed data from the
  # MainCtrl in the form of a Layer object, but can also take in a layer in the 
  # form of url parameters
 ###
@@ -397,13 +397,13 @@ angular.module 'topmap'
         
 ###*
  # @ngdoc function
- # @name topMap.controller:ModalInstanceCtrl
+ # @name topmap.controller:ModalInstanceCtrl
  # @description
  # # ModalInstanceCtrl
- # Controller of the topMap for displaying a basic modal dialog with a 
+ # Controller of the topmap for displaying a basic modal dialog with a 
  # provided data element
 ###
-angular.module 'topMap'
+angular.module 'topmap'
   .controller 'ModalInstanceCtrl', ($scope, $modalInstance, data) ->
 
     $scope.data = data;
@@ -419,13 +419,13 @@ angular.module 'topMap'
 
 ###*
  # @ngdoc function
- # @name topMap.controller:OGCModalInstanceCtrl
+ # @name topmap.controller:OGCModalInstanceCtrl
  # @description
  # # ModalInstanceCtrl
- # Controller of the topMap for displaying a basic modal dialog with a 
+ # Controller of the topmap for displaying a basic modal dialog with a 
  # provided data element for OGC Data Layers
 ###
-angular.module 'topMap'
+angular.module 'topmap'
   .controller 'OGCModalInstanceCtrl', ($scope, $modalInstance, data, Layer, config) ->
 
     $scope.data = data;

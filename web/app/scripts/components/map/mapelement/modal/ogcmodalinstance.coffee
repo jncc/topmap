@@ -1,9 +1,9 @@
 ###*
  # @ngdoc function
- # @name topMap.controller:OGCModalInstanceCtrl
+ # @name topmap.controller:OGCModalInstanceCtrl
  # @description
  # # ModalInstanceCtrl
- # Controller of the topMap for displaying a basic modal dialog with a 
+ # Controller of the topmap for displaying a basic modal dialog with a 
  # provided data element for OGC Data Layers
 ###
 angular.module 'topmap.map'

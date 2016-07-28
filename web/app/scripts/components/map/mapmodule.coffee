@@ -17,7 +17,7 @@ angular
     'ui.grid',
     'ui.grid.resizeColumns',
     'ui.grid.pagination',
-    'topmap.common',
+    'topmap.common'
   ]
   .config ($routeProvider, $locationProvider) ->
     $routeProvider

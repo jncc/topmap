@@ -2,10 +2,10 @@
 
 ###*
  # @ngdoc service
- # @name topMap.layer
+ # @name topmap.layer
  # @description
  # # layer
- # Factory in the topMap.
+ # Factory in the topmap.
 ###
 angular.module 'topmap.common'
   .factory 'Layer', ->

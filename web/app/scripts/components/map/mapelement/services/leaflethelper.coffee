@@ -2,10 +2,10 @@
 
 ###*
  # @ngdoc service
- # @name topMap.leafletHelper
+ # @name topmap.leafletHelper
  # @description
  # # leafletHelper
- # Service in the topMap.
+ # Service in the topmap.
 ###
 angular.module 'topmap.map'
   .service 'leafletHelper', ->

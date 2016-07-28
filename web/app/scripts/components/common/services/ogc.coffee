@@ -2,10 +2,10 @@
 
 ###*
  # @ngdoc service
- # @name topMapApp.ogc
+ # @name topmapApp.ogc
  # @description
  # # ogc
- # Factory in the topMap, a set of helpers based around OGC web services and
+ # Factory in the topmap, a set of helpers based around OGC web services and
  # other mapping functions
 ###
 angular.module 'topmap.common'

@@ -1,9 +1,9 @@
 ###*
  # @ngdoc function
- # @name topMap.controller:ModalInstanceCtrl
+ # @name topmap.controller:ModalInstanceCtrl
  # @description
  # # ModalInstanceCtrl
- # Controller of the topMap for displaying a basic modal dialog with a 
+ # Controller of the topmap for displaying a basic modal dialog with a 
  # provided data element
 ###
 angular.module 'topmap.map'

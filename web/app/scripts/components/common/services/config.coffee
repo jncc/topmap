@@ -2,10 +2,10 @@
 
 ###*
  # @ngdoc service
- # @name topMap.config
+ # @name topmap.config
  # @description
  # # config
- # Constant in the topMap.
+ # Constant in the topmap.
 ###
 angular.module 'topmap.common'
   .constant 'config', {

@@ -3,7 +3,7 @@
 describe 'Service: config', ->
 
   # load the service's module
-  beforeEach module 'topMap'
+  beforeEach module 'topmap'
 
   # instantiate service
   config = {}

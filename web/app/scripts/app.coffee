@@ -2,9 +2,9 @@
 
 ###*
  # @ngdoc overview
- # @name topMap
+ # @name topmap
  # @description
- # # topMap
+ # # topmap
  #
  # Main module of the application.
 ###
@@ -22,7 +22,7 @@ angular
     'ui.bootstrap',
     'base64',
     'slick',
-    'topmap.common'
+    'topmap.common',
     'topmap.map'
   ]
   .config ($routeProvider, $locationProvider) ->

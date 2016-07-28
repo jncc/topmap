@@ -2,10 +2,10 @@
 
 ###*
  # @ngdoc function
- # @name topMap.controller:AboutCtrl
+ # @name topmap.controller:AboutCtrl
  # @description
  # # AboutCtrl
- # Controller of the topMap
+ # Controller of the topmap
 ###
 angular.module 'topmap'
   .controller 'AboutCtrl', ($scope) ->

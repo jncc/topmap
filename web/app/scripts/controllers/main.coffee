@@ -2,10 +2,10 @@
 
 ###*
  # @ngdoc function
- # @name topMap.controller:MainCtrl
+ # @name topmap.controller:MainCtrl
  # @description
  # # MainCtrl
- # Controller of the topMap
+ # Controller of the topmap
 ###
 angular.module 'topmap'
   .controller 'MainCtrl', (leafletData, ogc, config, $q, $scope, Layer, usSpinnerService) ->  

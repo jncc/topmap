@@ -1,6 +1,6 @@
 'use strict'
 
-angular.module 'topMap'
+angular.module 'topmap'
   .service 'configHelper', (config) ->
     getDataConfig: (layerName) ->
       

@@ -16,5 +16,5 @@ angular
     'leaflet-directive',
     'ui.grid',
     'ui.grid.resizeColumns',
-    'ui.grid.pagination',
+    'ui.grid.pagination'
   ]

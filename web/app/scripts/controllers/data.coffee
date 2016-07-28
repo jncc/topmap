@@ -2,10 +2,10 @@
 
 ###*
  # @ngdoc function
- # @name topMap.controller:DatasetCtrl
+ # @name topmap.controller:DatasetCtrl
  # @description
  # # DatasetCtrl
- # Controller of the topMap
+ # Controller of the topmap
 ###
 angular.module 'topmap'
   .controller 'DataCtrl', ($scope, $q, $modal, $location, usSpinnerService, ogc, config, store, Layer) ->
@@ -49,13 +49,13 @@ angular.module 'topmap'
            
 ###*
  # @ngdoc function
- # @name topMap.controller:OGCModalInstanceCtrl
+ # @name topmap.controller:OGCModalInstanceCtrl
  # @description
  # # ModalInstanceCtrl
- # Controller of the topMap for displaying a basic modal dialog with a 
+ # Controller of the topmap for displaying a basic modal dialog with a 
  # provided data element for OGC Data Layers
 ###
-angular.module 'topMap'
+angular.module 'topmap'
   .controller 'OGCModalInstanceCtrl', ($scope, $modalInstance, data, Layer, config) ->
 
     $scope.data = data;

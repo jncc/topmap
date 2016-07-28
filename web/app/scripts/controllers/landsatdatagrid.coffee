@@ -1,10 +1,10 @@
 'use strict'
 ###*
  # @ngdoc function
- # @name topMap.controller:sentinelDatagridCtrl
+ # @name topmap.controller:sentinelDatagridCtrl
  # @description
  # # sentinelDatagridCtrl
- # Controller of the topMap
+ # Controller of the topmap
 ###
 
 #download/{{row.entity.title}}
