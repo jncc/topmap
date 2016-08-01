@@ -1,6 +1,6 @@
 'use strict'
 angular.module 'topmap.map'
-  .controller 'mapElementController', ($scope, $log, $location,  $http, $modal, $q, Layer, leafletHelper, leafletData, ogc, config, usSpinnerService, parameterHelper) ->
+  .controller 'mapElementController', ($scope, $location,  $http, $modal, $q, Layer, leafletHelper, leafletData, ogc, config, usSpinnerService, parameterHelper) ->
     console.log('map element controller')
 
     ctrl = this
@@ -337,6 +337,8 @@ angular.module 'topmap.map'
           
         usSpinnerService.stop('spinner-main')  
 
+    ctrl.$onChanges = (changesObj) ->
+      console.log('some shits going down man')
       
     #init map
     leafletData.getMap().then (map) ->

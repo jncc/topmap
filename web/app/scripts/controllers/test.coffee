@@ -1,12 +1,22 @@
 angular.module 'topmap'
-  .controller 'testCtrl', ($scope) ->
-    $scope.parameters = {wibble: 'A value thats being passed to the component'}
+  .controller 'testCtrl', () ->
+    ctrl = this
+    ctrl.parameters = {wibble: 'A value thats being passed to the component'}
 
-  .controller 'testThingCtrl', ($scope) ->
-    $scope.parameters = this.parameters
+    ctrl.makeDifferent = ->
+      ctrl.parameters.wibble = 'make different'
+
+  .controller 'testThingCtrl', () ->
+    ctrl = this
+    ctrl.internalParameters = {}
     
+    angular.copy(ctrl.parameters, ctrl.internalParameters)
+    
+    ctrl.$onChanges = (changesObj) ->
+      console.log('some shit is going down')
+
   .component 'tmTestThing',
     bindings:
-      parameters: '='
+      parameters: '<'
     templateUrl: '/views/testthing.html'
     controller: 'testThingCtrl'

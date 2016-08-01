@@ -1,5 +1,6 @@
 <div>
     hello pre thing
+    {{$ctrl.parameters.wibble}}
     <tm-test-thing parameters="parameters"></tm-test-thing>
-    hello post thing
+    <input type="button" ng-click="$ctrl.makeDifferent()">change wibble</input>
 </div>

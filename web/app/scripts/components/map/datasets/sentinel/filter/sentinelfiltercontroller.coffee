@@ -52,12 +52,12 @@ angular.module 'topmap.map'
     $scope.ok = () ->
       if ($scope.platform == $scope.selectionDefault && 'senplt' of $scope.parameters.urlParameters)
         $scope.parameters.urlParameters.senplt = undefined
-      else
+      else if ($scope.platform != $scope.selectionDefault)
         $scope.parameters.urlParameters.senplt = $scope.platform
 
       if ($scope.product == $scope.selectionDefault && 'senprd' of $scope.parameters.urlParameters)
         $scope.parameters.urlParameters.senprd = undefined
-      else
+      else if ($scope.product != $scope.selectionDefault)
         $scope.parameters.urlParameters.senprd = $scope.product
         
       ctrl.onUpdateParameters(newParameters: $scope.parameters)
