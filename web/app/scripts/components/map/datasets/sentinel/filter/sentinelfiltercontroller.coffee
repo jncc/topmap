@@ -2,16 +2,18 @@
 
 angular.module 'topmap.map'
   .controller 'sentinelFilterCtrl', ($scope, $http) ->
-    $scope.parameters = {}
-    $scope.this = this
+    ctrl = this
 
+    $scope.parameters = {}
     $scope.selectionDefault = 'Select item'
 
     $scope.platform = $scope.selectionDefault
     $scope.platforms = []
     $scope.product = $scope.selectionDefault
     $scope.products = []
-    
+
+    #Isolate parameters
+    angular.copy(ctrl.parameters, $scope.parameters)
     
     setParameters = () ->
       if ('senplt' of $scope.parameters.urlParameters)
@@ -48,31 +50,25 @@ angular.module 'topmap.map'
           alert('Could not get a list of filter options')
 
     $scope.ok = () ->
-      if ($scope.platform == $scope.selectionDefault)
+      if ($scope.platform == $scope.selectionDefault && 'senplt' of $scope.parameters.urlParameters)
         $scope.parameters.urlParameters.senplt = undefined
       else
         $scope.parameters.urlParameters.senplt = $scope.platform
 
-      if ($scope.product == $scope.selectionDefault)
+      if ($scope.product == $scope.selectionDefault && 'senprd' of $scope.parameters.urlParameters)
         $scope.parameters.urlParameters.senprd = undefined
       else
         $scope.parameters.urlParameters.senprd = $scope.product
+        
+      ctrl.onUpdateParameters(newParameters: $scope.parameters)
+      ctrl.toggleFilters()
 
-      $scope.parameters.pageState.showFilters = false
-
-      $scope.parameters.trigger = $scope.this
-      $scope.$emit 'parameterChange', $scope.parameters
-
-      
     $scope.undo = () ->
       setParameters()
 
-    $scope.$on 'parameterUpdate', (event, parameters) ->
-      if parameters.trigger == $scope.this
-        return
-      $scope.parameters = parameters
-      setParameters()
-      initFilters()
+    # init page
+    setParameters()
+    initFilters()
     
 
 

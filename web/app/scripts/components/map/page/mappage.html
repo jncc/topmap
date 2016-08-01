@@ -5,28 +5,8 @@
     <!-- Data Grids --> 
     </div>
         <div class="filters" ng-switch="pageParameters.dataParameters.layer" ng-show="showFilters">
-        <div ng-switch-when="sentinel" ng-controller="sentinelFilterCtrl">
-            <div class="modal-header">
-                <h3 class="modal-title">Sentinel Filters</h3>
-            </div>
-            <div class="modal-body scroll">
-                <div>
-                    Platform:
-                    <br/>
-                    <select ng-options="platform as platform for platform in platforms" ng-model="platform">
-                    </select>
-                </div>
-                <div>
-                    Product:
-                    <br/>
-                    <select ng-options="product as product for product in products" ng-model="product">
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <input class="button" type="submit" ng-click="ok()" value="OK" />
-                <input class="button" type="reset" ng-click="undo()" value="Undo" />
-            </div>
+        <div ng-switch-when="sentinel">
+            <tm-sentinel-filter parameters="pageParameters" on-update-parameters="parameterUpdate(newParameters)" toggle-filters="toggleFilters()"></tm-sentinel-filter>
         </div>
     </div>
     <div class="dataGrids" ng-switch="pageParameters.dataParameters.layer">
