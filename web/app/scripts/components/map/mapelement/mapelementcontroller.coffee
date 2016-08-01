@@ -337,6 +337,8 @@ angular.module 'topmap.map'
     $onInit = () ->
       $scope.parameters = angular.copy(@parameters)
       
+      console.log('map element init')
+
       leafletData.getMap().then (map) ->
         L.easyButton('glyphicon glyphicon-folder-open', (btn, map) ->
           $scope.showLayerList()
@@ -370,8 +372,6 @@ angular.module 'topmap.map'
               
           )
 
-          
-          
           $scope.$watch 'drawnlayerwkt', (newValue, oldValue) ->
             if newValue 
               # Update WMS
