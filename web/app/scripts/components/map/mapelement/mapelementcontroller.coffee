@@ -335,9 +335,8 @@ angular.module 'topmap.map'
     #init map
     
     $onInit = () ->
-      $scope.parameters = angular.copy(@parameters)
-      
       console.log('map element init')
+      $scope.parameters = angular.copy(@parameters)
 
       leafletData.getMap().then (map) ->
         L.easyButton('glyphicon glyphicon-folder-open', (btn, map) ->

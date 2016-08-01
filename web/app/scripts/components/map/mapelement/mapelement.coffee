@@ -1,9 +1,9 @@
 'use strict'
 angular.module 'topmap.map'
-  .component 'tmMapMapComponent', () ->
+  .component 'tmMapComponent',
     bindings:
-      parameters: '='
-    templateUrl: 'scripts/components/map/mapelement/mapelement.html',
+      parameters: '<'
+    templateUrl: 'scripts/components/map/mapelement/mapelement.html'
     controller: 'mapElementController'
     
     
