@@ -2,7 +2,7 @@ angular.module 'topmap.map'
   .controller 'mapPageController', ($scope, $location, $route, $timeout, $modal, parameterHelper, configHelper) ->    
     $scope.broadcastParameterChange = () -> 
       $scope.$broadcast 'parameterUpdate', $scope.pageParameters
-      
+
     $scope.pageParameters =
       urlParameters: {}
       dataParameters: {layer: 'none'}

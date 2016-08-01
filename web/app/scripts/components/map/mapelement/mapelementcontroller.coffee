@@ -1,10 +1,11 @@
 'use strict'
 angular.module 'topmap.map'
   .controller 'mapElementController', ($scope, $location,  $http, $modal, $q, Layer, leafletHelper, leafletData, ogc, config, usSpinnerService, parameterHelper) ->
-    
-    $scope.this = this
+    console.log('map element controller')
+
     $scope.drawnlayerwkt = ''
     $scope.drawnlayercql = ''
+    $scope.parameters = ''
   
     angular.extend($scope, {
       # OGC Browser Variables
@@ -248,54 +249,6 @@ angular.module 'topmap.map'
         # Display list
         $scope.displayLayerList()
       
-    #init map  
-    leafletData.getMap().then (map) ->
-      L.easyButton('glyphicon glyphicon-folder-open', (btn, map) ->
-        $scope.showLayerList()
-      ).addTo(map)
-      L.easyButton('glyphicon glyphicon-list', (btn, map) ->
-        $scope.showLegend = !$scope.showLegend
-      ).addTo(map)
-      L.easyButton('glyphicon glyphicon-globe', (btn, map) ->
-        $scope.openLayerInfo()
-      ).addTo(map)
-      L.easyButton('glyphicon glyphicon-filter', (btn, map) ->
-        $scope.toggleFilterDialogue()
-      ).addTo(map)
-      
-      leafletData.getMap().then (map) ->
-        map.on('draw:created', (e) ->
-          leafletData.getLayers().then (baselayers) ->
-            
-            drawnItems = baselayers.overlays.draw
-            # Remove old drawn layer
-            layers = drawnItems.getLayers()
-
-            for layer in layers
-              drawnItems.removeLayer(layer)
-            # Add new drawn area as layer
-            layer = e.layer
-            drawnItems.addLayer(layer)
-        
-            $scope.drawnlayercql = leafletHelper.toCQLBBOX(layer)
-            $scope.drawnlayerwkt = leafletHelper.toWKT(layer)
-            
-        )
-
-        
-        
-        $scope.$watch 'drawnlayerwkt', (newValue, oldValue) ->
-          if newValue 
-            # Update WMS
-            geom = $scope.parameters.dataParameters.geomField
-            
-            cqlfilter = 'BBOX(' + geom + ',' + $scope.drawnlayercql + ')'
-            $scope.layers.overlays.wms.doRefresh = true
-            $scope.layers.overlays.wms.url =  $scope.layer.base + '?tiled=true&CQL_FILTER=' + encodeURIComponent(cqlfilter)
-            
-            $scope.parameters.urlParameters.wkt = $scope.drawnlayerwkt
-            # Update Grid
-            
     $scope.controls.draw = draw: {
       polygon: false,
       polyline: false,
@@ -328,9 +281,9 @@ angular.module 'topmap.map'
     # name), v (wms version)
     # $scope.$on 'parameterUpdate', (event, parameters) ->
     #   if parameters.trigger == $scope.this
-    #     return
-      
-    $scope.$watch 'parameters', (newValue, oldValue) ->
+    #     retur
+
+    $scope.updateMap = () ->
       
       if !('l' of $scope.parameters.urlParameters)
         alert('no layer supplied')
@@ -379,3 +332,58 @@ angular.module 'topmap.map'
         usSpinnerService.stop('spinner-main')  
 
       
+    #init map
+    
+    $onInit = () ->
+      $scope.parameters = angular.copy(@parameters)
+      
+      leafletData.getMap().then (map) ->
+        L.easyButton('glyphicon glyphicon-folder-open', (btn, map) ->
+          $scope.showLayerList()
+        ).addTo(map)
+        L.easyButton('glyphicon glyphicon-list', (btn, map) ->
+          $scope.showLegend = !$scope.showLegend
+        ).addTo(map)
+        L.easyButton('glyphicon glyphicon-globe', (btn, map) ->
+          $scope.openLayerInfo()
+        ).addTo(map)
+        L.easyButton('glyphicon glyphicon-filter', (btn, map) ->
+          $scope.toggleFilterDialogue()
+        ).addTo(map)
+        
+        leafletData.getMap().then (map) ->
+          map.on('draw:created', (e) ->
+            leafletData.getLayers().then (baselayers) ->
+              
+              drawnItems = baselayers.overlays.draw
+              # Remove old drawn layer
+              layers = drawnItems.getLayers()
+
+              for layer in layers
+                drawnItems.removeLayer(layer)
+              # Add new drawn area as layer
+              layer = e.layer
+              drawnItems.addLayer(layer)
+          
+              $scope.drawnlayercql = leafletHelper.toCQLBBOX(layer)
+              $scope.drawnlayerwkt = leafletHelper.toWKT(layer)
+              
+          )
+
+          
+          
+          $scope.$watch 'drawnlayerwkt', (newValue, oldValue) ->
+            if newValue 
+              # Update WMS
+              geom = $scope.parameters.dataParameters.geomField
+              
+              cqlfilter = 'BBOX(' + geom + ',' + $scope.drawnlayercql + ')'
+              $scope.layers.overlays.wms.doRefresh = true
+              $scope.layers.overlays.wms.url =  $scope.layer.base + '?tiled=true&CQL_FILTER=' + encodeURIComponent(cqlfilter)
+              
+              $scope.parameters.urlParameters.wkt = $scope.drawnlayerwkt
+              # Update Grid
+
+      $scope.updateMap()
+        
+    

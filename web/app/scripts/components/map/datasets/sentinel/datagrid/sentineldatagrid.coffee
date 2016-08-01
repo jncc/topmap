@@ -2,7 +2,8 @@
 
 angular.module 'topmap.map'
   .controller 'sentinelDatagridCtrl', ($scope, gridHelper, uiGridConstants) ->
-    
+    console.log('sentinel datagrid controller')
+
     $scope.gridData = []
     $scope.pageParameters = {}
     
