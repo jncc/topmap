@@ -1,9 +1,7 @@
 'use strict'
 
 angular.module 'topmap.map'
-  .controller 'sentinelFilter', ($scope, $http) ->
-
-
+  .controller 'sentinelFilterCtrl', ($scope, $http) ->
     $scope.parameters = {}
     $scope.this = this
 

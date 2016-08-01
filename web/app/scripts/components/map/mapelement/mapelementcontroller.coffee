@@ -387,4 +387,4 @@ angular.module 'topmap.map'
 
     $scope.updateMap()
       
-    
+    #todo: handle parameter updates.
