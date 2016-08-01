@@ -6,7 +6,6 @@ angular.module 'topmap.map'
     $scope.pageParameters =
       urlParameters: {}
       dataParameters: {layer: 'none'}
-      pageState: {showFilters: false}
 
     $scope.showFilters = false
 
@@ -23,12 +22,12 @@ angular.module 'topmap.map'
       }
     })
     
-    setShowFilters = () ->
-      if ($scope.pageParameters.dataParameters.layer == 'none' && $scope.pageParameters.pageState.showFilters)
+    $scope.toggleFilters = () ->
+      if ($scope.pageParameters.dataParameters.layer == 'none')
         $scope.showFilters = false
         alert('This layer does not have any filters')
       else if ($scope.pageParameters.dataParameters.layer != 'none')
-        $scope.showFilters = $scope.pageParameters.pageState.showFilters
+        $scope.showFilters = !$scope.showFilters
 
 
     #Handle Events
@@ -37,13 +36,10 @@ angular.module 'topmap.map'
       footer = angular.element '#footer'
       footer.addClass 'hidden'
 
-    $scope.$watch 'pageParameters', (newValue, oldValue) ->       
-      # $scope.pageParameters = $.extend true, $scope.pageParameters, newParameters
+    $scope.parameterUpdate = (newParameters) ->       
+      $scope.pageParameters = $.extend true, $scope.pageParameters, newParameters
       $location.search($scope.pageParameters.urlParameters)
       $location.hash($scope.pageParameters.urlHash)
-      setShowFilters()
-
-      # $scope.broadcastParameterChange()
 
     # #Trigger query change event in timout to ensure all handlers have registered.
     # $timeout (->

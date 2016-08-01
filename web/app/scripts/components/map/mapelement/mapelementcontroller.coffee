@@ -3,9 +3,14 @@ angular.module 'topmap.map'
   .controller 'mapElementController', ($scope, $log, $location,  $http, $modal, $q, Layer, leafletHelper, leafletData, ogc, config, usSpinnerService, parameterHelper) ->
     console.log('map element controller')
 
+    ctrl = this
+
     $scope.drawnlayerwkt = ''
     $scope.drawnlayercql = ''
-    $scope.parameters = this.parameters
+    $scope.parameters = {}
+    
+    #Isolate parameters
+    angular.copy(ctrl.parameters, $scope.parameters)
   
     angular.extend($scope, {
       # OGC Browser Variables
@@ -66,8 +71,8 @@ angular.module 'topmap.map'
           return {}
       
     $scope.toggleFilterDialogue = () ->
-      $scope.parameters.pageState.showFilters = !$scope.parameters.pageState.showFilters
-      $scope.broadcastParameterChange()
+      ctrl.toggleFilters()
+
       # if ($scope.parameters.dataParameters.layer == 'none')
       #   alert('This layer does not have any filters')
       # else
@@ -322,7 +327,7 @@ angular.module 'topmap.map'
           $scope.base_wms_version)
           $scope.addOverlay(layer)
           
-          if parameters.dataParameters.layer != 'none'        
+          if $scope.parameters.dataParameters.layer != 'none'        
             $scope.controls.draw.rectangle = true
           else
             $scope.controls.draw.rectangle = false
@@ -334,10 +339,6 @@ angular.module 'topmap.map'
 
       
     #init map
-    
-
-    console.log('init')
-
     leafletData.getMap().then (map) ->
       L.easyButton('glyphicon glyphicon-folder-open', (btn, map) ->
         $scope.showLayerList()
@@ -381,7 +382,8 @@ angular.module 'topmap.map'
             $scope.layers.overlays.wms.url =  $scope.layer.base + '?tiled=true&CQL_FILTER=' + encodeURIComponent(cqlfilter)
             
             $scope.parameters.urlParameters.wkt = $scope.drawnlayerwkt
-            # Update Grid
+            
+            ctrl.onUpdateParameters(newParameters: $scope.parameters)
 
     $scope.updateMap()
       

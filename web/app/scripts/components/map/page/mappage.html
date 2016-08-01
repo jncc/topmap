@@ -1,6 +1,6 @@
 <div style="height: 100%">
     <div class="mapContainer" style="height: calc(100% - 348px);" ng-style="mapStyle">
-        <tm-map-component parameters="pageParameters">
+        <tm-map-component parameters="pageParameters" on-update-parameters="parameterUpdate(newParameters)" toggle-filters="toggleFilters()">
         </tm-map-component>    
     <!-- Data Grids --> 
     </div>
