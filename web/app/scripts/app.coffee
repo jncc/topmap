@@ -43,6 +43,11 @@ angular
         templateUrl: 'views/help.html'
         controller: 'HelpCtrl'
         controllerAs: 'about'
+      .when '/test',
+        templateUrl: 'views/test.html'
+        controller: 'testCtrl'
+        controllerAs: 'test'
+
 
 #        templateUrl: 'views/map.html'
 #        controller: 'MapCtrl'
