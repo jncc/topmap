@@ -2,9 +2,6 @@ angular.module 'topmap.test'
   .controller 'testCtrl', () ->
     testc = this
     testc.parameters = {wibble:2}
-
-    testc.makeDifferent = ->
-      testc.parameters.wibble = testc.parameters.wibble ^ 2
     
     return
 
@@ -16,7 +13,7 @@ angular.module 'topmap.test'
 
   .component 'tmTestThing1',
     bindings:
-      parameters: '<'
+      parameters: '='
     templateUrl: '/scripts/components/test/testthing1.html'
     controller: 'testThingCtrl1'
     controllerAs: 'testcmp1'
@@ -32,7 +29,7 @@ angular.module 'topmap.test'
   
   .component 'tmTestThing2',
     bindings:
-      parameters: '<'
+      parameters: '='
     templateUrl: '/scripts/components/test/testthing2.html'
     controller: 'testThingCtrl2'
     controllerAs: 'testcmp2'

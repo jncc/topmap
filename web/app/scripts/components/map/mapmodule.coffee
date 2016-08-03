@@ -24,5 +24,5 @@ angular
       .when '/map',
         templateUrl: 'scripts/components/map/page/mappage.html'
         controller: 'mapPageController'
-        controllerAs: 'map'
+        controllerAs: 'pagectrl'
         reloadOnSearch: false
