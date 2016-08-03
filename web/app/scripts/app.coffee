@@ -23,7 +23,8 @@ angular
     'base64',
     'slick',
     'topmap.common',
-    'topmap.map'
+    'topmap.map',
+    'topmap.test'
   ]
   .config ($routeProvider, $locationProvider) ->
     $routeProvider
@@ -43,11 +44,6 @@ angular
         templateUrl: 'views/help.html'
         controller: 'HelpCtrl'
         controllerAs: 'about'
-      .when '/test',
-        templateUrl: 'views/test.html'
-        controller: 'testCtrl'
-        controllerAs: 'test'
-
 
 #        templateUrl: 'views/map.html'
 #        controller: 'MapCtrl'
