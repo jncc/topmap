@@ -1,13 +1,14 @@
 'use strict'
 angular.module 'topmap.map'
-  .controller 'mapElementController', ($scope, $location,  $http, $modal, $q, Layer, leafletHelper, leafletData, ogc, config, usSpinnerService, parameterHelper) ->
-    console.log('map element controller')
-
+  .controller 'mapElementController', ($scope, $location,  $http, $modal, $q, Layer, leafletHelper, leafletData, ogc, config, configHelper, usSpinnerService ) ->
+  
     mapCtrl = this
 
-    $scope.drawnlayerwkt = ''
-    $scope.drawnlayercql = ''
-  
+    mapCtrl.drawnlayerwkt = ''
+    mapCtrl.drawnlayercql = ''
+    
+    mapCtrl.layerConfig = {layer: 'none'}
+
     angular.extend($scope, {
       # OGC Browser Variables
       srcLayers: undefined,
@@ -53,43 +54,9 @@ angular.module 'topmap.map'
     # array
     $scope.showLegend = false
     $scope.features = []
-
-
-    getFilterOptions = (dataParams) ->
-      url = encodeURI(dataParams.layerUrl + dataParams.apiEndpoint + '/parameters')
-
-      $http.get(url, true)
-        .success (response) ->
-          data = response.data
-          return data
-        .error (e) -> 
-          alert('Could not configure filter parameters')
-          return {}
       
     $scope.toggleFilterDialogue = () ->
       mapCtrl.toggleFilters()
-
-      # if (mapCtrl.parameters.dataParameters.layer == 'none')
-      #   alert('This layer does not have any filters')
-      # else
-      #   url = encodeURI(mapCtrl.parameters.dataParameters.layerUrl + mapCtrl.parameters.dataParameters.apiEndpoint + '/parameters')
-
-      #   $http.get(url, true)
-      #     .success (filterOptions) ->
-      #       modalInstance = $modal.open({
-      #         animation: true,
-      #         templateUrl: mapCtrl.parameters.dataParameters.filterView,
-      #         controller: mapCtrl.parameters.dataParameters.filterController,
-      #         size: 'lg',
-      #         resolve: {
-      #           parameters: () ->
-      #             return mapCtrl.parameters
-      #           filterOptions: () ->
-      #             return filterOptions
-      #         }
-      #       })
-      #     .error (e) -> 
-      #       alert('Could not configure filter parameters')
 
     # Open a modal window for displaying features from a GetFeatureInfo request
     # on the map
@@ -257,11 +224,6 @@ angular.module 'topmap.map'
       circle: false,
       marker: false
     
-
-    # $scope.broadcastParameterChange = () ->
-    #   mapCtrl.parameters.trigger = $scope.this
-    #   $scope.$emit 'parameterChange', mapCtrl.parameters
-    
     #reloadDrawnLayer = (wkt) ->
       #wkt = new (Wkt.Wkt)
             
@@ -285,15 +247,36 @@ angular.module 'topmap.map'
     #   if parameters.trigger == $scope.this
     #     retur
 
+
+    reduceProperties = (parameters, excludedProps) ->
+      names = Object.getOwnPropertyNames(parameters)
+      
+      if names.length == 0 
+        return angular.copy(parameters)
+      
+      result = {}
+      
+      for n of names
+        exclude = false
+        for x of excludedProps
+          if excludedProps[x] is names[n] 
+            exclude = true
+        if !exclude
+          result[names[n]] = parameters[names[n]]
+          
+      return result
+
     mapCtrl.updateMap = () ->    
       if !('l' of mapCtrl.parameters.urlParameters)
         alert('no layer supplied')
         return
-        
+      
+      mapCtrl.layerConfig = configHelper.getLayerConfig(mapCtrl.parameters.urlParameters.l)
+
       usSpinnerService.spin('spinner-main')
       
       #get copy of params without l
-      filteredParams = parameterHelper.getLimitedCopy(mapCtrl.parameters.urlParameters, ["l"])
+      filteredParams = reduceProperties(mapCtrl.parameters.urlParameters, ["l"])
 
       ogc.fetchWMSCapabilities(
         ogc.getCapabilitiesURL($scope.base_wms_url, 
@@ -322,7 +305,7 @@ angular.module 'topmap.map'
           $scope.base_wms_version)
           $scope.addOverlay(layer)
           
-          if mapCtrl.parameters.dataParameters.layer != 'none'        
+          if mapCtrl.layerConfig.layer != 'none'        
             $scope.controls.draw.rectangle = true
           else
             $scope.controls.draw.rectangle = false
@@ -362,21 +345,21 @@ angular.module 'topmap.map'
             layer = e.layer
             drawnItems.addLayer(layer)
         
-            $scope.drawnlayercql = leafletHelper.toCQLBBOX(layer)
-            $scope.drawnlayerwkt = leafletHelper.toWKT(layer)
+            mapCtrl.drawnlayercql = leafletHelper.toCQLBBOX(layer)
+            mapCtrl.drawnlayerwkt = leafletHelper.toWKT(layer)
             
         )
 
-        $scope.$watch 'drawnlayerwkt', (newValue, oldValue) ->
+        $scope.$watch 'mapCtrl.drawnlayerwkt', (newValue, oldValue) ->
           if newValue 
             # Update WMS
-            geom = mapCtrl.parameters.dataParameters.geomField
+            geom = mapCtrl.layerConfig.geomField
             
-            cqlfilter = 'BBOX(' + geom + ',' + $scope.drawnlayercql + ')'
+            cqlfilter = 'BBOX(' + geom + ',' + mapCtrl.drawnlayercql + ')'
             $scope.layers.overlays.wms.doRefresh = true
             $scope.layers.overlays.wms.url =  $scope.layer.base + '?tiled=true&CQL_FILTER=' + encodeURIComponent(cqlfilter)
             
-            mapCtrl.parameters.urlParameters.wkt = $scope.drawnlayerwkt
+            mapCtrl.parameters.urlParameters.wkt = mapCtrl.drawnlayerwkt
 
     mapCtrl.updateMap()
 

@@ -1,5 +1,5 @@
 angular.module 'topmap.map'
-  .controller 'mapPageController', ($scope, $location, $route, $timeout, $modal, parameterHelper, configHelper) ->    
+  .controller 'mapPageController', ($scope, $location, $route, $timeout, $modal, configHelper) ->    
 
     pageCtrl = this
 
@@ -12,9 +12,17 @@ angular.module 'topmap.map'
 
     pageCtrl.showFilters = false
 
+    decodeUriParameters = (encodedParams) ->
+      result = {}
+      
+      for p of encodedParams
+        result[p] = decodeURIComponent(encodedParams[p])
+        
+      return result
+
     #Init Page Parameters
     pageCtrl.pageParameters.urlHash = $location.hash()
-    pageCtrl.pageParameters.urlParameters = parameterHelper.getDecodedParmeters($location.search())
+    pageCtrl.pageParameters.urlParameters = decodeUriParameters($location.search())
     pageCtrl.layerConfig = configHelper.getLayerConfig(pageCtrl.pageParameters.urlParameters.l)
     
     angular.extend($scope, {
