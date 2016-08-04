@@ -1,8 +1,8 @@
 'use strict'
 
-angular.module 'topmap.map'
+angular.module 'topmap.common'
   .service 'configHelper', (config) ->
-    getDataConfig: (layerName) ->
+    getLayerConfig: (layerName) ->
       
       for layer in config.topsat_layers
         if layer.layerName == layerName

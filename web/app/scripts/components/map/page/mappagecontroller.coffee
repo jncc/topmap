@@ -5,14 +5,17 @@ angular.module 'topmap.map'
 
     pageCtrl.pageParameters =
       urlParameters: {}
-      dataParameters: {layer: 'none'}
+      urlHash: ''
+
+    pageCtrl.layerConfig =
+      layer: 'none'
 
     pageCtrl.showFilters = false
 
     #Init Page Parameters
     pageCtrl.pageParameters.urlHash = $location.hash()
     pageCtrl.pageParameters.urlParameters = parameterHelper.getDecodedParmeters($location.search())
-    pageCtrl.pageParameters.dataParameters = configHelper.getDataConfig(pageCtrl.pageParameters.urlParameters.l)
+    pageCtrl.layerConfig = configHelper.getLayerConfig(pageCtrl.pageParameters.urlParameters.l)
     
     angular.extend($scope, {
     # Make Leaflet map fit to page height automatically
@@ -22,10 +25,10 @@ angular.module 'topmap.map'
     })
     
     pageCtrl.toggleFilters = ->
-      if (pageCtrl.pageParameters.dataParameters.layer == 'none')
+      if (pageCtrl.layerConfig.layer == 'none')
         pageCtrl.showFilters = false
         alert('This layer does not have any filters')
-      else if (pageCtrl.pageParameters.dataParameters.layer != 'none')
+      else if (pageCtrl.layerConfig.layer != 'none')
         pageCtrl.showFilters = !pageCtrl.showFilters
       return
 
@@ -42,11 +45,7 @@ angular.module 'topmap.map'
       footer.addClass 'hidden'
       return
 
-    $scope.$watch 'pageCtrl.pageParameters.urlHash', (newValue, oldValue) ->     
-      pageCtrl.updateLocation()
-      return
-
-    $scope.$watch 'pageCtrl.pageParameters.urlParameters', ((newValue, oldValue) ->
+    $scope.$watch 'pageCtrl.pageParameters', ((newValue, oldValue) ->
       pageCtrl.updateLocation()
       return
     ), true
