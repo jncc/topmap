@@ -1,18 +1,18 @@
 angular.module 'topmap.map'
   .controller 'mapPageController', ($scope, $location, $route, $timeout, $modal, parameterHelper, configHelper) ->    
 
-    pagectrl = this
+    pageCtrl = this
 
-    pagectrl.pageParameters =
+    pageCtrl.pageParameters =
       urlParameters: {}
       dataParameters: {layer: 'none'}
 
-    pagectrl.showFilters = false
+    pageCtrl.showFilters = false
 
     #Init Page Parameters
-    pagectrl.pageParameters.urlHash = $location.hash()
-    pagectrl.pageParameters.urlParameters = parameterHelper.getDecodedParmeters($location.search())
-    pagectrl.pageParameters.dataParameters = configHelper.getDataConfig(pagectrl.pageParameters.urlParameters.l)
+    pageCtrl.pageParameters.urlHash = $location.hash()
+    pageCtrl.pageParameters.urlParameters = parameterHelper.getDecodedParmeters($location.search())
+    pageCtrl.pageParameters.dataParameters = configHelper.getDataConfig(pageCtrl.pageParameters.urlParameters.l)
     
     angular.extend($scope, {
     # Make Leaflet map fit to page height automatically
@@ -21,18 +21,18 @@ angular.module 'topmap.map'
       }
     })
     
-    pagectrl.toggleFilters = ->
-      if (pagectrl.pageParameters.dataParameters.layer == 'none')
-        pagectrl.showFilters = false
+    pageCtrl.toggleFilters = ->
+      if (pageCtrl.pageParameters.dataParameters.layer == 'none')
+        pageCtrl.showFilters = false
         alert('This layer does not have any filters')
-      else if (pagectrl.pageParameters.dataParameters.layer != 'none')
-        pagectrl.showFilters = !pagectrl.showFilters
+      else if (pageCtrl.pageParameters.dataParameters.layer != 'none')
+        pageCtrl.showFilters = !pageCtrl.showFilters
       return
 
 
-    pagectrl.updateLocation = ->
-      $location.search(pagectrl.pageParameters.urlParameters)
-      $location.hash(pagectrl.pageParameters.urlHash)
+    pageCtrl.updateLocation = ->
+      $location.search(pageCtrl.pageParameters.urlParameters)
+      $location.hash(pageCtrl.pageParameters.urlHash)
       return
 
     #Handle Events
@@ -42,12 +42,12 @@ angular.module 'topmap.map'
       footer.addClass 'hidden'
       return
 
-    $scope.$watch 'pagectrl.pageParameters.urlHash', (newValue, oldValue) ->     
-      pagectrl.updateLocation()
+    $scope.$watch 'pageCtrl.pageParameters.urlHash', (newValue, oldValue) ->     
+      pageCtrl.updateLocation()
       return
 
-    $scope.$watch 'pagectrl.pageParameters.urlParameters', ((newValue, oldValue) ->
-      pagectrl.updateLocation()
+    $scope.$watch 'pageCtrl.pageParameters.urlParameters', ((newValue, oldValue) ->
+      pageCtrl.updateLocation()
       return
     ), true
 

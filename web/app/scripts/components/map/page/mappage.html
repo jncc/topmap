@@ -1,17 +1,17 @@
 <div style="height: 100%">
     <div class="mapContainer" style="height: calc(100% - 348px);" ng-style="mapStyle">
-        <tm-map-component parameters="pagectrl.pageParameters" toggle-filters="pagectrl.toggleFilters()">
+        <tm-map-component parameters="pageCtrl.pageParameters" toggle-filters="pageCtrl.toggleFilters()">
         </tm-map-component>    
     
     </div>
-        <div class="filters" ng-switch="pagectrl.pageParameters.dataParameters.layer" ng-show="pagectrl.showFilters">
+        <div class="filters" ng-switch="pageCtrl.pageParameters.dataParameters.layer" ng-show="pageCtrl.showFilters">
         <div ng-switch-when="sentinel">
-            <tm-sentinel-filter parameters="pagectrl.pageParameters" toggle-filters="pagectrl.toggleFilters()"></tm-sentinel-filter>
+            <tm-sentinel-filter parameters="pageCtrl.pageParameters" toggle-filters="pageCtrl.toggleFilters()"></tm-sentinel-filter>
         </div>
     </div>
-    <div class="dataGrids" ng-switch="pagectrl.pageParameters.dataParameters.layer">
+    <div class="dataGrids" ng-switch="pageCtrl.pageParameters.dataParameters.layer">
             <div ng-switch-when="sentinel">
-                <tm-sentinel-datagrid parameters="pagectrl.pageParameters"></tm-sentinel-datagrid>
+                <tm-sentinel-datagrid parameters="pageCtrl.pageParameters"></tm-sentinel-datagrid>
             </div>
             <div ng-switch-when="landsat" ng-controller="landsatDatagridCtrl"> 
                 <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridConfig"></div>
