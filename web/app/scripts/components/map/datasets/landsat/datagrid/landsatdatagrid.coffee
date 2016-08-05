@@ -17,7 +17,7 @@ angular.module 'topmap.map'
       displayName: 'Guid',
       width: 300,
       cellTemplate: '<div class="non-overflowing-cell cell-padding">
-      <a target="_blank" ng-href="{{grid.appScope.datagrid.datasetConfig.apiEndpoint}}/download/{{row.entity.guid}}" ng-bind-html="row.entity.guid"></a>
+      <a target="_blank" ng-href="{{grid.appScope.datagrid.datasetConfig.layerUrl}}{{grid.appScope.datagrid.datasetConfig.apiEndpoint}}/download/{{row.entity.guid}}" ng-bind-html="row.entity.guid"></a>
       </div>'
   
     landsatDatagrid.gridColumnDefs = [guidColDef,
