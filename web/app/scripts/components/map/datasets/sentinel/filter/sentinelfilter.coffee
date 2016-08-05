@@ -21,7 +21,7 @@ angular.module 'topmap.map'
 
     sentinelFilter.datasetConfig = configHelper.getConfigByName('sentinel')
     
-    setParameters = () ->
+    sentinelFilter.setParameters = () ->
       if ('senplt' of sentinelFilter.parameters.urlParameters)
         sentinelFilter.platform = sentinelFilter.parameters.urlParameters.senplt
       else
@@ -31,11 +31,6 @@ angular.module 'topmap.map'
         sentinelFilter.product = sentinelFilter.parameters.urlParameters.senprd
       else
         sentinelFilter.product = '' 
-
-    getOptionsList = (filterName, filters) ->
-      for fl in filters 
-        if (fl.name == filterName)
-          return fl
 
     sentinelFilter.initFilters = () ->
       url = encodeURI(sentinelFilter.datasetConfig.layerUrl + sentinelFilter.datasetConfig.apiEndpoint + '/parameters')
@@ -78,7 +73,7 @@ angular.module 'topmap.map'
       setParameters()
 
     # init page
-    setParameters()
+    sentinelFilter.setParameters()
     sentinelFilter.initFilters()
     
 
