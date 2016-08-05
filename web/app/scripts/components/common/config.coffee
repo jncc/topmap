@@ -36,7 +36,7 @@ angular.module 'topmap.common'
     },
     topsat_layers: [
       {
-        layer: 'sentinel', 
+        name: 'sentinel', 
         layerName: 'EODIP:sentinelview', 
         apiEndpoint: 'sentinel', 
         resourceListName: 'sentinelResourceList', 
@@ -45,7 +45,7 @@ angular.module 'topmap.common'
         filterView: 'sentinelFilter.html'
       },
       {
-        layer:'landsat', 
+        name: 'landsat', 
         layerName: 'EODIP:landsat_coverage', 
         apiEndpoint: 'landsat', 
         resourceListName: 'landsatSceneResourceList', 

@@ -1,13 +1,13 @@
 'use strict'
 angular.module 'topmap.map'
-  .controller 'mapElementController', ($scope, $location,  $http, $modal, $q, Layer, leafletHelper, leafletData, ogc, config, configHelper, usSpinnerService ) ->
+  .controller 'mapElementController', ($scope, $location,  $http, $modal, $q, Layer, leafletHelper, leafletData, ogc, config, configHelper, usSpinnerService, objectHelper ) ->
   
     mapCtrl = this
 
     mapCtrl.drawnlayerwkt = ''
     mapCtrl.drawnlayercql = ''
     
-    mapCtrl.layerConfig = {layer: 'none'}
+    mapCtrl.layerConfig = {name: 'none'}
 
     angular.extend($scope, {
       # OGC Browser Variables
@@ -248,35 +248,19 @@ angular.module 'topmap.map'
     #     retur
 
 
-    reduceProperties = (parameters, excludedProps) ->
-      names = Object.getOwnPropertyNames(parameters)
-      
-      if names.length == 0 
-        return angular.copy(parameters)
-      
-      result = {}
-      
-      for n of names
-        exclude = false
-        for x of excludedProps
-          if excludedProps[x] is names[n] 
-            exclude = true
-        if !exclude
-          result[names[n]] = parameters[names[n]]
-          
-      return result
+
 
     mapCtrl.updateMap = () ->    
       if !('l' of mapCtrl.parameters.urlParameters)
         alert('no layer supplied')
         return
       
-      mapCtrl.layerConfig = configHelper.getLayerConfig(mapCtrl.parameters.urlParameters.l)
+      mapCtrl.layerConfig = configHelper.getConfigByLayerName(mapCtrl.parameters.urlParameters.l)
 
       usSpinnerService.spin('spinner-main')
       
       #get copy of params without l
-      filteredParams = reduceProperties(mapCtrl.parameters.urlParameters, ["l"])
+      filteredParams = objectHelper.reduceProperties(mapCtrl.parameters.urlParameters, ["l"])
 
       ogc.fetchWMSCapabilities(
         ogc.getCapabilitiesURL($scope.base_wms_url, 
@@ -305,7 +289,7 @@ angular.module 'topmap.map'
           $scope.base_wms_version)
           $scope.addOverlay(layer)
           
-          if mapCtrl.layerConfig.layer != 'none'        
+          if mapCtrl.layerConfig.name != 'none'        
             $scope.controls.draw.rectangle = true
           else
             $scope.controls.draw.rectangle = false

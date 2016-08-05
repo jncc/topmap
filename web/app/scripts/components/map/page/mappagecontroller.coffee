@@ -8,7 +8,7 @@ angular.module 'topmap.map'
       urlHash: ''
 
     pageCtrl.layerConfig =
-      layer: 'none'
+      name: 'none'
 
     pageCtrl.showFilters = false
 
@@ -23,7 +23,7 @@ angular.module 'topmap.map'
     #Init Page Parameters
     pageCtrl.pageParameters.urlHash = $location.hash()
     pageCtrl.pageParameters.urlParameters = decodeUriParameters($location.search())
-    pageCtrl.layerConfig = configHelper.getLayerConfig(pageCtrl.pageParameters.urlParameters.l)
+    pageCtrl.layerConfig = configHelper.getConfigByLayerName(pageCtrl.pageParameters.urlParameters.l)
     
     angular.extend($scope, {
     # Make Leaflet map fit to page height automatically
@@ -33,10 +33,10 @@ angular.module 'topmap.map'
     })
     
     pageCtrl.toggleFilters = ->
-      if (pageCtrl.layerConfig.layer == 'none')
+      if (pageCtrl.layerConfig.name == 'none')
         pageCtrl.showFilters = false
         alert('This layer does not have any filters')
-      else if (pageCtrl.layerConfig.layer != 'none')
+      else if (pageCtrl.layerConfig.name != 'none')
         pageCtrl.showFilters = !pageCtrl.showFilters
       return
 

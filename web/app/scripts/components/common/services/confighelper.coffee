@@ -2,11 +2,20 @@
 
 angular.module 'topmap.common'
   .service 'configHelper', (config) ->
-    getLayerConfig: (layerName) ->
+    getConfigByLayerName: (layerName) ->
       
       for layer in config.topsat_layers
         if layer.layerName == layerName
           layer.layerUrl = config.topsat_api.url
           return layer
           
-      return {layer: 'none'}
+      return {name: 'none'}
+
+    getConfigByName: (name) ->
+      
+      for layer in config.topsat_layers
+        if layer.name == name
+          layer.layerUrl = config.topsat_api.url
+          return layer
+          
+      return {name: 'none'}
