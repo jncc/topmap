@@ -13,8 +13,8 @@
             <div ng-switch-when="sentinel">
                 <tm-sentinel-datagrid parameters="pageCtrl.pageParameters"></tm-sentinel-datagrid>
             </div>
-            <div ng-switch-when="landsat" ng-controller="landsatDatagridCtrl"> 
-                <div class="map-datagrid" ui-grid-pagination ui-grid-resize-columns ui-grid="gridConfig"></div>
+            <div ng-switch-when="landsat"> 
+                <tm-landsat-datagrid parameters="pageCtrl.pageParameters"></tm-landsat-datagrid>
             </div>
     </div>
 </div>
