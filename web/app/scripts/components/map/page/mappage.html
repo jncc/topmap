@@ -6,7 +6,10 @@
     </div>
         <div class="filters" ng-switch="pageCtrl.layerConfig.name" ng-show="pageCtrl.showFilters">
         <div ng-switch-when="sentinel">
-            <!--<tm-sentinel-filter parameters="pageCtrl.pageParameters" toggle-filters="pageCtrl.toggleFilters()"></tm-sentinel-filter>-->
+            <tm-sentinel-filter parameters="pageCtrl.pageParameters" toggle-filters="pageCtrl.toggleFilters()"></tm-sentinel-filter>
+        </div>
+        <div ng-switch-when="landsat">
+            <!--<tm-landsat-filter parameters="pageCtrl.pageParameters" toggle-filters="pageCtrl.toggleFilters()"></tm-landsat-filter>-->
         </div>
     </div>
     <div class="dataGrids" ng-switch="pageCtrl.layerConfig.name">

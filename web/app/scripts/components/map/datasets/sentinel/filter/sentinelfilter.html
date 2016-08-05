@@ -5,17 +5,17 @@
     <div>
         Platform:
         <br/>
-        <select ng-options="platform as platform for platform in platforms" ng-model="platform">
+        <select ng-options="platform as platform for platform in sentinelFilter.platforms" ng-model="sentinelFilter.platform">
         </select>
     </div>
     <div>
         Product:
         <br/>
-        <select ng-options="product as product for product in products" ng-model="product">
+        <select ng-options="product as product for product in sentinelFilter.products" ng-model="sentinelFilter.product">
         </select>
     </div>
 </div>
 <div class="modal-footer">
-    <input class="button" type="submit" ng-click="ok()" value="OK" />
-    <input class="button" type="reset" ng-click="undo()" value="Undo" />
+    <input class="button" type="submit" ng-click="sentinelFilter.ok()" value="OK" />
+    <input class="button" type="reset" ng-click="sentinelFilter.undo()" value="Undo" />
 </div>

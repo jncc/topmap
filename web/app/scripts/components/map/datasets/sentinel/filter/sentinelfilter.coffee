@@ -2,81 +2,84 @@
 angular.module 'topmap.map'
   .component 'tmSentinelFilter',
     bindings:
-      parameters: '<'
-      onUpdateParameters: '&'
+      parameters: '='
       toggleFilters: '&'
     templateUrl: 'scripts/components/map/datasets/sentinel/filter/sentinelfilter.html'
     controller: 'sentinelFilterController'
+    controllerAs: 'sentinelFilter'
     
-  .controller 'sentinelFilterController', ($scope, $http) ->
+  .controller 'sentinelFilterController', ($http, configHelper) ->
 
-    ctrl = this
+    sentinelFilter = this
 
-    $scope.parameters = {}
-    $scope.selectionDefault = 'Select item'
+    selectionDefault = 'Select item'
 
-    $scope.platform = $scope.selectionDefault
-    $scope.platforms = []
-    $scope.product = $scope.selectionDefault
-    $scope.products = []
+    sentinelFilter.platform = selectionDefault
+    sentinelFilter.platforms = []
+    sentinelFilter.product = selectionDefault
+    sentinelFilter.products = []
 
-    #Isolate parameters
-    angular.copy(ctrl.parameters, $scope.parameters)
+    sentinelFilter.datasetConfig = configHelper.getConfigByName('sentinel')
     
     setParameters = () ->
-      if ('senplt' of $scope.parameters.urlParameters)
-        $scope.platform = $scope.parameters.urlParameters.senplt
+      if ('senplt' of sentinelFilter.parameters.urlParameters)
+        sentinelFilter.platform = sentinelFilter.parameters.urlParameters.senplt
       else
-        $scope.platform = ''
+        sentinelFilter.platform = ''
         
-      if ('senprd' of $scope.parameters.urlParameters)
-        $scope.product = $scope.parameters.urlParameters.senprd
+      if ('senprd' of sentinelFilter.parameters.urlParameters)
+        sentinelFilter.product = sentinelFilter.parameters.urlParameters.senprd
       else
-        $scope.product = '' 
+        sentinelFilter.product = '' 
 
     getOptionsList = (filterName, filters) ->
       for fl in filters 
         if (fl.name == filterName)
           return fl
 
-    initFilters = () ->
-      url = encodeURI($scope.parameters.dataParameters.layerUrl + $scope.parameters.dataParameters.apiEndpoint + '/parameters')
+    sentinelFilter.initFilters = () ->
+      url = encodeURI(sentinelFilter.datasetConfig.layerUrl + sentinelFilter.datasetConfig.apiEndpoint + '/parameters')
 
       $http.get(url, true)
         .success (filterOptions) ->
 
           for fol in filterOptions
-            fol.values.unshift($scope.selectionDefault)
+            fol.values.unshift(selectionDefault)
             if (fol.parameter == 'product')
-              $scope.products = fol.values
-              $scope.product = $scope.products[0]
+              sentinelFilter.products = fol.values
+              console.log('set products')
+              console.log(sentinelFilter.products)
+              sentinelFilter.product = sentinelFilter.products[0]
             if (fol.parameter == 'platform')
-              $scope.platforms = fol.values
-              $scope.platform = $scope.platforms[0]
+              sentinelFilter.platforms = fol.values
+              console.log('set platforms')
+              console.log(sentinelFilter.platforms)
+              sentinelFilter.platform = sentinelFilter.platforms[0]
 
         .error (e) -> 
           alert('Could not get a list of filter options')
+      
+      return
 
-    $scope.ok = () ->
-      if ($scope.platform == $scope.selectionDefault && 'senplt' of $scope.parameters.urlParameters)
-        $scope.parameters.urlParameters.senplt = undefined
-      else if ($scope.platform != $scope.selectionDefault)
-        $scope.parameters.urlParameters.senplt = $scope.platform
+    sentinelFilter.ok = () ->
+      if (sentinelFilter.platform == selectionDefault && 'senplt' of sentinelFilter.parameters.urlParameters)
+        sentinelFilter.parameters.urlParameters.senplt = undefined
+      else if (sentinelFilter.platform != selectionDefault)
+        sentinelFilter.parameters.urlParameters.senplt = sentinelFilter.platform
 
-      if ($scope.product == $scope.selectionDefault && 'senprd' of $scope.parameters.urlParameters)
-        $scope.parameters.urlParameters.senprd = undefined
-      else if ($scope.product != $scope.selectionDefault)
-        $scope.parameters.urlParameters.senprd = $scope.product
+      if (sentinelFilter.product == selectionDefault && 'senprd' of sentinelFilter.parameters.urlParameters)
+        sentinelFilter.parameters.urlParameters.senprd = undefined
+      else if (sentinelFilter.product != selectionDefault)
+        sentinelFilter.parameters.urlParameters.senprd = sentinelFilter.product
         
-      ctrl.onUpdateParameters(newParameters: $scope.parameters)
-      ctrl.toggleFilters()
+      sentinelFilter.toggleFilters()
 
-    $scope.undo = () ->
+    sentinelFilter.undo = () ->
       setParameters()
 
     # init page
     setParameters()
-    initFilters()
+    sentinelFilter.initFilters()
     
 
 
