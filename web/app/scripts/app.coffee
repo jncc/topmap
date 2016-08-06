@@ -23,7 +23,8 @@ angular
     'base64',
     'slick',
     'topmap.common',
-    'topmap.help'
+    'topmap.help',
+    'topmap.about',
     'topmap.datalist',
     'topmap.map',
     'topmap.test'
@@ -34,10 +35,6 @@ angular
         templateUrl: 'views/main.html'
         controller: 'MainCtrl'
         controllerAs: 'main'
-      .when '/about',
-        templateUrl: 'views/about.html'
-        controller: 'AboutCtrl'
-        controllerAs: 'about'
 
       .otherwise
         redirectTo: '/'

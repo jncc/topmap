@@ -59,7 +59,11 @@ angular.module 'topmap.map'
       
       return
 
-    
+    $scope.$watch 'datagrid.parameters', ((newValue, oldValue) ->
+      datagrid.getGridData()
+      return
+    ), true
+
     #init grid
     datagrid.getGridData()
     

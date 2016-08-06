@@ -47,7 +47,7 @@ angular.module 'topmap.datalist'
  # Controller of the topmap for displaying a basic modal dialog with a 
  # provided data element for OGC Data Layers
 ###
-angular.module 'topmap.layerlist'
+angular.module 'topmap.datalist'
   .controller 'OGCModalInstanceCtrl', ($scope, $modalInstance, data, Layer, config) ->
 
     $scope.data = data;

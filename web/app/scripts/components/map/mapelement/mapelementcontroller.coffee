@@ -345,6 +345,11 @@ angular.module 'topmap.map'
             
             mapCtrl.parameters.urlParameters.wkt = mapCtrl.drawnlayerwkt
 
+    $scope.$watch 'mapCtrl.parameters', ((newValue, oldValue) ->
+      mapCtrl.updateMap()
+      return
+    ), true
+
     mapCtrl.updateMap()
 
     return
