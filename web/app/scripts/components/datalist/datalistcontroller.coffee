@@ -1,14 +1,6 @@
 'use strict'
-
-###*
- # @ngdoc function
- # @name topmap.controller:DatasetCtrl
- # @description
- # # DatasetCtrl
- # Controller of the topmap
-###
-angular.module 'topmap'
-  .controller 'DataCtrl', ($scope, $q, $modal, $location, usSpinnerService, ogc, config, store, Layer) ->
+angular.module 'topmap.datalist'
+  .controller 'dataListController', ($scope, $q, $modal, $location, usSpinnerService, ogc, config, store, Layer) ->
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
       footer = angular.element '#footer'
       footer.removeClass 'hidden'
@@ -55,7 +47,7 @@ angular.module 'topmap'
  # Controller of the topmap for displaying a basic modal dialog with a 
  # provided data element for OGC Data Layers
 ###
-angular.module 'topmap'
+angular.module 'topmap.layerlist'
   .controller 'OGCModalInstanceCtrl', ($scope, $modalInstance, data, Layer, config) ->
 
     $scope.data = data;
