@@ -25,12 +25,12 @@ angular.module 'topmap.map'
       if ('senplt' of sentinelFilter.parameters.urlParameters)
         sentinelFilter.platform = sentinelFilter.parameters.urlParameters.senplt
       else
-        sentinelFilter.platform = ''
+        sentinelFilter.platform = selectionDefault
         
       if ('senprd' of sentinelFilter.parameters.urlParameters)
         sentinelFilter.product = sentinelFilter.parameters.urlParameters.senprd
       else
-        sentinelFilter.product = '' 
+        sentinelFilter.product = selectionDefault 
 
     sentinelFilter.initFilters = () ->
       url = encodeURI(sentinelFilter.datasetConfig.layerUrl + sentinelFilter.datasetConfig.apiEndpoint + '/parameters')
@@ -46,6 +46,8 @@ angular.module 'topmap.map'
             if (fol.parameter == 'platform')
               sentinelFilter.platforms = fol.values
               sentinelFilter.platform = sentinelFilter.platforms[0]
+
+          sentinelFilter.setParameters()
 
         .error (e) -> 
           alert('Could not get a list of filter options')
@@ -69,8 +71,9 @@ angular.module 'topmap.map'
       setParameters()
 
     # init page
-    sentinelFilter.setParameters()
     sentinelFilter.initFilters()
+    
+    
     
 
 

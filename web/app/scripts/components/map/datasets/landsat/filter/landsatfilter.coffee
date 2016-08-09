@@ -23,7 +23,7 @@ angular.module 'topmap.map'
       if ('lanplt' of landsatFilter.parameters.urlParameters)
         landsatFilter.platform = landsatFilter.parameters.urlParameters.lanplt
       else
-        landsatFilter.platform = ''
+        landsatFilter.platform = selectionDefault
       
 
     landsatFilter.initFilters = () ->
@@ -38,6 +38,7 @@ angular.module 'topmap.map'
               landsatFilter.platforms = fol.values
               landsatFilter.platform = landsatFilter.platforms[0]
 
+            landsatFilter.setParameters()
         .error (e) -> 
           alert('Could not get a list of filter options')
       
@@ -55,7 +56,6 @@ angular.module 'topmap.map'
       landsatFilter.setParameters()
 
     # init page
-    landsatFilter.setParameters()
     landsatFilter.initFilters()
     
 
