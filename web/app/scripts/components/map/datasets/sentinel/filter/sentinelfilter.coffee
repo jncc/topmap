@@ -42,13 +42,9 @@ angular.module 'topmap.map'
             fol.values.unshift(selectionDefault)
             if (fol.parameter == 'product')
               sentinelFilter.products = fol.values
-              console.log('set products')
-              console.log(sentinelFilter.products)
               sentinelFilter.product = sentinelFilter.products[0]
             if (fol.parameter == 'platform')
               sentinelFilter.platforms = fol.values
-              console.log('set platforms')
-              console.log(sentinelFilter.platforms)
               sentinelFilter.platform = sentinelFilter.platforms[0]
 
         .error (e) -> 

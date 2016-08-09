@@ -248,8 +248,14 @@ angular.module 'topmap.map'
     #     retur
 
 
-    mapCtrl.getVendorParams = ->
-      return objectHelper.reduceProperties(mapCtrl.parameters.urlParameters, ["l","wkt"])
+    mapCtrl.getCQLParams = ->
+      params = {}
+
+      for p in mapCtrl.layerConfig.cqlParameterMap
+        value = mapCtrl.parameters.urlParameters[p]
+        params[mapCtrl.layerConfig.cqlParameterMap[p]] = value
+      
+      return params
 
     mapCtrl.initMap = () ->    
       if !('l' of mapCtrl.parameters.urlParameters)
@@ -260,8 +266,6 @@ angular.module 'topmap.map'
 
       usSpinnerService.spin('spinner-main')
       
-      #get copy of params without l
-      vendorParams = mapCtrl.getVendorParams()
 
       ogc.fetchWMSCapabilities(
         ogc.getCapabilitiesURL($scope.base_wms_url, 
@@ -283,8 +287,7 @@ angular.module 'topmap.map'
             name: resObj.data.Name,
             title: resObj.data.Title,
             abstract: resObj.data.Abstract,
-            wms: resObj.data,
-            vendorParams: vendorParams
+            wms: resObj.data
           }, 
           $scope.base_wms_url,
           $scope.base_wms_version)
@@ -355,14 +358,26 @@ angular.module 'topmap.map'
 
     mapCtrl.updateMap = () ->
       wmsUrl = $scope.layer.base + '?'
+      cqlParams = mapCtrl.getCQLParams()
+      cqlfilter = ''
 
       if (mapCtrl.parameters.urlParameters.wkt)
         geom = mapCtrl.layerConfig.geomField        
         cqlfilter = 'BBOX(' + geom + ',' + mapCtrl.drawnlayercql + ')'
-        wmsUrl = wmsUrl + 'tiled=true&CQL_FILTER=' + encodeURIComponent(cqlfilter)
 
-      vendorParams = mapCtrl.getVendorParams()
-      $scope.layers.overlays.wms.vendorParams = vendorParams
+      for p in cqlParams
+        if cqlfilter is ''
+          cqlfilter = p + '=' + cqlParams[p]
+        else 
+          cqlfilter = ';' + p + '=' + cqlParams[p]
+
+      wmsUrl = wmsUrl + 'tiled=true&CQL_FILTER=' + encodeURIComponent(cqlfilter)
+      console.log(wmsUrl)
+      
+      #iterate over url parameters. 
+        #get matching parameter names from layerConfig.cqlParameterMap
+          #appen matched paramter from cqlParameterMap and value from vendorParams
+      
 
       $scope.layers.overlays.wms.doRefresh = true
       $scope.layers.overlays.wms.url = wmsUrl

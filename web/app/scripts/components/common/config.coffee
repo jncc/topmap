@@ -42,7 +42,10 @@ angular.module 'topmap.common'
         resourceListName: 'sentinelResourceList', 
         geomField: 'footprint_geom',
         filterController: 'sentinelFilter',
-        filterView: 'sentinelFilter.html'
+        filterView: 'sentinelFilter.html',
+        cqlParameterMap:
+          senplt: 'platform',
+          senprd: 'producttype'
       },
       {
         name: 'landsat', 
@@ -51,7 +54,9 @@ angular.module 'topmap.common'
         resourceListName: 'landsatSceneResourceList', 
         geomField: 'landsat'
         filterController: 'landsatFilter',
-        filterView: 'landsatFilter.html'
+        filterView: 'landsatFilter.html',
+        cqlParameterMap:
+          lanplt: 'platform'
       }
     ]
 }
