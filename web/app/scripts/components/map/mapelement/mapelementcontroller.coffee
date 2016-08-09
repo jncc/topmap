@@ -248,9 +248,10 @@ angular.module 'topmap.map'
     #     retur
 
 
+    mapCtrl.getVendorParams = ->
+      return objectHelper.reduceProperties(mapCtrl.parameters.urlParameters, ["l","wkt"])
 
-
-    mapCtrl.updateMap = () ->    
+    mapCtrl.initMap = () ->    
       if !('l' of mapCtrl.parameters.urlParameters)
         alert('no layer supplied')
         return
@@ -260,7 +261,7 @@ angular.module 'topmap.map'
       usSpinnerService.spin('spinner-main')
       
       #get copy of params without l
-      filteredParams = objectHelper.reduceProperties(mapCtrl.parameters.urlParameters, ["l"])
+      vendorParams = mapCtrl.getVendorParams()
 
       ogc.fetchWMSCapabilities(
         ogc.getCapabilitiesURL($scope.base_wms_url, 
@@ -283,7 +284,7 @@ angular.module 'topmap.map'
             title: resObj.data.Title,
             abstract: resObj.data.Abstract,
             wms: resObj.data,
-            vendorParams: filteredParams
+            vendorParams: vendorParams
           }, 
           $scope.base_wms_url,
           $scope.base_wms_version)
@@ -331,25 +332,41 @@ angular.module 'topmap.map'
         
             mapCtrl.drawnlayercql = leafletHelper.toCQLBBOX(layer)
             mapCtrl.drawnlayerwkt = leafletHelper.toWKT(layer)
+
+            mapCtrl.parameters.urlParameters.wkt = mapCtrl.drawnlayerwkt
             
         )
 
-        $scope.$watch 'mapCtrl.drawnlayerwkt', (newValue, oldValue) ->
-          if newValue 
-            # Update WMS
-            geom = mapCtrl.layerConfig.geomField
+        # $scope.$watch 'mapCtrl.drawnlayerwkt', (newValue, oldValue) ->
+        #   if newValue 
+        #     # Update WMS
+        #     geom = mapCtrl.layerConfig.geomField
             
-            cqlfilter = 'BBOX(' + geom + ',' + mapCtrl.drawnlayercql + ')'
-            $scope.layers.overlays.wms.doRefresh = true
-            $scope.layers.overlays.wms.url =  $scope.layer.base + '?tiled=true&CQL_FILTER=' + encodeURIComponent(cqlfilter)
+        #     cqlfilter = 'BBOX(' + geom + ',' + mapCtrl.drawnlayercql + ')'
+        #     $scope.layers.overlays.wms.doRefresh = true
+        #     $scope.layers.overlays.wms.url =  $scope.layer.base + '?tiled=true&CQL_FILTER=' + encodeURIComponent(cqlfilter)
             
-            mapCtrl.parameters.urlParameters.wkt = mapCtrl.drawnlayerwkt
+        #     mapCtrl.parameters.urlParameters.wkt = mapCtrl.drawnlayerwkt
 
     $scope.$watch 'mapCtrl.parameters', ((newValue, oldValue) ->
       mapCtrl.updateMap()
       return
     ), true
 
-    mapCtrl.updateMap()
+    mapCtrl.updateMap = () ->
+      wmsUrl = $scope.layer.base + '?'
+
+      if (mapCtrl.parameters.urlParameters.wkt)
+        geom = mapCtrl.layerConfig.geomField        
+        cqlfilter = 'BBOX(' + geom + ',' + mapCtrl.drawnlayercql + ')'
+        wmsUrl = wmsUrl + 'tiled=true&CQL_FILTER=' + encodeURIComponent(cqlfilter)
+
+      vendorParams = mapCtrl.getVendorParams()
+      $scope.layers.overlays.wms.vendorParams = vendorParams
+
+      $scope.layers.overlays.wms.doRefresh = true
+      $scope.layers.overlays.wms.url = wmsUrl
+
+    mapCtrl.initMap()
 
     return
