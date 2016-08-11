@@ -29,9 +29,20 @@ angular.module 'topmap.map'
         latlngs = layer.getLatLngs()
         return latlngs[0].lng + ',' + latlngs[0].lat + ',' + latlngs[2].lng + ',' + latlngs[2].lat
         
-        
-      
-      
-        
-        
+    #assumes the wkt describes a rectangle
+    wktToCQL: (wkt) ->
+      if not wkt.substring(0,7) == 'POLYGON'
+        return ''
 
+      coords = wkt.replace('POLYGON((','').replace('))','')
+      latlngs = coords.split(',').map((str) ->
+        latlng = str.split(' ')
+        {
+          lng: latlng[0]
+          lat: latlng[1]
+        }
+      )
+      if latlngs.length != 5
+        return ''
+
+      return latlngs[0].lng + ',' + latlngs[0].lat + ',' + latlngs[2].lng + ',' + latlngs[2].lat
