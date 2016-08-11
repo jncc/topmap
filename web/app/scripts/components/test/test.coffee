@@ -1,36 +1,24 @@
+#''
 angular.module 'topmap.test'
   .controller 'testCtrl', () ->
     testc = this
-    testc.parameters = {wibble:2}
+    
+    wkt = 'POLYGON((-11.25 47.226532133867295,-11.25 49.274495136709376,-6.767578125 49.274495136709376,-6.767578125 47.226532133867295,-11.25 47.226532133867295))'
+    coords = wkt.replace('POLYGON((','').replace('))','')
+    latlngs = coords.split(',').map( (str) ->
+      latlng = str.split(' ')
+      {
+        lng: latlng[0]
+        lat: latlng[1]
+      }
+    )
+
+    console.log(latlngs.length)
+
+    #console.log(latlngs)
+    console.log(latlngs[0].lng + ',' + latlngs[0].lat + ',' + latlngs[2].lng + ',' + latlngs[2].lat)
+
+    #console.log(wkt.substring(0,7))
     
     return
-
-  .controller 'testThingCtrl1', () ->
-    testcmp1 = this
-
-    return
-  
-
-  .component 'tmTestThing1',
-    bindings:
-      parameters: '='
-    templateUrl: '/scripts/components/test/testthing1.html'
-    controller: 'testThingCtrl1'
-    controllerAs: 'testcmp1'
-
-  .controller 'testThingCtrl2', () ->
-    testcmp2 = this
-
-    testcmp2.makeDifferent = ->
-      testcmp2.parameters.wibble = testcmp2.parameters.wibble ^ 2
-    
-    return
-
-  
-  .component 'tmTestThing2',
-    bindings:
-      parameters: '='
-    templateUrl: '/scripts/components/test/testthing2.html'
-    controller: 'testThingCtrl2'
-    controllerAs: 'testcmp2'
 

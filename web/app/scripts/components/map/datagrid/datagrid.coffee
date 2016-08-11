@@ -40,7 +40,7 @@ angular.module 'topmap.map'
     datagrid.getGridData = () ->
       
       #Get rid of the map only paramters to keep url length down.
-      urlParams = objectHelper.reduceProperties(datagrid.parameters.urlParameters, ['l','b','v'])
+      urlParams = objectHelper.reduceProperties(datagrid.parameters.urlParameters, ['l'])
       
       url = encodeURI(datagrid.datasetConfig.layerUrl + datagrid.datasetConfig.apiEndpoint + '/search' + '?page=' + (datagrid.gridConfig.pageNumber - 1) + '&size=' + datagrid.gridConfig.pageSize)
       urlParamString = $httpParamSerializer(urlParams)
@@ -50,8 +50,11 @@ angular.module 'topmap.map'
 
       $http.get(url, true)
         .success (result) ->
-          datagrid.gridData = result._embedded[datagrid.datasetConfig.resourceListName]
-          datagrid.gridConfig.totalItems = result.page.totalElements
+          if result._embedded
+            datagrid.gridData = result._embedded[datagrid.datasetConfig.resourceListName]
+            datagrid.gridConfig.totalItems = result.page.totalElements
+          else 
+            datagrid.gridData = []
           
         .error (e) -> 
           #todo: make application wide error reporting better
@@ -59,9 +62,12 @@ angular.module 'topmap.map'
       
       return
 
-    $scope.$watch 'datagrid.parameters', ((newValue, oldValue) ->
-      datagrid.getGridData()
-      return
+    $scope.$watch 'datagrid.parameters.urlParameters', ((newValue, oldValue) ->
+      if not angular.equals(newValue, oldValue)
+        console.log('grid respond to parameter change')
+
+        datagrid.getGridData()
+        return
     ), true
 
     #init grid

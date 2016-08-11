@@ -1,7 +1,8 @@
 'use strict'
 angular.module 'topmap.map'
-  .controller 'mapElementController', ($scope, $location,  $http, $modal, $q, Layer, leafletHelper, leafletData, ogc, config, configHelper, usSpinnerService, objectHelper ) ->
+  .controller 'mapElementController', ($scope,  $http, $modal, $q, Layer, leafletHelper, leafletData, ogc, config, configHelper, usSpinnerService, objectHelper ) ->
   
+    console.log('map controller initialises')
     mapCtrl = this
 
     mapCtrl.drawnlayerwkt = ''
@@ -93,6 +94,7 @@ angular.module 'topmap.map'
     # Add and overlayer layer, currently only copes with one layer in the future
     # we should be able to add multiple layers in the same way
     $scope.addOverlay = (layer) ->
+      console.log('add overlay')
       $scope.layer = layer
       
       # Update bounds and fit the map to the given bounds
@@ -132,18 +134,12 @@ angular.module 'topmap.map'
       
     $scope.$on 'leafletDirectiveMap.moveend', (e, wrap) ->
       bounds = wrap.leafletEvent.target.getBounds()
-      #do this here because we don't want to trigger a grid update
+
       mapCtrl.parameters.urlHash = bounds._southWest.lat + ',' + 
         bounds._southWest.lng + ',' + 
         bounds._northEast.lat + ',' + 
         bounds._northEast.lng
         
-      $location.hash(mapCtrl.parameters.urlHash)
-        
-      if $scope.layer?
-        $location.search('b', encodeURIComponent($scope.layer.base))
-        $location.search('l', encodeURIComponent($scope.layer.name))
-        $location.search('v', encodeURIComponent($scope.layer.version))
 
     # Get Feature Info Request Handler
     $scope.$on 'leafletDirectiveMap.click', (e, wrap) ->
@@ -251,13 +247,14 @@ angular.module 'topmap.map'
     mapCtrl.getCQLParams = ->
       params = {}
 
-      for p in mapCtrl.layerConfig.cqlParameterMap
+      for p of mapCtrl.layerConfig.cqlParameterMap
         value = mapCtrl.parameters.urlParameters[p]
         params[mapCtrl.layerConfig.cqlParameterMap[p]] = value
       
       return params
 
-    mapCtrl.initMap = () ->    
+    mapCtrl.initMap = () -> 
+      console.log('init map')   
       if !('l' of mapCtrl.parameters.urlParameters)
         alert('no layer supplied')
         return
@@ -266,37 +263,41 @@ angular.module 'topmap.map'
 
       usSpinnerService.spin('spinner-main')
       
+      console.log('map begins fetch capabilites')
 
       ogc.fetchWMSCapabilities(
         ogc.getCapabilitiesURL($scope.base_wms_url, 
           'wms', 
           $scope.base_wms_version)).then (data) ->
-        resObj = ogc.extractLayerFromCapabilities(
-          decodeURIComponent(mapCtrl.parameters.urlParameters.l), 
-          data
-        )
 
-        if resObj.error
-          alert resObj.msg
-        else
-          bounds = ogc.getBoundsFromFragment(mapCtrl.parameters.urlHash)
-          if not bounds.error
-            resObj.data = ogc.modifyBoundsTo(resObj.data, bounds)
+            console.log('map got capabilites')
 
-          layer = Layer({
-            name: resObj.data.Name,
-            title: resObj.data.Title,
-            abstract: resObj.data.Abstract,
-            wms: resObj.data
-          }, 
-          $scope.base_wms_url,
-          $scope.base_wms_version)
-          $scope.addOverlay(layer)
-          
-          if mapCtrl.layerConfig.name != 'none'        
-            $scope.controls.draw.rectangle = true
-          else
-            $scope.controls.draw.rectangle = false
+            resObj = ogc.extractLayerFromCapabilities(
+              decodeURIComponent(mapCtrl.parameters.urlParameters.l), 
+              data
+            )
+
+            if resObj.error
+              alert resObj.msg
+            else
+              bounds = ogc.getBoundsFromFragment(mapCtrl.parameters.urlHash)
+              if not bounds.error
+                resObj.data = ogc.modifyBoundsTo(resObj.data, bounds)
+
+              layer = Layer({
+                name: resObj.data.Name,
+                title: resObj.data.Title,
+                abstract: resObj.data.Abstract,
+                wms: resObj.data
+              }, 
+              $scope.base_wms_url,
+              $scope.base_wms_version)
+              $scope.addOverlay(layer)
+              
+              if mapCtrl.layerConfig.name != 'none'        
+                $scope.controls.draw.rectangle = true
+              else
+                $scope.controls.draw.rectangle = false
             
         #if mapCtrl.parameters.urlParameters.wkt
         #  reloadDrawnLayer(mapCtrl.parameters.urlParameters.wkt)
@@ -332,11 +333,9 @@ angular.module 'topmap.map'
             # Add new drawn area as layer
             layer = e.layer
             drawnItems.addLayer(layer)
-        
-            mapCtrl.drawnlayercql = leafletHelper.toCQLBBOX(layer)
-            mapCtrl.drawnlayerwkt = leafletHelper.toWKT(layer)
 
-            mapCtrl.parameters.urlParameters.wkt = mapCtrl.drawnlayerwkt
+            console.log('map updates wkt')
+            mapCtrl.parameters.urlParameters.wkt = leafletHelper.toWKT(layer)
             
         )
 
@@ -352,16 +351,20 @@ angular.module 'topmap.map'
         #     mapCtrl.parameters.urlParameters.wkt = mapCtrl.drawnlayerwkt
 
     $scope.$watch 'mapCtrl.parameters', ((newValue, oldValue) ->
-      mapCtrl.updateMap()
-      return
+      if not angular.equals(newValue, oldValue)
+        console.log('map responds to parameter change')
+        mapCtrl.updateMap()
+        return
     ), true
 
     mapCtrl.updateMap = () ->
+      console.log('map updates')
       wmsUrl = $scope.layer.base + '?'
       cqlParams = mapCtrl.getCQLParams()
       cqlfilter = ''
 
       if (mapCtrl.parameters.urlParameters.wkt)
+        mapCtrl.drawnlayercql = leafletHelper.toCQLBBOX(layer)
         geom = mapCtrl.layerConfig.geomField        
         cqlfilter = 'BBOX(' + geom + ',' + mapCtrl.drawnlayercql + ')'
 

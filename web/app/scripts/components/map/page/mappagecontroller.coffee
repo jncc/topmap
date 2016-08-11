@@ -1,8 +1,8 @@
 angular.module 'topmap.map'
   .controller 'mapPageController', ($scope, $location, $route, $timeout, $modal, configHelper) ->    
-
     pageCtrl = this
 
+    console.log
     pageCtrl.pageParameters =
       urlParameters: {}
       urlHash: ''
@@ -54,8 +54,11 @@ angular.module 'topmap.map'
       return
 
     $scope.$watch 'pageCtrl.pageParameters', ((newValue, oldValue) ->
-      pageCtrl.updateLocation()
-      return
+      if not angular.equals(newValue, oldValue)
+        console.log('page responds to parameter change')
+
+        pageCtrl.updateLocation()
+        return
     ), true
 
     return
