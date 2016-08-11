@@ -34,8 +34,7 @@ angular.module 'topmap.map'
       if not wkt.substring(0,7) == 'POLYGON'
         return ''
 
-      coords = wkt.replace('POLYGON((','').replace('))','')
-      latlngs = coords.split(',').map((str) ->
+      latlngs = wkt.replace('POLYGON((','').replace('))','').split(',').map((str) ->
         latlng = str.split(' ')
         {
           lng: latlng[0]
