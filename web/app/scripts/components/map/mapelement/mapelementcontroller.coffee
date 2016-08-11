@@ -7,6 +7,12 @@ angular.module 'topmap.map'
 
     mapCtrl.drawnlayerwkt = ''
     mapCtrl.drawnlayercql = ''
+
+    if !('l' of mapCtrl.parameters.urlParameters)
+      alert('no layer supplied')
+      return
+      
+    mapCtrl.layerConfig = configHelper.getConfigByLayerName(mapCtrl.parameters.urlParameters.l)
     
     mapCtrl.layerConfig = {name: 'none'}
 
@@ -114,15 +120,19 @@ angular.module 'topmap.map'
         transparent: true
       }
       
-      if layer.vendorParams
-        lp = angular.extend(lp, layer.vendorParams)
+      wmsUrl = layer.base + '?tiled=true'
+
+      cqlfilter = mapCtrl.getCQLFilter() 
+
+      if cqlfilter != ''
+        wmsUrl = wmsUrl + '&CQL_FILTER=' + encodeURIComponent(cqlfilter)
       
       # Add overlay
       $scope.layers.overlays['wms'] = {
         name: layer.title,
         type: 'wms',
         visible: true,
-        url: layer.base + '?tiled=true',
+        url: wmsUrl,
         layerParams: lp
         doRefresh: true
       }
@@ -133,6 +143,8 @@ angular.module 'topmap.map'
       $scope.layers.overlays = {}
       
     $scope.$on 'leafletDirectiveMap.moveend', (e, wrap) ->
+      console.log('moveend triggerd')
+
       bounds = wrap.leafletEvent.target.getBounds()
 
       mapCtrl.parameters.urlHash = bounds._southWest.lat + ',' + 
@@ -244,22 +256,34 @@ angular.module 'topmap.map'
     #     retur
 
 
-    mapCtrl.getCQLParams = ->
-      params = {}
+    mapCtrl.getCQLFilter = ->
+      cqlParams = {}
+      cqlfilter = ''
+
+      if (mapCtrl.parameters.urlParameters.wkt)
+        cqlCoords = leafletHelper.wktToCQL(mapCtrl.parameters.urlParameters.wkt)
+        if cqlCoords == ''
+          alert('The WKT must define a rectangular bounding box')
+        else 
+          mapCtrl.drawnlayercql = cqlCoords
+          geom = mapCtrl.layerConfig.geomField        
+          cqlfilter = 'BBOX(' + geom + ',' + mapCtrl.drawnlayercql + ')'
 
       for p of mapCtrl.layerConfig.cqlParameterMap
         value = mapCtrl.parameters.urlParameters[p]
-        params[mapCtrl.layerConfig.cqlParameterMap[p]] = value
-      
-      return params
+        if value
+          cqlParams[mapCtrl.layerConfig.cqlParameterMap[p]] = value
+
+      for p of cqlParams
+        if cqlfilter == ''
+          cqlfilter = p + '=' + cqlParams[p]
+        else 
+          cqlfilter = cqlfilter + ';' + p + '=' + cqlParams[p]
+
+      return cqlfilter
 
     mapCtrl.initMap = () -> 
-      console.log('init map')   
-      if !('l' of mapCtrl.parameters.urlParameters)
-        alert('no layer supplied')
-        return
-      
-      mapCtrl.layerConfig = configHelper.getConfigByLayerName(mapCtrl.parameters.urlParameters.l)
+      console.log('map initialises')   
 
       usSpinnerService.spin('spinner-main')
       
@@ -289,9 +313,9 @@ angular.module 'topmap.map'
                 title: resObj.data.Title,
                 abstract: resObj.data.Abstract,
                 wms: resObj.data
-              }, 
-              $scope.base_wms_url,
-              $scope.base_wms_version)
+                }, 
+                $scope.base_wms_url,
+                $scope.base_wms_version)
               $scope.addOverlay(layer)
               
               if mapCtrl.layerConfig.name != 'none'        
@@ -359,28 +383,15 @@ angular.module 'topmap.map'
 
     mapCtrl.updateMap = () ->
       console.log('map updates')
-      wmsUrl = $scope.layer.base + '?'
-      cqlParams = mapCtrl.getCQLParams()
-      cqlfilter = ''
 
-      if (mapCtrl.parameters.urlParameters.wkt)
-        mapCtrl.drawnlayercql = leafletHelper.toCQLBBOX(layer)
-        geom = mapCtrl.layerConfig.geomField        
-        cqlfilter = 'BBOX(' + geom + ',' + mapCtrl.drawnlayercql + ')'
+      wmsUrl = $scope.layer.base + '?tiled=true'
 
-      for p in cqlParams
-        if cqlfilter is ''
-          cqlfilter = p + '=' + cqlParams[p]
-        else 
-          cqlfilter = ';' + p + '=' + cqlParams[p]
+      cqlfilter = mapCtrl.getCQLFilter()
+        
+      if cqlfilter != ''
+        wmsUrl = wmsUrl + '&CQL_FILTER=' + encodeURIComponent(cqlfilter)
 
-      wmsUrl = wmsUrl + 'tiled=true&CQL_FILTER=' + encodeURIComponent(cqlfilter)
       console.log(wmsUrl)
-      
-      #iterate over url parameters. 
-        #get matching parameter names from layerConfig.cqlParameterMap
-          #appen matched paramter from cqlParameterMap and value from vendorParams
-      
 
       $scope.layers.overlays.wms.doRefresh = true
       $scope.layers.overlays.wms.url = wmsUrl

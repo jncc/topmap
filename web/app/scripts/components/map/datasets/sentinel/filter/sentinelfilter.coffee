@@ -68,7 +68,7 @@ angular.module 'topmap.map'
       sentinelFilter.toggleFilters()
 
     sentinelFilter.undo = () ->
-      setParameters()
+      sentinelFilter.setParameters()
 
     # init page
     sentinelFilter.initFilters()

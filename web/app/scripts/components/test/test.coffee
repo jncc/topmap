@@ -4,21 +4,22 @@ angular.module 'topmap.test'
     testc = this
     
     wkt = 'POLYGON((-11.25 47.226532133867295,-11.25 49.274495136709376,-6.767578125 49.274495136709376,-6.767578125 47.226532133867295,-11.25 47.226532133867295))'
-    coords = wkt.replace('POLYGON((','').replace('))','')
-    latlngs = coords.split(',').map( (str) ->
+    
+    if not wkt.substring(0,7) == 'POLYGON'
+      return ''
+      
+    latlngs = wkt.replace('POLYGON((','').replace('))','').split(',').map((str) ->
       latlng = str.split(' ')
       {
         lng: latlng[0]
         lat: latlng[1]
       }
     )
+    if latlngs.length != 5
+      return ''
 
-    console.log(latlngs.length)
+    cql = latlngs[0].lng + ',' + latlngs[0].lat + ',' + latlngs[2].lng + ',' + latlngs[2].lat
 
-    #console.log(latlngs)
-    console.log(latlngs[0].lng + ',' + latlngs[0].lat + ',' + latlngs[2].lng + ',' + latlngs[2].lat)
+    console.log(cql)
 
-    #console.log(wkt.substring(0,7))
-    
     return
-
