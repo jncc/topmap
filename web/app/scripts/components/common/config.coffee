@@ -52,7 +52,7 @@ angular.module 'topmap.common'
         layerName: 'EODIP:landsat_coverage', 
         apiEndpoint: 'landsat', 
         resourceListName: 'landsatSceneResourceList', 
-        geomField: 'landsat'
+        geomField: 'wkb_geometry'
         filterController: 'landsatFilter',
         filterView: 'landsatFilter.html',
         cqlParameterMap:

@@ -273,7 +273,7 @@ angular.module 'topmap.map'
 
       for p of cqlParams
         if cqlfilter == ''
-          cqlfilter = p + '=' + cqlParams[p]
+          cqlfilter = p + '=\'' + cqlParams[p] + '\''
         else 
           cqlfilter = cqlfilter + ' AND ' + p + '=\'' + cqlParams[p] + '\''
 
