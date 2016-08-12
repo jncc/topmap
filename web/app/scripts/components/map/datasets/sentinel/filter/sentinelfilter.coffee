@@ -14,6 +14,9 @@ angular.module 'topmap.map'
 
     selectionDefault = 'Select item'
 
+    platformParam = 'senplt'
+    productParam = 'senprd'
+
     sentinelFilter.platform = selectionDefault
     sentinelFilter.platforms = []
     sentinelFilter.product = selectionDefault
@@ -22,12 +25,12 @@ angular.module 'topmap.map'
     sentinelFilter.datasetConfig = configHelper.getConfigByName('sentinel')
     
     sentinelFilter.setParameters = () ->
-      if ('senplt' of sentinelFilter.parameters.urlParameters)
+      if (platformParam of sentinelFilter.parameters.urlParameters)
         sentinelFilter.platform = sentinelFilter.parameters.urlParameters.senplt
       else
         sentinelFilter.platform = selectionDefault
         
-      if ('senprd' of sentinelFilter.parameters.urlParameters)
+      if (productParam of sentinelFilter.parameters.urlParameters)
         sentinelFilter.product = sentinelFilter.parameters.urlParameters.senprd
       else
         sentinelFilter.product = selectionDefault 
@@ -40,10 +43,10 @@ angular.module 'topmap.map'
 
           for fol in filterOptions
             fol.values.unshift(selectionDefault)
-            if (fol.parameter == 'product')
+            if (fol.parameter == productParam)
               sentinelFilter.products = fol.values
               sentinelFilter.product = sentinelFilter.products[0]
-            if (fol.parameter == 'platform')
+            if (fol.parameter == platformParam)
               sentinelFilter.platforms = fol.values
               sentinelFilter.platform = sentinelFilter.platforms[0]
 
@@ -55,12 +58,12 @@ angular.module 'topmap.map'
       return
 
     sentinelFilter.ok = () ->
-      if (sentinelFilter.platform == selectionDefault && 'senplt' of sentinelFilter.parameters.urlParameters)
+      if (sentinelFilter.platform == selectionDefault && platformParam of sentinelFilter.parameters.urlParameters)
         sentinelFilter.parameters.urlParameters.senplt = undefined
       else if (sentinelFilter.platform != selectionDefault)
         sentinelFilter.parameters.urlParameters.senplt = sentinelFilter.platform
 
-      if (sentinelFilter.product == selectionDefault && 'senprd' of sentinelFilter.parameters.urlParameters)
+      if (sentinelFilter.product == selectionDefault && productParam of sentinelFilter.parameters.urlParameters)
         sentinelFilter.parameters.urlParameters.senprd = undefined
       else if (sentinelFilter.product != selectionDefault)
         sentinelFilter.parameters.urlParameters.senprd = sentinelFilter.product

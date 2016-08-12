@@ -1,7 +1,6 @@
 'use strict'
 angular.module 'topmap.map'
   .controller 'mapElementController', ($scope,  $http, $modal, $q, Layer, leafletHelper, leafletData, ogc, config, configHelper, usSpinnerService, objectHelper ) ->
-  
     console.log('map controller initialises')
     mapCtrl = this
 
@@ -13,8 +12,6 @@ angular.module 'topmap.map'
       return
       
     mapCtrl.layerConfig = configHelper.getConfigByLayerName(mapCtrl.parameters.urlParameters.l)
-    
-    mapCtrl.layerConfig = {name: 'none'}
 
     angular.extend($scope, {
       # OGC Browser Variables
@@ -278,7 +275,7 @@ angular.module 'topmap.map'
         if cqlfilter == ''
           cqlfilter = p + '=' + cqlParams[p]
         else 
-          cqlfilter = cqlfilter + ';' + p + '=' + cqlParams[p]
+          cqlfilter = cqlfilter + ' AND ' + p + '=\'' + cqlParams[p] + '\''
 
       return cqlfilter
 

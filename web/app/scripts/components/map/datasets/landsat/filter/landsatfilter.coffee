@@ -13,6 +13,7 @@ angular.module 'topmap.map'
     landsatFilter = this
 
     selectionDefault = 'Select item'
+    platformParam = 'lanplt'
 
     landsatFilter.platform = selectionDefault
     landsatFilter.platforms = []
@@ -20,7 +21,7 @@ angular.module 'topmap.map'
     landsatFilter.datasetConfig = configHelper.getConfigByName('landsat')
     
     landsatFilter.setParameters = () ->
-      if ('lanplt' of landsatFilter.parameters.urlParameters)
+      if (platformParam of landsatFilter.parameters.urlParameters)
         landsatFilter.platform = landsatFilter.parameters.urlParameters.lanplt
       else
         landsatFilter.platform = selectionDefault
@@ -34,7 +35,7 @@ angular.module 'topmap.map'
 
           for fol in filterOptions
             fol.values.unshift(selectionDefault)
-            if (fol.parameter == 'platform')
+            if (fol.parameter == platformParam)
               landsatFilter.platforms = fol.values
               landsatFilter.platform = landsatFilter.platforms[0]
 
@@ -45,7 +46,7 @@ angular.module 'topmap.map'
       return
 
     landsatFilter.ok = () ->
-      if (landsatFilter.platform == selectionDefault && 'lanplt' of landsatFilter.parameters.urlParameters)
+      if (landsatFilter.platform == selectionDefault && platformParam of landsatFilter.parameters.urlParameters)
         landsatFilter.parameters.urlParameters.lanplt = undefined
       else if (landsatFilter.platform != selectionDefault)
         landsatFilter.parameters.urlParameters.lanplt = landsatFilter.platform
