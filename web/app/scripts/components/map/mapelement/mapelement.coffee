@@ -75,7 +75,7 @@ angular.module 'topmap.map'
       modalInstance = $modal.open({
         animation: true,
         templateUrl: 'getFeatureInfo.html',
-        controller: 'ModalInstancemapCtrl',
+        controller: 'ModalInstanceCtrl',
         size: 'lg',
         resolve: {
           data: () ->
@@ -88,7 +88,7 @@ angular.module 'topmap.map'
       modalInstance = $modal.open({
         animation: true,
         templateUrl: 'getLayerInfo.html',
-        controller: 'ModalInstancemapCtrl',
+        controller: 'ModalInstanceCtrl',
         size: 'lg',
         resolve: {
           data: () ->
