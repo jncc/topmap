@@ -10,7 +10,9 @@ angular.module 'topmap.map'
     if !('l' of mapCtrl.parameters.urlParameters)
       alert('no layer supplied')
       return
-      
+
+    mapCtrl.leafletData = leafletData
+
     mapCtrl.layerConfig = configHelper.getConfigByLayerName(mapCtrl.parameters.urlParameters.l)
 
     angular.extend($scope, {
@@ -59,9 +61,6 @@ angular.module 'topmap.map'
     $scope.showLegend = false
     $scope.features = []
       
-    $scope.toggleFilterDialogue = () ->
-      mapCtrl.toggleFilters()
-
     # Open a modal window for displaying features from a GetFeatureInfo request
     # on the map
     $scope.openGetFeatureInfo = () -> 
@@ -337,9 +336,7 @@ angular.module 'topmap.map'
       L.easyButton('glyphicon glyphicon-globe', (btn, map) ->
         $scope.openLayerInfo()
       ).addTo(map)
-      L.easyButton('glyphicon glyphicon-filter', (btn, map) ->
-        $scope.toggleFilterDialogue()
-      ).addTo(map)
+
       
       leafletData.getMap().then (map) ->
         map.on('draw:created', (e) ->

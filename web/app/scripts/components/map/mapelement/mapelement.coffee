@@ -3,7 +3,7 @@ angular.module 'topmap.map'
   .component 'tmMapComponent',
     bindings:
       parameters: '='
-      toggleFilters: '&'
+    transclude: true
     templateUrl: 'scripts/components/map/mapelement/mapelement.html'
     controller: 'mapElementController'
     controllerAs: 'mapCtrl'
