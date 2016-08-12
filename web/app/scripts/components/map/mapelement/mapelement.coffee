@@ -15,6 +15,8 @@ angular.module 'topmap.map'
     mapCtrl.drawnlayerwkt = ''
     mapCtrl.drawnlayercql = ''
 
+    mapCtrl.layer = {}
+
     if !('l' of mapCtrl.parameters.urlParameters)
       alert('no layer supplied')
       return
@@ -82,30 +84,14 @@ angular.module 'topmap.map'
             return $scope.features
         }
       })
-    
-    # Open a modal window for displaying general layer infomation to the user
-    $scope.openLayerInfo = () -> 
-      modalInstance = $modal.open({
-        animation: true,
-        templateUrl: 'getLayerInfo.html',
-        controller: 'ModalInstanceCtrl',
-        size: 'lg',
-        resolve: {
-          data: () ->
-            return {
-              capabilities: ogc.getCapabilitiesURL($scope.layer.base, 
-                'wms', 
-                $scope.layer.version),
-              layer: $scope.layer
-            }
-        }
-      })
+  
       
     # Add and overlayer layer, currently only copes with one layer in the future
     # we should be able to add multiple layers in the same way
     $scope.addOverlay = (layer) ->
       console.log('add overlay')
       $scope.layer = layer
+      mapCtrl.layer = $scope.layer
       
       # Update bounds and fit the map to the given bounds
       $scope.bounds = {
@@ -341,9 +327,7 @@ angular.module 'topmap.map'
       L.easyButton('glyphicon glyphicon-list', (btn, map) ->
         $scope.showLegend = !$scope.showLegend
       ).addTo(map)
-      L.easyButton('glyphicon glyphicon-globe', (btn, map) ->
-        $scope.openLayerInfo()
-      ).addTo(map)
+
 
       
       leafletData.getMap().then (map) ->
