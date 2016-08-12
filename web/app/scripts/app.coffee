@@ -27,6 +27,7 @@ angular
     'topmap.about',
     'topmap.datalist',
     'topmap.map',
+    'topmap.roadmap',
     'topmap.test'
   ]
   .config ($routeProvider, $locationProvider) ->
