@@ -215,11 +215,6 @@ angular.module 'topmap.map'
         # Display list
         $scope.displayLayerList()
 
-    mapCtrl.controls.draw = draw: 
-      polygon: false,
-      polyline: false,
-      circle: false,
-      marker: false
     
     #reloadDrawnLayer = (wkt) ->
       #wkt = new (Wkt.Wkt)
@@ -307,10 +302,6 @@ angular.module 'topmap.map'
                 $scope.base_wms_version)
               mapCtrl.addOverlay(layer)
               
-              if mapCtrl.layerConfig.name != 'none'        
-                mapCtrl.controls.draw.rectangle = true
-              else
-                mapCtrl.controls.draw.rectangle = false
             
         #if mapCtrl.parameters.urlParameters.wkt
         #  reloadDrawnLayer(mapCtrl.parameters.urlParameters.wkt)
@@ -327,26 +318,6 @@ angular.module 'topmap.map'
         $scope.showLegend = !$scope.showLegend
       ).addTo(map)
 
-
-      
-      leafletData.getMap().then (map) ->
-        map.on('draw:created', (e) ->
-          leafletData.getLayers().then (baselayers) ->
-            
-            drawnItems = baselayers.overlays.draw
-            # Remove old drawn layer
-            layers = drawnItems.getLayers()
-
-            for layer in layers
-              drawnItems.removeLayer(layer)
-            # Add new drawn area as layer
-            layer = e.layer
-            drawnItems.addLayer(layer)
-
-            console.log('map updates wkt')
-            mapCtrl.parameters.urlParameters.wkt = leafletHelper.toWKT(layer)
-            
-        )
 
         # $scope.$watch 'mapCtrl.drawnlayerwkt', (newValue, oldValue) ->
         #   if newValue 

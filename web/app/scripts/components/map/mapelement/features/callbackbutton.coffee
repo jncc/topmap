@@ -9,7 +9,6 @@ angular.module 'topmap.map'
     controller: 'mapCallbackButtonController'
     controllerAs: 'mcbCtrl'
   .controller 'mapCallbackButtonController', () ->
-    console.log('callback button')
     mcbCtrl = this
     mcbCtrl.$onInit = ->
       iconString = 'glyphicon ' + mcbCtrl.icon

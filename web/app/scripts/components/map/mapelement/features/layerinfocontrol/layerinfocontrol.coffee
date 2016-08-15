@@ -7,7 +7,7 @@ angular.module 'topmap.map'
       mapCtrl: '^tmMapComponent'
     controller: 'mapLayerInfoControlController'
     controllerAs: 'mliCtrl'
-    
+
   .controller 'mapLayerInfoControlController', ($modal, ogc) ->
     mliCtrl = this
 
