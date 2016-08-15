@@ -1,20 +1,21 @@
 'use strict'
 angular.module 'topmap.map'
-  .component 'tmMapLayerInfoButton',
+  .component 'tmMapLayerInfoControl',
     bindings:
       icon: '@'
     require:
       mapCtrl: '^tmMapComponent'
-    controller: 'mapLayerInfoButtonController'
+    controller: 'mapLayerInfoControlController'
     controllerAs: 'mliCtrl'
-  .controller 'mapLayerInfoButtonController', ($modal, ogc) ->
+    
+  .controller 'mapLayerInfoControlController', ($modal, ogc) ->
     mliCtrl = this
 
     # Open a modal window for displaying general layer infomation to the user
     mliCtrl.openLayerInfo = () -> 
       modalInstance = $modal.open({
         animation: true,
-        templateUrl: 'scripts/components/map/mapelement/features/layerinfobutton/layerinfobutton-dialogue.html',
+        templateUrl: 'scripts/components/map/mapelement/features/layerinfocontrol/layerinfocontroldialogue.html',
         controller: 'ModalInstanceCtrl',
         size: 'lg',
         resolve: {
