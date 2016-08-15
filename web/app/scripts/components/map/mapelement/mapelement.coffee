@@ -17,32 +17,7 @@ angular.module 'topmap.map'
 
     mapCtrl.layer = {}
 
-    if !('l' of mapCtrl.parameters.urlParameters)
-      alert('no layer supplied')
-      return
-
-    mapCtrl.leafletData = leafletData
-
-    mapCtrl.layerConfig = configHelper.getConfigByLayerName(mapCtrl.parameters.urlParameters.l)
-
-    angular.extend($scope, {
-      # OGC Browser Variables
-      srcLayers: undefined,
-      base_wms_url: config.ogc_datasources[0].url,
-      base_wms_version: config.ogc_datasources[0].wms.version,
-      # Setup basic Leaflet view
-      defaults: {
-        scrollWheelZoom: true,
-        attributionControl: true
-      },
-      controls: {
-      
-      },
-      bounds: {
-        southWest: L.latLng(48.2369976053553, -10.5834521778756),
-        northEast: L.latLng(63.8904084768698, 3.99789995551856)
-      },
-      layers: {
+    mapCtrl.layers = {
         baselayers: {
           xyz: {
             name: 'OpenStreetMap',
@@ -64,6 +39,33 @@ angular.module 'topmap.map'
           }
         }
       }
+
+    if !('l' of mapCtrl.parameters.urlParameters)
+      alert('no layer supplied')
+      return
+
+    mapCtrl.leafletData = leafletData
+
+    mapCtrl.layerConfig = configHelper.getConfigByLayerName(mapCtrl.parameters.urlParameters.l)
+
+    mapCtrl.controls = {}
+
+    mapCtrl.bounds = {
+        southWest: L.latLng(48.2369976053553, -10.5834521778756),
+        northEast: L.latLng(63.8904084768698, 3.99789995551856)
+      }
+
+    mapCtrl.defaults = {
+        scrollWheelZoom: true,
+        attributionControl: true
+      }
+
+    angular.extend($scope, {
+      # OGC Browser Variables
+      srcLayers: undefined,
+      base_wms_url: config.ogc_datasources[0].url,
+      base_wms_version: config.ogc_datasources[0].wms.version,
+
     })
 
     # Set up some basic settings, hide the legend and add an empty features
@@ -88,13 +90,12 @@ angular.module 'topmap.map'
       
     # Add and overlayer layer, currently only copes with one layer in the future
     # we should be able to add multiple layers in the same way
-    $scope.addOverlay = (layer) ->
+    mapCtrl.addOverlay = (layer) ->
       console.log('add overlay')
-      $scope.layer = layer
-      mapCtrl.layer = $scope.layer
+      mapCtrl.layer = layer
       
       # Update bounds and fit the map to the given bounds
-      $scope.bounds = {
+      mapCtrl.bounds = {
         southWest: layer.bbox[0],
         northEast: layer.bbox[1]
       }
@@ -118,7 +119,7 @@ angular.module 'topmap.map'
         wmsUrl = wmsUrl + '&CQL_FILTER=' + encodeURIComponent(cqlfilter)
       
       # Add overlay
-      $scope.layers.overlays['wms'] = {
+      mapCtrl.layers.overlays['wms'] = {
         name: layer.title,
         type: 'wms',
         visible: true,
@@ -126,11 +127,9 @@ angular.module 'topmap.map'
         layerParams: lp
         doRefresh: true
       }
-      
-        # Remove all overlays from the map
         
-    $scope.removeOverlays = () ->
-      $scope.layers.overlays = {}
+    mapCtrl.removeOverlays = () ->
+      mapCtrl.layers.overlays = {}
       
     $scope.$on 'leafletDirectiveMap.moveend', (e, wrap) ->
       console.log('moveend triggerd')
@@ -147,12 +146,12 @@ angular.module 'topmap.map'
     $scope.$on 'leafletDirectiveMap.click', (e, wrap) ->
       usSpinnerService.spin('spinner-main')
 
-      $scope.clicked = {
+      mapCtrl.clicked = {
         x: Math.round(wrap.leafletEvent.containerPoint.x),
         y: Math.round(wrap.leafletEvent.containerPoint.y)
       }
 
-      $scope.markers = {
+      mapCtrl.markers = {
         click: {
           lat: wrap.leafletEvent.latlng.lat,
           lng: wrap.leafletEvent.latlng.lng
@@ -216,7 +215,7 @@ angular.module 'topmap.map'
         # Display list
         $scope.displayLayerList()
 
-    $scope.controls.draw = draw: 
+    mapCtrl.controls.draw = draw: 
       polygon: false,
       polyline: false,
       circle: false,
@@ -294,9 +293,9 @@ angular.module 'topmap.map'
             if resObj.error
               alert resObj.msg
             else
-              bounds = ogc.getBoundsFromFragment(mapCtrl.parameters.urlHash)
-              if not bounds.error
-                resObj.data = ogc.modifyBoundsTo(resObj.data, bounds)
+              mapCtrl.bounds = ogc.getBoundsFromFragment(mapCtrl.parameters.urlHash)
+              if not mapCtrl.bounds.error
+                resObj.data = ogc.modifyBoundsTo(resObj.data, mapCtrl.bounds)
 
               layer = Layer({
                 name: resObj.data.Name,
@@ -306,12 +305,12 @@ angular.module 'topmap.map'
                 }, 
                 $scope.base_wms_url,
                 $scope.base_wms_version)
-              $scope.addOverlay(layer)
+              mapCtrl.addOverlay(layer)
               
               if mapCtrl.layerConfig.name != 'none'        
-                $scope.controls.draw.rectangle = true
+                mapCtrl.controls.draw.rectangle = true
               else
-                $scope.controls.draw.rectangle = false
+                mapCtrl.controls.draw.rectangle = false
             
         #if mapCtrl.parameters.urlParameters.wkt
         #  reloadDrawnLayer(mapCtrl.parameters.urlParameters.wkt)
@@ -379,8 +378,8 @@ angular.module 'topmap.map'
 
       console.log(wmsUrl)
 
-      $scope.layers.overlays.wms.doRefresh = true
-      $scope.layers.overlays.wms.url = wmsUrl
+      mapCtrl.layers.overlays.wms.doRefresh = true
+      mapCtrl.layers.overlays.wms.url = wmsUrl
 
     mapCtrl.initMap()
 

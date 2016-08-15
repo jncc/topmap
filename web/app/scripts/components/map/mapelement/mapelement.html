@@ -1,11 +1,13 @@
 
 <div id="leafletContainer" style="height: 100%;">
-    <leaflet bounds="bounds" layers="layers" controls="controls" markers="markers" width="100%" height="100%" ></leaflet>
+    <leaflet bounds="mapCtrl.bounds" layers="mapCtrl.layers" controls="mapCtrl.controls" markers="markers" width="100%" height="100%" ></leaflet>
 </div>
 
-<div id="legend" ng-show="showLegend" class="legendContainer check-element animate-show scroll">
+<div ng-transclude></div>
+
+<div id="legend" ng-show="mapCtrl.showLegend" class="legendContainer check-element animate-show scroll">
     <h4>Legend</h4>
-    <img ng-src="{{layer.base}}?service=WMS&REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER={{layer.name}}&legend_options=forceLabels:on" class="img-responsive" style="max-height: 100%;" alt="Legend Graphic"/>
+    <img ng-src="{{mapCtrl.layer.base}}?service=WMS&REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER={{mapCtrl.layer.name}}&legend_options=forceLabels:on" class="img-responsive" style="max-height: 100%;" alt="Legend Graphic"/>
 </div>
 
 <span us-spinner="{radius:30, width:8, length: 16}" spinner-key="spinner-main"></span>
