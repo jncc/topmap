@@ -331,7 +331,7 @@ angular.module 'topmap.map'
         #     mapCtrl.parameters.urlParameters.wkt = mapCtrl.drawnlayerwkt
 
     $scope.$watch 'mapCtrl.parameters', ((newValue, oldValue) ->
-      if not angular.equals(newValue, oldValue)
+      if not angular.equals(newValue, oldValue) && mapCtrl.layer
         console.log('map responds to parameter change')
         mapCtrl.updateMap()
         return
@@ -340,7 +340,7 @@ angular.module 'topmap.map'
     mapCtrl.updateMap = () ->
       console.log('map updates')
 
-      wmsUrl = $scope.layer.base + '?tiled=true'
+      wmsUrl = mapCtrl.layer.base + '?tiled=true'
 
       cqlfilter = mapCtrl.getCQLFilter()
         

@@ -13,7 +13,7 @@ angular.module 'topmap.common'
       {
         name: 'JNCC_Geoserver',
         prettyName: 'JNCC Geoserver',
-        url: 'http://eodip.jncc.gov.uk/geoserver/ows',
+        url: 'https://eodip.jncc.gov.uk/geoserver/ows',
         wms: {
           version: '1.3.0'
         },
@@ -31,7 +31,7 @@ angular.module 'topmap.common'
     ],
     topsat_api: {
       name: 'JNCC TopSat API',
-      url: 'http://eodip.jncc.gov.uk/api/'
+      url: 'https://eodip.jncc.gov.uk/api/'
       # url: 'http://localhost:8084/api/'
     },
     topsat_layers: [
