@@ -121,7 +121,7 @@ public class LandsatSceneController {
     {
         List<ParameterValueList> result = new ArrayList<>();
         
-        result.add(new ParameterValueList("platform", landsatRepository.getAllPlatforms()));
+        result.add(new ParameterValueList("lanplt", landsatRepository.getAllPlatforms()));
         
         return new HttpEntity<>(result);
     }

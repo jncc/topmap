@@ -1,11 +1,13 @@
 
 <div id="leafletContainer" style="height: 100%;">
-    <leaflet bounds="bounds" layers="layers" controls="controls" markers="markers" width="100%" height="100%" ></leaflet>
+    <leaflet bounds="mapCtrl.bounds" layers="mapCtrl.layers" controls="mapCtrl.controls" markers="markers" width="100%" height="100%" ></leaflet>
 </div>
 
-<div id="legend" ng-show="showLegend" class="legendContainer check-element animate-show scroll">
+<div ng-transclude></div>
+
+<div id="legend" ng-show="mapCtrl.showLegend" class="legendContainer check-element animate-show scroll">
     <h4>Legend</h4>
-    <img ng-src="{{layer.base}}?service=WMS&REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER={{layer.name}}&legend_options=forceLabels:on" class="img-responsive" style="max-height: 100%;" alt="Legend Graphic"/>
+    <img ng-src="{{mapCtrl.layer.base}}?service=WMS&REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER={{mapCtrl.layer.name}}&legend_options=forceLabels:on" class="img-responsive" style="max-height: 100%;" alt="Legend Graphic"/>
 </div>
 
 <span us-spinner="{radius:30, width:8, length: 16}" spinner-key="spinner-main"></span>
@@ -31,24 +33,6 @@
         <input class="button" type="submit" ng-click="ok()" value="OK" />
     </div>
 </script>
-<script type="text/ng-template" id="getLayerInfo.html">
-    <div class="modal-header">
-        <h3 class="modal-title">{{data.layer.title}}</h3>
-    </div>
-    <div class="modal-body scroll">
-        <p>Abstract: {{data.layer.abstract}}</p>
-        <br/>
-        <p>Service URL: {{data.layer.base}}</p>
-        <p>WMS Version: {{data.layer.version}}</p>
-        <p>Layer Name: {{data.layer.name}}</p>
-        <p>Get Capabilities URL: {{data.capabilities}}</p>
-        
-        
-    </div>
-    <div class="modal-footer">
-        <input class="button" type="submit" ng-click="ok()" value="OK" />
-    </div>
-</script>    
 <script type="text/ng-template" id="showOGCLayers.html">
     <div class="modal-header">
         <h3 class="modal-title">Layers</h3>

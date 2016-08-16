@@ -12,6 +12,8 @@ angular.module 'topmap.map'
 
     pageCtrl.showFilters = false
 
+    pageCtrl.mapStyle = {height: '100%'}
+
     decodeUriParameters = (encodedParams) ->
       result = {}
       
@@ -20,11 +22,18 @@ angular.module 'topmap.map'
         
       return result
 
-    #Init Page Parameters
+    #Init Page
     pageCtrl.pageParameters.urlHash = $location.hash()
     pageCtrl.pageParameters.urlParameters = decodeUriParameters($location.search())
     pageCtrl.layerConfig = configHelper.getConfigByLayerName(pageCtrl.pageParameters.urlParameters.l)
     
+    if pageCtrl.layerConfig.name != 'none'
+      pageCtrl.mapStyle = 
+        {
+          height: "calc(100% - 348px)"
+        }
+
+    #sets a hight in index html
     angular.extend($scope, {
     # Make Leaflet map fit to page height automatically
       contentDivHeight: {
