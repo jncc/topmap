@@ -8,7 +8,7 @@ angular.module 'topmap.map'
     controller: 'mapElementController'
     controllerAs: 'mapCtrl'
     
-  .controller 'mapElementController', ($scope,  $http, $modal, $q, Layer, leafletHelper, leafletData, ogc, config, configHelper, usSpinnerService, objectHelper ) ->
+  .controller 'mapElementController', ($scope,  $http, $modal, $q, Layer, leafletHelper, leafletData, ogc, configHelper, usSpinnerService, objectHelper ) ->
     console.log('map controller initialises')
     mapCtrl = this
 
@@ -42,7 +42,6 @@ angular.module 'topmap.map'
 
     if !('l' of mapCtrl.parameters.urlParameters)
       alert('no layer supplied')
-      return
 
     mapCtrl.leafletData = leafletData
 
@@ -63,8 +62,6 @@ angular.module 'topmap.map'
     angular.extend($scope, {
       # OGC Browser Variables
       srcLayers: undefined,
-      base_wms_url: config.ogc_datasources[0].url,
-      base_wms_version: config.ogc_datasources[0].wms.version,
 
     })
 
@@ -199,8 +196,8 @@ angular.module 'topmap.map'
     $scope.showLayerList = () ->
       if $scope.srcLayers is undefined
         usSpinnerService.spin('spinner-main')
-        wms_capabilities_url = ogc.getCapabilitiesURL($scope.base_wms_url, 'wms', $scope.base_wms_version)
-        wfs_capabilities_url = ogc.getCapabilitiesURL($scope.base_wms_url, 'wfs', $scope.base_wms_version)
+        wms_capabilities_url = ogc.getCapabilitiesURL(mapCtrl.layerConfig.wmsUrl, 'wms', mapCtrl.layerConfig.wmsVersion)
+        wfs_capabilities_url = ogc.getCapabilitiesURL(mapCtrl.layerConfig.wmsUrl, 'wfs', mapCtrl.layerConfig.wmsVersion)
 
         wmsPromise = ogc.fetchWMSCapabilities(wms_capabilities_url)
         wfsPromise = ogc.fetchWFSCapabilities(wfs_capabilities_url)
@@ -274,9 +271,9 @@ angular.module 'topmap.map'
       console.log('map begins fetch capabilites')
 
       ogc.fetchWMSCapabilities(
-        ogc.getCapabilitiesURL($scope.base_wms_url, 
+        ogc.getCapabilitiesURL(mapCtrl.layerConfig.wmsUrl, 
           'wms', 
-          $scope.base_wms_version)).then (data) ->
+          mapCtrl.layerConfig.wmsVersion)).then (data) ->
 
             console.log('map got capabilites')
 
@@ -298,8 +295,8 @@ angular.module 'topmap.map'
                 abstract: resObj.data.Abstract,
                 wms: resObj.data
                 }, 
-                $scope.base_wms_url,
-                $scope.base_wms_version)
+                mapCtrl.layerConfig.wmsUrl,
+                mapCtrl.layerConfig.wmsVersion)
               mapCtrl.addOverlay(layer)
               
             
