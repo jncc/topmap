@@ -28,7 +28,7 @@ angular.module 'topmap.map'
       
 
     landsatFilter.initFilters = () ->
-      url = encodeURI(landsatFilter.datasetConfig.layerUrl + landsatFilter.datasetConfig.apiEndpoint + '/parameters')
+      url = encodeURI(landsatFilter.datasetConfig.dataUrl + landsatFilter.datasetConfig.apiEndpoint + '/parameters')
 
       $http.get(url, true)
         .success (filterOptions) ->

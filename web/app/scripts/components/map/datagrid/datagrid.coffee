@@ -42,12 +42,13 @@ angular.module 'topmap.map'
       #Get rid of the map only paramters to keep url length down.
       urlParams = objectHelper.reduceProperties(datagrid.parameters.urlParameters, ['l'])
       
-      url = encodeURI(datagrid.datasetConfig.layerUrl + datagrid.datasetConfig.apiEndpoint + '/search' + '?page=' + (datagrid.gridConfig.pageNumber - 1) + '&size=' + datagrid.gridConfig.pageSize)
+      url = encodeURI(datagrid.datasetConfig.dataUrl + datagrid.datasetConfig.apiEndpoint + '/search' + '?page=' + (datagrid.gridConfig.pageNumber - 1) + '&size=' + datagrid.gridConfig.pageSize)
       urlParamString = $httpParamSerializer(urlParams)
 
       if urlParamString
         url = url + '&' + urlParamString
 
+      console.log('datagrid url ' + url)
       $http.get(url, true)
         .success (result) ->
           if result._embedded

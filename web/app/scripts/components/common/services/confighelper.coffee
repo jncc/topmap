@@ -6,7 +6,7 @@ angular.module 'topmap.common'
       
       for layer in config.topsat_layers
         if layer.layerName == layerName
-          layer.layerUrl = config.topsat_api.url
+          layer.dataUrl = config.topsat_api.url
           return layer
           
       return {name: 'none'}
@@ -15,7 +15,7 @@ angular.module 'topmap.common'
       
       for layer in config.topsat_layers
         if layer.name == name
-          layer.layerUrl = config.topsat_api.url
+          layer.dataUrl = config.topsat_api.url
           return layer
           
       return {name: 'none'}

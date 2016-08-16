@@ -319,16 +319,6 @@ angular.module 'topmap.map'
       ).addTo(map)
 
 
-        # $scope.$watch 'mapCtrl.drawnlayerwkt', (newValue, oldValue) ->
-        #   if newValue 
-        #     # Update WMS
-        #     geom = mapCtrl.layerConfig.geomField
-            
-        #     cqlfilter = 'BBOX(' + geom + ',' + mapCtrl.drawnlayercql + ')'
-        #     $scope.layers.overlays.wms.doRefresh = true
-        #     $scope.layers.overlays.wms.url =  $scope.layer.base + '?tiled=true&CQL_FILTER=' + encodeURIComponent(cqlfilter)
-            
-        #     mapCtrl.parameters.urlParameters.wkt = mapCtrl.drawnlayerwkt
 
     $scope.$watch 'mapCtrl.parameters', ((newValue, oldValue) ->
       if not angular.equals(newValue, oldValue) && mapCtrl.layer

@@ -36,7 +36,7 @@ angular.module 'topmap.map'
         sentinelFilter.product = selectionDefault 
 
     sentinelFilter.initFilters = () ->
-      url = encodeURI(sentinelFilter.datasetConfig.layerUrl + sentinelFilter.datasetConfig.apiEndpoint + '/parameters')
+      url = encodeURI(sentinelFilter.datasetConfig.dataUrl + sentinelFilter.datasetConfig.apiEndpoint + '/parameters')
 
       $http.get(url, true)
         .success (filterOptions) ->
