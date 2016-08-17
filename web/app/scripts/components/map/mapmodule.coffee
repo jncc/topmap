@@ -19,10 +19,12 @@ angular
     'ui.grid.pagination',
     'topmap.common'
   ]
-  .config ($routeProvider, $locationProvider) ->
+  .constant('moduleSettings',
+    basePath : 'scripts/components/map/') 
+  .config ($routeProvider, $locationProvider, moduleSettings) ->
     $routeProvider
       .when '/map',
-        templateUrl: 'scripts/components/map/page/mappage.html'
+        templateUrl: moduleSettings.basePath + 'page/mappage.html'
         controller: 'mapPageController'
         controllerAs: 'pageCtrl'
         reloadOnSearch: false
