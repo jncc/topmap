@@ -286,6 +286,7 @@ angular.module 'topmap.map'
               alert resObj.msg
             else
               mapCtrl.bounds = ogc.getBoundsFromFragment(mapCtrl.parameters.urlHash)
+
               if not mapCtrl.bounds.error
                 resObj.data = ogc.modifyBoundsTo(resObj.data, mapCtrl.bounds)
 
@@ -318,7 +319,7 @@ angular.module 'topmap.map'
 
 
     $scope.$watch 'mapCtrl.parameters', ((newValue, oldValue) ->
-      if not angular.equals(newValue, oldValue) && mapCtrl.layer
+      if not angular.equals(newValue, oldValue) && mapCtrl.layer.name
         console.log('map responds to parameter change')
         mapCtrl.updateMap()
         return
