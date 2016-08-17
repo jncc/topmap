@@ -5,7 +5,7 @@ angular.module 'topmap.map'
       mapCtrl: '^tmMapComponent'
     controller: 'mapGetFeatureInfoControlController'
     controllerAs: 'gfiCtrl'
-  .controller 'mapGetFeatureInfoControlController', ($scope, $modal, ogc, usSpinnerService) ->
+  .controller 'mapGetFeatureInfoControlController', ($scope, $modal, ogc, usSpinnerService, moduleSettings) ->
     console.log('gfi controller')
 
     gfiCtrl = this
@@ -17,7 +17,7 @@ angular.module 'topmap.map'
     gfiCtrl.openGetFeatureInfo = () -> 
       modalInstance = $modal.open({
         animation: true,
-        templateUrl: 'scripts/components/map/mapelement/features/getfeatureinfocontrol/getfeatureinfocontroldialogue.html'
+        templateUrl: moduleSettings.basePath + 'mapelement/features/getfeatureinfocontrol/getfeatureinfocontroldialogue.html'
         controller: 'ModalInstanceCtrl',
         size: 'lg',
         resolve: {
