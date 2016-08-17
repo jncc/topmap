@@ -65,9 +65,6 @@ angular.module 'topmap.map'
 
     })
 
-    # Set up some basic settings, hide the legend and add an empty features
-    # array
-    $scope.showLegend = false
     $scope.features = []
       
     # Open a modal window for displaying features from a GetFeatureInfo request
@@ -312,9 +309,7 @@ angular.module 'topmap.map'
       L.easyButton('glyphicon glyphicon-folder-open', (btn, map) ->
         $scope.showLayerList()
       ).addTo(map)
-      L.easyButton('glyphicon glyphicon-list', (btn, map) ->
-        $scope.showLegend = !$scope.showLegend
-      ).addTo(map)
+
 
 
 
