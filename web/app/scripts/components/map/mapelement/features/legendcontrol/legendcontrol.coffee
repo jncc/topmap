@@ -9,7 +9,7 @@ angular.module 'topmap.map'
     controller: 'tmMapLegendControlController'
     controllerAs: 'legCtrl'
 
-  .controller 'tmMapLegendControlController', ($modal, ogc) ->
+  .controller 'tmMapLegendControlController', () ->
     legCtrl = this
 
     legCtrl.showLegend = false

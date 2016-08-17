@@ -12,10 +12,14 @@ angular.module 'topmap.map'
     console.log('map controller initialises')
     mapCtrl = this
 
+    mapCtrl.scope = $scope
+    
     mapCtrl.drawnlayerwkt = ''
     mapCtrl.drawnlayercql = ''
 
     mapCtrl.layer = {}
+
+    mapCtrl.markers = {}
 
     mapCtrl.layers = {
         baselayers: {
@@ -65,21 +69,8 @@ angular.module 'topmap.map'
 
     })
 
-    $scope.features = []
       
-    # Open a modal window for displaying features from a GetFeatureInfo request
-    # on the map
-    $scope.openGetFeatureInfo = () -> 
-      modalInstance = $modal.open({
-        animation: true,
-        templateUrl: 'getFeatureInfo.html',
-        controller: 'ModalInstanceCtrl',
-        size: 'lg',
-        resolve: {
-          data: () ->
-            return $scope.features
-        }
-      })
+
   
       
     # Add and overlayer layer, currently only copes with one layer in the future
@@ -135,42 +126,6 @@ angular.module 'topmap.map'
         bounds._northEast.lat + ',' + 
         bounds._northEast.lng
         
-
-    # Get Feature Info Request Handler
-    $scope.$on 'leafletDirectiveMap.click', (e, wrap) ->
-      usSpinnerService.spin('spinner-main')
-
-      mapCtrl.clicked = {
-        x: Math.round(wrap.leafletEvent.containerPoint.x),
-        y: Math.round(wrap.leafletEvent.containerPoint.y)
-      }
-
-      mapCtrl.markers = {
-        click: {
-          lat: wrap.leafletEvent.latlng.lat,
-          lng: wrap.leafletEvent.latlng.lng
-          focus: false,
-          message: "Lat, Lon : " + 
-            wrap.leafletEvent.latlng.lat + ", " + 
-            wrap.leafletEvent.latlng.lng
-          draggable: false
-        }
-      }
-      
-      leafletData.getMap().then (map) ->
-        params = ogc.getFeatureInfoUrl wrap.leafletEvent.latlng, 
-          map, 
-          $scope.layer, 
-          map.options.crs.code
-        url = $scope.layer.base + params
-
-        ogc.getFeatureInfo(url).then (data) ->
-          usSpinnerService.stop('spinner-main')
-          $scope.features = data.features
-          $scope.openGetFeatureInfo()
-        , (error) -> 
-          usSpinnerService.stop('spinner-main')
-          alert 'Could not get feature info'
 
     ###*
      # OGC Layers browser
