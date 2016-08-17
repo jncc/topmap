@@ -3,7 +3,8 @@ angular.module 'topmap.map'
   .component 'tmLandsatDatagrid',
     bindings:
       parameters: '='
-    templateUrl: 'scripts/components/map/datasets/landsat/datagrid/landsatdatagrid.html'
+    templateUrl: (moduleSettings) ->
+      moduleSettings.basePath + 'datasets/landsat/datagrid/landsatdatagrid.html'
     controller: 'landsatDatagridController'
     controllerAs: 'landsatDatagrid'
     

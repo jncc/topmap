@@ -3,7 +3,8 @@ angular.module 'topmap.map'
   .component 'tmSentinelDatagrid',
     bindings:
       parameters: '='
-    templateUrl: 'scripts/components/map/datasets/sentinel/datagrid/sentineldatagrid.html'
+    templateUrl: (moduleSettings) ->
+      moduleSettings.basePath + 'datasets/sentinel/datagrid/sentineldatagrid.html'
     controller: 'sentinelDatagridController'
     controllerAs: 'sentinelDatagrid'
     

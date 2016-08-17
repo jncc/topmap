@@ -5,7 +5,7 @@ angular.module 'topmap.map'
       parameters: '='
     transclude: true
     templateUrl: (moduleSettings) ->
-      return moduleSettings.basePath + 'mapelement/mapelement.html'
+      moduleSettings.basePath + 'mapelement/mapelement.html'
     controller: 'mapElementController'
     controllerAs: 'mapCtrl'
     
