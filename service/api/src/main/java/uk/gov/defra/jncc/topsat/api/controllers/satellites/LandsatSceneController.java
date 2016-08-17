@@ -72,7 +72,7 @@ public class LandsatSceneController {
             @ApiParam(value = "A WKT bounding box defined in WGS84 (EPSG:4326)")
             @RequestParam(name = "wkt", required = false) String wkt,
             @ApiParam(value = "The landsat platform")
-            @RequestParam(name = "platform", required = false) String platform) throws ParseException {
+            @RequestParam(name = "lanplt", required = false) String platform) throws ParseException {
         LandsatParameters params = new LandsatParameters();
         params.BoundingBoxWkt = wkt;
         params.Platform = platform;

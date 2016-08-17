@@ -9,18 +9,22 @@ angular.module 'topmap.map'
   .controller 'mapDrawSelectionControlController', (leafletHelper) ->
     dsCtrl = this
 
+    console.log('draw selection control')
+
     dsCtrl.$onInit = ->
       console.log('draw selection control inits')
+
       dsCtrl.mapCtrl.controls.draw = draw: 
         polygon: false,
         polyline: false,
         circle: false,
         marker: false
-        
+
       if dsCtrl.mapCtrl.layerConfig.name != 'none'        
         dsCtrl.mapCtrl.controls.draw.rectangle = true
       else
         dsCtrl.mapCtrl.controls.draw.rectangle = false
+
 
       dsCtrl.mapCtrl.leafletData.getMap().then (map) ->
         map.on('draw:created', (e) ->
@@ -39,3 +43,6 @@ angular.module 'topmap.map'
             console.log('map updates wkt')
             dsCtrl.mapCtrl.parameters.urlParameters.wkt = leafletHelper.toWKT(layer)          
         )
+
+      return
+    return

@@ -13,6 +13,7 @@ angular.module 'topmap.map'
 
     # Open a modal window for displaying general layer infomation to the user
     mliCtrl.openLayerInfo = () -> 
+      console.log('layer info inits')
       modalInstance = $modal.open({
         animation: true,
         templateUrl: 'scripts/components/map/mapelement/features/layerinfocontrol/layerinfocontroldialogue.html',
@@ -35,8 +36,8 @@ angular.module 'topmap.map'
         L.easyButton(icon, (btn, map) ->
           mliCtrl.openLayerInfo()
         ).addTo(map)
-
       return
+      
     return
     
     
