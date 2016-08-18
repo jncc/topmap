@@ -5,7 +5,7 @@ angular.module 'topmap.map'
       mapCtrl: '^tmMapComponent'
     controller: 'mapGetFeatureInfoControlController'
     controllerAs: 'gfiCtrl'
-  .controller 'mapGetFeatureInfoControlController', ($scope, $modal, ogc, usSpinnerService, moduleSettings) ->
+  .controller 'mapGetFeatureInfoControlController', ($scope, $modal, ogc, usSpinnerService) ->
     console.log('gfi controller')
 
     gfiCtrl = this
@@ -17,7 +17,7 @@ angular.module 'topmap.map'
     gfiCtrl.openGetFeatureInfo = () -> 
       modalInstance = $modal.open({
         animation: true,
-        templateUrl: moduleSettings.basePath + 'mapelement/features/getfeatureinfocontrol/getfeatureinfocontroldialogue.html'
+        templateUrl: 'scripts/components/map/mapelement/features/getfeatureinfocontrol/getfeatureinfocontroldialogue.html'
         controller: 'ModalInstanceCtrl',
         size: 'lg',
         resolve: {
@@ -58,8 +58,12 @@ angular.module 'topmap.map'
             gfiCtrl.mapCtrl.layer, 
             map.options.crs.code
 
+          url = gfiCtrl.mapCtrl.layer.base + params 
           cqlParms = gfiCtrl.mapCtrl.getCQLFilter()
-          url = gfiCtrl.mapCtrl.layer.base + params + '&' + cqlParms
+
+          if cqlParms
+            url = url + '&CQL_FILTER=' + cqlParms
+
           console.log(url)
 
 

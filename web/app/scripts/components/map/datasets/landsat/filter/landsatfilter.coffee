@@ -4,8 +4,7 @@ angular.module 'topmap.map'
     bindings:
       parameters: '='
       toggleFilters: '&'
-    templateUrl: (moduleSettings) -> 
-      moduleSettings.basePath + 'datasets/landsat/filter/landsatfilter.html'
+    templateUrl: 'scripts/components/map/datasets/landsat/filter/landsatfilter.html'
     controller: 'landsatFilterController'
     controllerAs: 'landsatFilter'
     

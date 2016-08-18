@@ -14,7 +14,7 @@ angular.module 'topmap.common'
         if layer.layerName == layerName
           return @extendLayer(layer)
           
-      return {name: 'none'}
+      return @extendLayer({name: 'none'})
 
     getConfigByName: (name) ->
       
@@ -22,4 +22,4 @@ angular.module 'topmap.common'
         if layer.name == name
           return @extendLayer(layer)
           
-      return {name: 'none'}
+      return @extendLayer({name: 'none'})

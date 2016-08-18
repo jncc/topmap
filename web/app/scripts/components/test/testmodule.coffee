@@ -10,6 +10,7 @@ angular
     'ui.bootstrap',
     'topmap.common'
   ]
+  #.constant('moduleBasePath','scripts/components/test/')
   .config ($routeProvider, $locationProvider) ->
     $routeProvider
       .when '/test',

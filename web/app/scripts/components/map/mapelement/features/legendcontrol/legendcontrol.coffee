@@ -5,8 +5,7 @@ angular.module 'topmap.map'
       icon: '@'
     require:
       mapCtrl: '^tmMapComponent'
-    templateUrl: (moduleSettings) ->
-      moduleSettings.basePath + '/mapelement/features/legendcontrol/legend.html'
+    templateUrl: 'scripts/components/map//mapelement/features/legendcontrol/legend.html'
     controller: 'tmMapLegendControlController'
     controllerAs: 'legCtrl'
 

@@ -4,16 +4,13 @@ angular.module 'topmap.map'
     bindings:
       parameters: '='
     transclude: true
-    templateUrl: (moduleSettings) ->
-      moduleSettings.basePath + 'mapelement/mapelement.html'
+    templateUrl: 'scripts/components/map/mapelement/mapelement.html'
     controller: 'mapElementController'
     controllerAs: 'mapCtrl'
     
-  .controller 'mapElementController', ($scope,  $http, $modal, $q, Layer, leafletHelper, leafletData, ogc, configHelper, usSpinnerService, objectHelper ) ->
+  .controller 'mapElementController', ($scope,  $http, Layer, leafletHelper, leafletData, ogc, configHelper, usSpinnerService) ->
     console.log('map controller initialises')
     mapCtrl = this
-
-    mapCtrl.scope = $scope
     
     mapCtrl.drawnlayerwkt = ''
     mapCtrl.drawnlayercql = ''
@@ -63,16 +60,6 @@ angular.module 'topmap.map'
         scrollWheelZoom: true,
         attributionControl: true
       }
-
-    angular.extend($scope, {
-      # OGC Browser Variables
-      srcLayers: undefined,
-
-    })
-
-      
-
-  
       
     # Add and overlayer layer, currently only copes with one layer in the future
     # we should be able to add multiple layers in the same way
@@ -81,15 +68,18 @@ angular.module 'topmap.map'
       mapCtrl.layer = layer
       
       # Update bounds and fit the map to the given bounds
-      mapCtrl.bounds = {
-        southWest: layer.bbox[0],
-        northEast: layer.bbox[1]
-      }
+      if !mapCtrl.parameters.urlHash
+        mapCtrl.bounds = {
+          southWest: layer.bbox[0],
+          northEast: layer.bbox[1]
+        }
       
       leafletData.getMap().then (map) ->
-        map.fitBounds(L.latLngBounds([layer.bbox[0].lat, layer.bbox[0].lng], 
-          [layer.bbox[1].lat, layer.bbox[1].lng]))
-          
+        map.fitBounds(L.latLngBounds([mapCtrl.bounds.southWest.lat, mapCtrl.bounds.southWest.lng], 
+          [mapCtrl.bounds.northEast.lat, mapCtrl.bounds.northEast.lng]))
+        mapCtrl.setUrlHash(mapCtrl.bounds)
+        mapCtrl.setMoveEndHandler()
+
       lp = {
         layers: layer.name,
         version: layer.version,
@@ -116,79 +106,7 @@ angular.module 'topmap.map'
         
     mapCtrl.removeOverlays = () ->
       mapCtrl.layers.overlays = {}
-      
-    $scope.$on 'leafletDirectiveMap.moveend', (e, wrap) ->
-      console.log('moveend triggerd')
-
-      bounds = wrap.leafletEvent.target.getBounds()
-
-      mapCtrl.parameters.urlHash = bounds._southWest.lat + ',' + 
-        bounds._southWest.lng + ',' + 
-        bounds._northEast.lat + ',' + 
-        bounds._northEast.lng
-        
-
-    ###*
-     # OGC Layers browser
-    ###
-    $scope.displayLayerList = () ->
-      modalInstance = $modal.open({
-        animation: true,
-        templateUrl: 'showOGCLayers.html',
-        controller: 'OGCModalInstancemapCtrl',
-        size: 'lg',
-        scope: $scope,
-        resolve: {
-          data: () ->
-            return {
-              srcLayers: $scope.srcLayers,
-            }
-        }
-      });
-
-    $scope.showLayerList = () ->
-      if $scope.srcLayers is undefined
-        usSpinnerService.spin('spinner-main')
-        wms_capabilities_url = ogc.getCapabilitiesURL(mapCtrl.layerConfig.wmsUrl, 'wms', mapCtrl.layerConfig.wmsVersion)
-        wfs_capabilities_url = ogc.getCapabilitiesURL(mapCtrl.layerConfig.wmsUrl, 'wfs', mapCtrl.layerConfig.wmsVersion)
-
-        wmsPromise = ogc.fetchWMSCapabilities(wms_capabilities_url)
-        wfsPromise = ogc.fetchWFSCapabilities(wfs_capabilities_url)
-
-        $q.all([wmsPromise, wfsPromise]).then (data) ->
-          $scope.srcLayers = ogc.joinCapabilitiesLists(data[0], data[1])
-          usSpinnerService.stop('spinner-main')
-          $scope.displayLayerList()
-        , (error) ->
-          alert 'Could not get capabilites from OGC server, please try again later'
-      else 
-        # Display list
-        $scope.displayLayerList()
-
-    
-    #reloadDrawnLayer = (wkt) ->
-      #wkt = new (Wkt.Wkt)
-            
-      #try
-      #  wkt.read wkt
-      #catch e
-      #  alert 'Could not read the WKT string from the url.'
-      #  
-      #if wkt.type != 'polygon'
-      #  alert 'wkt must be a polygon'  
-      #
-      #leafletData.getMap().then (map) ->
-      #  obj = wkt.toObject(map.defaults)
-        
-        #if !Wkt.isArray(obj)
-         # map.
-    
-    # Set up the overlays on the map, either by a given b (base url), l (layer 
-    # name), v (wms version)
-    # $scope.$on 'parameterUpdate', (event, parameters) ->
-    #   if parameters.trigger == $scope.this
-    #     retur
-
+              
 
     mapCtrl.getCQLFilter = ->
       cqlParams = {}
@@ -215,6 +133,27 @@ angular.module 'topmap.map'
           cqlfilter = cqlfilter + ' AND ' + p + '=\'' + cqlParams[p] + '\''
 
       return cqlfilter
+
+    mapCtrl.setUrlHash = (bounds) ->
+        mapCtrl.parameters.urlHash = bounds.southWest.lat + ',' + 
+          bounds.southWest.lng + ',' + 
+          bounds.northEast.lat + ',' + 
+          bounds.northEast.lng
+
+    mapCtrl.setMoveEndHandler = ->
+      $scope.$on 'leafletDirectiveMap.moveend', (e, wrap) ->
+        console.log('moveend triggerd')
+
+        newBounds = wrap.leafletEvent.target.getBounds()
+
+        bounds = {
+          southWest: newBounds._southWest
+          northEast: newBounds._northEast
+        }
+        
+        mapCtrl.setUrlHash(bounds)
+
+      return
 
     mapCtrl.initMap = () -> 
       console.log('map initialises')   
@@ -251,23 +190,12 @@ angular.module 'topmap.map'
                 }, 
                 mapCtrl.layerConfig.wmsUrl,
                 mapCtrl.layerConfig.wmsVersion)
-              mapCtrl.addOverlay(layer)
-              
+              mapCtrl.addOverlay(layer)              
             
         #if mapCtrl.parameters.urlParameters.wkt
         #  reloadDrawnLayer(mapCtrl.parameters.urlParameters.wkt)
           
-        usSpinnerService.stop('spinner-main')  
-
-      
-    #init map
-    leafletData.getMap().then (map) ->
-      L.easyButton('glyphicon glyphicon-folder-open', (btn, map) ->
-        $scope.showLayerList()
-      ).addTo(map)
-
-
-
+        usSpinnerService.stop('spinner-main')    
 
     $scope.$watch 'mapCtrl.parameters', ((newValue, oldValue) ->
       if not angular.equals(newValue, oldValue) && mapCtrl.layer.name
