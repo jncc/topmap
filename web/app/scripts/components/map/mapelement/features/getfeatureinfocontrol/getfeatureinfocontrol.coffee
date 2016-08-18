@@ -58,8 +58,12 @@ angular.module 'topmap.map'
             gfiCtrl.mapCtrl.layer, 
             map.options.crs.code
 
+          url = gfiCtrl.mapCtrl.layer.base + params 
           cqlParms = gfiCtrl.mapCtrl.getCQLFilter()
-          url = gfiCtrl.mapCtrl.layer.base + params + '&' + cqlParms
+
+          if cqlParms
+            url = url + '&CQL_FILTER=' + cqlParms
+
           console.log(url)
 
 
