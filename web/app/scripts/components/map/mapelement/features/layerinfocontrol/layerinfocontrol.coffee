@@ -8,14 +8,14 @@ angular.module 'topmap.map'
     controller: 'mapLayerInfoControlController'
     controllerAs: 'mliCtrl'
 
-  .controller 'mapLayerInfoControlController', ($modal, ogc, moduleBasePath) ->
+  .controller 'mapLayerInfoControlController', ($modal, ogc) ->
     mliCtrl = this
 
     # Open a modal window for displaying general layer infomation to the user
     mliCtrl.openLayerInfo = () -> 
       modalInstance = $modal.open({
         animation: true,
-        templateUrl: moduleBasePath + 'mapelement/features/layerinfocontrol/layerinfocontroldialogue.html',
+        templateUrl: 'scripts/components/map/mapelement/features/layerinfocontrol/layerinfocontroldialogue.html',
         controller: 'ModalInstanceCtrl',
         size: 'lg',
         resolve: {

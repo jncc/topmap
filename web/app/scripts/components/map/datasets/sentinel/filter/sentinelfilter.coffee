@@ -4,8 +4,7 @@ angular.module 'topmap.map'
     bindings:
       parameters: '='
       toggleFilters: '&'
-    templateUrl: (moduleBasePath) ->
-      moduleBasePath + 'datasets/sentinel/filter/sentinelfilter.html'
+    templateUrl: 'scripts/components/map/datasets/sentinel/filter/sentinelfilter.html'
     controller: 'sentinelFilterController'
     controllerAs: 'sentinelFilter'
     
