@@ -1,38 +1,12 @@
 
 <div id="leafletContainer" style="height: 100%;">
-    <leaflet bounds="mapCtrl.bounds" layers="mapCtrl.layers" controls="mapCtrl.controls" markers="markers" width="100%" height="100%" ></leaflet>
+    <leaflet bounds="mapCtrl.bounds" layers="mapCtrl.layers" controls="mapCtrl.controls" markers="mapCtrl.markers" width="100%" height="100%" ></leaflet>
 </div>
 
 <div ng-transclude></div>
 
-<div id="legend" ng-show="mapCtrl.showLegend" class="legendContainer check-element animate-show scroll">
-    <h4>Legend</h4>
-    <img ng-src="{{mapCtrl.layer.base}}?service=WMS&REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER={{mapCtrl.layer.name}}&legend_options=forceLabels:on" class="img-responsive" style="max-height: 100%;" alt="Legend Graphic"/>
-</div>
-
 <span us-spinner="{radius:30, width:8, length: 16}" spinner-key="spinner-main"></span>
 
-<script type="text/ng-template" id="getFeatureInfo.html">
-    <div class="modal-header">
-        <h3 class="modal-title">Feature Info</h3>
-    </div>
-    <div class="modal-body scroll">
-        <div ng-if="!data.length">
-            <span>No features found at this location</span>
-        </div>
-        <div ng-if="data.length">
-            <dir-pagination-controls></dir-pagination-controls>
-            <div dir-paginate="feature in data | itemsPerPage: 1">
-                <ul>
-                    <li ng-repeat="(key, data) in feature.properties">{{key}}: {{data}}</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <input class="button" type="submit" ng-click="ok()" value="OK" />
-    </div>
-</script>
 <script type="text/ng-template" id="showOGCLayers.html">
     <div class="modal-header">
         <h3 class="modal-title">Layers</h3>

@@ -4,7 +4,8 @@ angular.module 'topmap.map'
     bindings:
       parameters: '='
     transclude: true
-    templateUrl: 'scripts/components/map/mapelement/mapelement.html'
+    templateUrl: (moduleSettings) ->
+      moduleSettings.basePath + 'mapelement/mapelement.html'
     controller: 'mapElementController'
     controllerAs: 'mapCtrl'
     
@@ -12,10 +13,14 @@ angular.module 'topmap.map'
     console.log('map controller initialises')
     mapCtrl = this
 
+    mapCtrl.scope = $scope
+    
     mapCtrl.drawnlayerwkt = ''
     mapCtrl.drawnlayercql = ''
 
     mapCtrl.layer = {}
+
+    mapCtrl.markers = {}
 
     mapCtrl.layers = {
         baselayers: {
@@ -65,24 +70,8 @@ angular.module 'topmap.map'
 
     })
 
-    # Set up some basic settings, hide the legend and add an empty features
-    # array
-    $scope.showLegend = false
-    $scope.features = []
       
-    # Open a modal window for displaying features from a GetFeatureInfo request
-    # on the map
-    $scope.openGetFeatureInfo = () -> 
-      modalInstance = $modal.open({
-        animation: true,
-        templateUrl: 'getFeatureInfo.html',
-        controller: 'ModalInstanceCtrl',
-        size: 'lg',
-        resolve: {
-          data: () ->
-            return $scope.features
-        }
-      })
+
   
       
     # Add and overlayer layer, currently only copes with one layer in the future
@@ -138,42 +127,6 @@ angular.module 'topmap.map'
         bounds._northEast.lat + ',' + 
         bounds._northEast.lng
         
-
-    # Get Feature Info Request Handler
-    $scope.$on 'leafletDirectiveMap.click', (e, wrap) ->
-      usSpinnerService.spin('spinner-main')
-
-      mapCtrl.clicked = {
-        x: Math.round(wrap.leafletEvent.containerPoint.x),
-        y: Math.round(wrap.leafletEvent.containerPoint.y)
-      }
-
-      mapCtrl.markers = {
-        click: {
-          lat: wrap.leafletEvent.latlng.lat,
-          lng: wrap.leafletEvent.latlng.lng
-          focus: false,
-          message: "Lat, Lon : " + 
-            wrap.leafletEvent.latlng.lat + ", " + 
-            wrap.leafletEvent.latlng.lng
-          draggable: false
-        }
-      }
-      
-      leafletData.getMap().then (map) ->
-        params = ogc.getFeatureInfoUrl wrap.leafletEvent.latlng, 
-          map, 
-          $scope.layer, 
-          map.options.crs.code
-        url = $scope.layer.base + params
-
-        ogc.getFeatureInfo(url).then (data) ->
-          usSpinnerService.stop('spinner-main')
-          $scope.features = data.features
-          $scope.openGetFeatureInfo()
-        , (error) -> 
-          usSpinnerService.stop('spinner-main')
-          alert 'Could not get feature info'
 
     ###*
      # OGC Layers browser
@@ -286,6 +239,7 @@ angular.module 'topmap.map'
               alert resObj.msg
             else
               mapCtrl.bounds = ogc.getBoundsFromFragment(mapCtrl.parameters.urlHash)
+
               if not mapCtrl.bounds.error
                 resObj.data = ogc.modifyBoundsTo(resObj.data, mapCtrl.bounds)
 
@@ -311,14 +265,12 @@ angular.module 'topmap.map'
       L.easyButton('glyphicon glyphicon-folder-open', (btn, map) ->
         $scope.showLayerList()
       ).addTo(map)
-      L.easyButton('glyphicon glyphicon-list', (btn, map) ->
-        $scope.showLegend = !$scope.showLegend
-      ).addTo(map)
+
 
 
 
     $scope.$watch 'mapCtrl.parameters', ((newValue, oldValue) ->
-      if not angular.equals(newValue, oldValue) && mapCtrl.layer
+      if not angular.equals(newValue, oldValue) && mapCtrl.layer.name
         console.log('map responds to parameter change')
         mapCtrl.updateMap()
         return

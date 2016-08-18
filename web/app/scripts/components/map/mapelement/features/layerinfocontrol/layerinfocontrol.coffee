@@ -8,15 +8,14 @@ angular.module 'topmap.map'
     controller: 'mapLayerInfoControlController'
     controllerAs: 'mliCtrl'
 
-  .controller 'mapLayerInfoControlController', ($modal, ogc) ->
+  .controller 'mapLayerInfoControlController', ($modal, ogc, moduleSettings) ->
     mliCtrl = this
 
     # Open a modal window for displaying general layer infomation to the user
     mliCtrl.openLayerInfo = () -> 
-      console.log('layer info inits')
       modalInstance = $modal.open({
         animation: true,
-        templateUrl: 'scripts/components/map/mapelement/features/layerinfocontrol/layerinfocontroldialogue.html',
+        templateUrl: moduleSettings.basePath + 'mapelement/features/layerinfocontrol/layerinfocontroldialogue.html',
         controller: 'ModalInstanceCtrl',
         size: 'lg',
         resolve: {
@@ -31,6 +30,7 @@ angular.module 'topmap.map'
       })
 
     mliCtrl.$onInit = ->
+      console.log('layer info inits')
       icon = 'glyphicon ' + mliCtrl.icon
       mliCtrl.mapCtrl.leafletData.getMap().then (map) ->
         L.easyButton(icon, (btn, map) ->
