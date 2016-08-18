@@ -8,7 +8,7 @@
  # Controller of the topmap
 ###
 angular.module 'topmap.roadmap'
-  .controller 'roadmapcontroller', ($scope) ->
+  .controller 'roadmapController', ($scope) ->
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
       footer = angular.element '#footer'
       footer.removeClass 'hidden'
