@@ -5,8 +5,8 @@ angular.module 'topmap.map'
       parameters: '=',
       gridColumnDefs: '=',
       datasetConfig: '='
-    templateUrl: (moduleSettings) ->
-      moduleSettings.basePath + 'datagrid/datagrid.html'
+    templateUrl: (moduleBasePath) ->
+      moduleBasePath + 'datagrid/datagrid.html'
     controller: 'datagridController'
     controllerAs: 'datagrid'
 
