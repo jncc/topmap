@@ -1,0 +1,69 @@
+
+<div id="leafletContainer" style="height: 100%;">
+    <leaflet bounds="mapCtrl.bounds" layers="mapCtrl.layers" controls="mapCtrl.controls" markers="mapCtrl.markers" width="100%" height="100%" ></leaflet>
+</div>
+
+<div ng-transclude></div>
+
+<span us-spinner="{radius:30, width:8, length: 16}" spinner-key="spinner-main"></span>
+
+<script type="text/ng-template" id="showOGCLayers.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Layers</h3>
+    </div>
+    <div class="modal-body scroll">          
+        <div id="list" ng-class="{'hidden': displayLayerInfo}">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="layer-title">Layer Name</th>
+                        <th class="layer-column">WMS</th>
+                        <th class="layer-column">WFS</th>
+                    </tr>
+                </thead>
+                <tbody dir-paginate="layer in data.srcLayers | itemsPerPage: 10">
+                    <tr ng-click="selLayer(layer)" class="row-hover">
+                        <td class="layer-title">{{layer.title}}</td>
+                        <td class="layer-column">
+                            <span ng-if="layer.wms !== undefined" class="glyphicon glyphicon-ok"></span>
+                            <span ng-if="layer.wms === undefined" class="glyphicon glyphicon-remove"></span>
+                        </td>
+                        <td class="layer-column">
+                            <span ng-if="layer.wfs !== undefined" class="glyphicon glyphicon-ok"></span>
+                            <span ng-if="layer.wfs === undefined" class="glyphicon glyphicon-remove"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <dir-pagination-controls></dir-pagination-controls>
+        </div>
+        <div id="layer" ng-class="{'hidden': !displayLayerInfo}">
+            <table>
+                <tr>
+                    <th>Layer Title</th>
+                    <td>{{layer.title}}</td>
+                </tr>
+                <tr>
+                    <th>Abstract</th>
+                    <td>{{layer.abstract}}</td>
+                </tr>
+                <tr >
+                    <th rowspan="2">Bounding Box</th>
+                    <td>South : {{layer.wms.EX_GeographicBoundingBox.southBoundLatitude}}, West : {{layer.wms.EX_GeographicBoundingBox.westBoundLongitude}}</td>
+                </tr>
+                <tr>
+                    <td>North : {{layer.wms.EX_GeographicBoundingBox.northBoundLatitude}}, East : {{layer.wms.EX_GeographicBoundingBox.eastBoundLongitude}}</td>
+                </tr>
+                <tr>
+                    <th>Layer Name</th>
+                    <td>{{layer.name}}</td>
+                </tr>
+            </table>
+        </div>            
+    </div>
+    <div class="modal-footer">
+        <input class="button left" ng-class="{'hidden': !displayLayerInfo}" type="submit" ng-click="back()" value="Back" />
+        <input class="button left" ng-class="{'hidden': !displayLayerInfo}" type="submit" ng-click="add()" value="View Layer" />
+        <input class="button" type="submit" ng-click="ok()" value="Close" />
+    </div>
+</script>   

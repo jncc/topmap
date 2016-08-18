@@ -1,0 +1,28 @@
+<div style="height: 100%">
+    <div class="mapContainer" ng-style="pageCtrl.mapStyle">
+        <tm-map-component parameters="pageCtrl.pageParameters">
+            <tm-map-layer-info-control icon="glyphicon-globe"></tm-map-layer-info-control>
+            <tm-map-callback-button callback-method="pageCtrl.toggleFilters()" icon="glyphicon-filter"></tm-map-callback-button> 
+            <tm-map-legend-control icon="glyphicon-list"></tm-map-legend-control>
+            <tm-map-get-feature-info-control></tm-map-get-feature-info-control>
+            <tm-map-draw-selection-control></tm-map-draw-selection-control>
+        </tm-map-component>    
+    </div>
+    
+    <div class="filters" ng-switch="pageCtrl.layerConfig.name" ng-show="pageCtrl.showFilters">
+        <div ng-switch-when="sentinel">
+            <tm-sentinel-filter parameters="pageCtrl.pageParameters" toggle-filters="pageCtrl.toggleFilters()"></tm-sentinel-filter>
+        </div>
+        <div ng-switch-when="landsat">
+            <tm-landsat-filter parameters="pageCtrl.pageParameters" toggle-filters="pageCtrl.toggleFilters()"></tm-landsat-filter>
+        </div>
+    </div>
+    <div class="dataGrids" ng-switch="pageCtrl.layerConfig.name">
+        <div ng-switch-when="sentinel">
+            <tm-sentinel-datagrid parameters="pageCtrl.pageParameters"></tm-sentinel-datagrid>
+        </div>
+        <div ng-switch-when="landsat"> 
+            <tm-landsat-datagrid parameters="pageCtrl.pageParameters"></tm-landsat-datagrid>
+        </div>
+    </div>
+</div>
