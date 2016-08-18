@@ -68,15 +68,18 @@ angular.module 'topmap.map'
       mapCtrl.layer = layer
       
       # Update bounds and fit the map to the given bounds
-      mapCtrl.bounds = {
-        southWest: layer.bbox[0],
-        northEast: layer.bbox[1]
-      }
+      if !mapCtrl.parameters.urlHash
+        mapCtrl.bounds = {
+          southWest: layer.bbox[0],
+          northEast: layer.bbox[1]
+        }
       
       leafletData.getMap().then (map) ->
-        map.fitBounds(L.latLngBounds([layer.bbox[0].lat, layer.bbox[0].lng], 
-          [layer.bbox[1].lat, layer.bbox[1].lng]))
-          
+        map.fitBounds(L.latLngBounds([mapCtrl.bounds.southWest.lat, mapCtrl.bounds.southWest.lng], 
+          [mapCtrl.bounds.northEast.lat, mapCtrl.bounds.northEast.lng]))
+        mapCtrl.setUrlHash(mapCtrl.bounds)
+        mapCtrl.setMoveEndHandler()
+
       lp = {
         layers: layer.name,
         version: layer.version,
@@ -103,17 +106,7 @@ angular.module 'topmap.map'
         
     mapCtrl.removeOverlays = () ->
       mapCtrl.layers.overlays = {}
-      
-    $scope.$on 'leafletDirectiveMap.moveend', (e, wrap) ->
-      console.log('moveend triggerd')
-
-      bounds = wrap.leafletEvent.target.getBounds()
-
-      mapCtrl.parameters.urlHash = bounds._southWest.lat + ',' + 
-        bounds._southWest.lng + ',' + 
-        bounds._northEast.lat + ',' + 
-        bounds._northEast.lng
-        
+              
 
     mapCtrl.getCQLFilter = ->
       cqlParams = {}
@@ -140,6 +133,27 @@ angular.module 'topmap.map'
           cqlfilter = cqlfilter + ' AND ' + p + '=\'' + cqlParams[p] + '\''
 
       return cqlfilter
+
+    mapCtrl.setUrlHash = (bounds) ->
+        mapCtrl.parameters.urlHash = bounds.southWest.lat + ',' + 
+          bounds.southWest.lng + ',' + 
+          bounds.northEast.lat + ',' + 
+          bounds.northEast.lng
+
+    mapCtrl.setMoveEndHandler = ->
+      $scope.$on 'leafletDirectiveMap.moveend', (e, wrap) ->
+        console.log('moveend triggerd')
+
+        newBounds = wrap.leafletEvent.target.getBounds()
+
+        bounds = {
+          southWest: newBounds._southWest
+          northEast: newBounds._northEast
+        }
+        
+        mapCtrl.setUrlHash(bounds)
+
+      return
 
     mapCtrl.initMap = () -> 
       console.log('map initialises')   
@@ -176,8 +190,7 @@ angular.module 'topmap.map'
                 }, 
                 mapCtrl.layerConfig.wmsUrl,
                 mapCtrl.layerConfig.wmsVersion)
-              mapCtrl.addOverlay(layer)
-              
+              mapCtrl.addOverlay(layer)              
             
         #if mapCtrl.parameters.urlParameters.wkt
         #  reloadDrawnLayer(mapCtrl.parameters.urlParameters.wkt)
