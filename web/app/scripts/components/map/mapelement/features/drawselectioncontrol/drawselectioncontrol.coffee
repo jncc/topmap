@@ -13,36 +13,31 @@ angular.module 'topmap.map'
 
     dsCtrl.$onInit = ->
       console.log('draw selection control inits')
+      if dsCtrl.mapCtrl.layerConfig.name != 'none'
+        dsCtrl.mapCtrl.controls.draw = draw: 
+          polygon: false,
+          polyline: false,
+          circle: false,
+          marker: false,
+          rectangle: true
 
-      dsCtrl.mapCtrl.controls.draw = draw: 
-        polygon: false,
-        polyline: false,
-        circle: false,
-        marker: false
+        dsCtrl.mapCtrl.leafletData.getMap().then (map) ->
+          map.on('draw:created', (e) ->
+            dsCtrl.mapCtrl.leafletData.getLayers().then (baselayers) ->
+              
+              drawnItems = baselayers.overlays.draw
+              # Remove old drawn layer
+              layers = drawnItems.getLayers()
 
-      if dsCtrl.mapCtrl.layerConfig.name != 'none'        
-        dsCtrl.mapCtrl.controls.draw.rectangle = true
-      else
-        dsCtrl.mapCtrl.controls.draw.rectangle = false
+              for layer in layers
+                drawnItems.removeLayer(layer)
+              # Add new drawn area as layer
+              layer = e.layer
+              drawnItems.addLayer(layer)
 
-
-      dsCtrl.mapCtrl.leafletData.getMap().then (map) ->
-        map.on('draw:created', (e) ->
-          dsCtrl.mapCtrl.leafletData.getLayers().then (baselayers) ->
-            
-            drawnItems = baselayers.overlays.draw
-            # Remove old drawn layer
-            layers = drawnItems.getLayers()
-
-            for layer in layers
-              drawnItems.removeLayer(layer)
-            # Add new drawn area as layer
-            layer = e.layer
-            drawnItems.addLayer(layer)
-
-            console.log('map updates wkt')
-            dsCtrl.mapCtrl.parameters.urlParameters.wkt = leafletHelper.toWKT(layer)          
-        )
+              console.log('map updates wkt')
+              dsCtrl.mapCtrl.parameters.urlParameters.wkt = leafletHelper.toWKT(layer)          
+          )
 
       return
     return
