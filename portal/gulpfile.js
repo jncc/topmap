@@ -103,7 +103,7 @@ gulp.task('images-dist', function () {
 
 
 gulp.task('fonts', () => {
-  return gulp.src(require('main-bower-files')('**/*.{eot,svg,ttf,woff,woff2}', function (err) {}))    //.concat('app/fonts/**/*'))
+  return gulp.src(require('main-bower-files')('**/*.{eot,svg,ttf,woff,woff2}', function (err) {}).concat('app/fonts/**/*'))
     .pipe(gulp.dest('.tmp/fonts'))
     .pipe(gulp.dest('dist/fonts'));
 });
@@ -153,30 +153,6 @@ gulp.task('serve-dist', ['dist'], () => {
 
 //var bowerCopyFiles = [];
 
-// Build-Time
-// gulp.task('imagemin', function () {
-//   gulp.src('./app/images/**/*')
-//     .pipe(imagemin())
-//     .pipe(gulp.dest('./.tmp/app/images'))
-// });
-
-// gulp.task('html_move', function() {
-//   gulp.src('./app/**/*.html')
-//     .pipe(gulp.dest('./.tmp/app'));
-// });
-
-
-
-
-
-
-// gulp.task('bower', function() {
-//   gulp.src('./app/index.html')
-//     .pipe(wiredep())
-//     .pipe(debug())
-//     .pipe(gulp.dest('./.tmp/dest'));
-// });
-
 // gulp.task('build-dependencies', function() {
 //   console.log(mainBowerFiles("**/*.js"));
 //   return gulp.src(mainBowerFiles("**/*.js"))
@@ -186,17 +162,17 @@ gulp.task('serve-dist', ['dist'], () => {
 
 
 // //copy bower assets that need copying
-// gulp.task('bower:assets', function() {
-//     return gulp.src(mainBowerFiles(), {
-//         base: './bower_components'
-//     })
-//     .pipe(filter([
-//         '**/*.{png,gif,svg,jpeg,jpg,woff,eot,ttf}',
-//         '!foundation/**/*',
-//         '!compass-mixins/**/*'
-//     ]))
-//     .pipe(gulp.dest('./.tmp/app/styles/vendor'));
-// });
+gulp.task('bower:assets', function() {
+  // get all the bower files which could be assets referenced by the package's CSS or javascript 
+  // mainBowerFiles works by reading the bower.json files in each package referenced by the main bower.json file
+  // (also include missing bootstrap assets currently not included in the package's bower.json file)
+  var src = mainBowerFiles().concat('./bower_components/bootstrap-sass-official/assets/fonts/**');
+
+  return gulp.src(src, { base: './bower_components' })
+    .pipe(filter(['**/*', '!**/*.{js,css,scss}']))
+    .pipe(debug())
+    .pipe(gulp.dest('dist/vendor'));
+});
 
 // //generate bower stylesheets with correct asset paths
 // gulp.task('bower:styles', function() {
