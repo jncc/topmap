@@ -1,35 +1,38 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
+var debug = require('gulp-debug');
+var clean = require('gulp-clean');
+var plumber = require('gulp-plumber');
+
 var coffee = require('gulp-coffee');
 var sourcemaps = require('gulp-sourcemaps');
-//var htmlmin = require('gulp-htmlmin');
-var imagemin = require('gulp-imagemin');
-var clean = require('gulp-clean');
 var sass = require('gulp-sass');
-var compass = require('gulp-compass')
-
-var plumber = require('gulp-plumber')
+var imagemin = require('gulp-imagemin');
 var autoprefixer = require('gulp-autoprefixer')
+var browserSync = require('browser-sync');
 
 var mainBowerFiles = require('main-bower-files');
 var filter = require('gulp-filter');
-var foreach = require('gulp-foreach');
-var fs = require('fs');
-var path = require('path');
-var rework = require('gulp-rework');
-var reworkUrl = require('rework-plugin-url');
-var concat = require('gulp-concat');
-var gulpDebug = require('gulp-debug');
+// var foreach = require('gulp-foreach');
+// var fs = require('fs');
+// var path = require('path');
+// var rework = require('gulp-rework');
+// var reworkUrl = require('rework-plugin-url');
+// var concat = require('gulp-concat');
+// var wiredep = require('wiredep').stream;
 
-var wiredep = require('wiredep').stream;
+//const $ = gulpLoadPlugins();
 
-var browserSync = require('browser-sync');
-
-var config = {
-  bowerDir: './bower_components'
-}
-
-var bowerCopyFiles = [];
+var $ = {
+  'if': require('gulp-if') ,
+  uglify: require('gulp-uglify'),
+  cssnano: require('gulp-cssnano'),
+  useref: require('gulp-useref'),
+  rev: require('gulp-rev'),
+  revReplace: require('gulp-rev-replace'),
+  htmlmin: require('gulp-htmlmin'),
+  cssUseref: require('gulp-css-useref')
+};
 
 // Coffescript build to ./tmp
 gulp.task('scripts', function() {
@@ -37,7 +40,7 @@ gulp.task('scripts', function() {
     .pipe(sourcemaps.init())
     .pipe(coffee({bare: true}).on('error', gutil.log))
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest('./.tmp'))
+    .pipe(gulp.dest('.tmp'))
 });
 
 // Build SASS files
@@ -56,7 +59,7 @@ gulp.task('styles', () => {
     //.pipe(reload({stream: true}));
 });
 
-
+// Serve build for debug
 gulp.task('serve', ['styles', 'scripts'], () => {
   browserSync({
     notify: false,
@@ -71,7 +74,84 @@ gulp.task('serve', ['styles', 'scripts'], () => {
 });
 
 
+// Build-Time - Build distributions
+gulp.task('html-dist', function() {
+   gulp.src('./app/**/*.html')
+     .pipe(gulp.dest('dist'));
+});
 
+gulp.task('images-dist', function () {
+  gulp.src('./app/images/**/*')
+    .pipe(imagemin())
+    .pipe(gulp.dest('dist/images'))
+});
+
+//copy bower assets that need copying
+// gulp.task('bower-images-dist', function() {
+//     return gulp.src(mainBowerFiles(), {
+//         base: './bower_components'
+//     })
+//     .pipe(filter([
+//         '**/*.{png,gif,jpeg,jpg}', 
+//         '!foundation/**/*',
+//         '!compass-mixins/**/*'
+//     ]))
+//     .pipe(gulp.dest('dist/images'));
+// });
+
+// 'woff,eot,svg,ttf'
+
+
+gulp.task('fonts', () => {
+  return gulp.src(require('main-bower-files')('**/*.{eot,svg,ttf,woff,woff2}', function (err) {}))    //.concat('app/fonts/**/*'))
+    .pipe(gulp.dest('.tmp/fonts'))
+    .pipe(gulp.dest('dist/fonts'));
+});
+
+gulp.task('bower-img', () => {
+  return gulp.src(require('main-bower-files')('**/*.{png,gif,jpg,jpeg}', function (err) {}))
+    //.concat('app/images/**/*'))
+    .pipe(gulp.dest('.tmp/images'))
+    .pipe(gulp.dest('dist/images'));
+});
+
+
+gulp.task('dist', ['html-dist', 'images-dist', 'styles', 'scripts'], () => {
+  // minify and rev js and css
+  // create output dist
+
+  return gulp.src('app/*.html')
+    .pipe($.useref({searchPath: ['.tmp', 'app', '.']})) // magic
+    //.pipe($.if('*.css', $.cssUseref({base: 'dist'})))
+//  .pipe($.if('*.js', $.uglify()))   // angular can't cope with uglification of js due to dependency injection?
+    //.pipe($.if('*.css', $.cssnano({safe: true, autoprefixer: false})))
+    .pipe($.if('*.js', $.rev()))      // "rev" does static asset revisioning
+    .pipe($.if('*.css', $.rev()))     // e.g. unicorn.css -> unicorn-098f6bcd.css
+    .pipe($.revReplace())             // replace the references to the rev'd files
+    
+    .pipe($.if('*.html', $.htmlmin({collapseWhitespace: true})))
+    .pipe(gulp.dest('dist'));
+});
+
+gulp.task('css-useref', ['styles', 'scripts'], () => {
+  return gulp.src('app/index.html')
+    .pipe($.cssUseref())
+    .pipe(gulp.dest('dest'))
+});
+
+// Serve build for debug
+gulp.task('serve-dist', ['dist'], () => {
+  browserSync({
+    notify: false,
+    port: 9001,
+    server: {
+      baseDir: ['dist'],
+    }
+  });
+});
+
+
+//var bowerCopyFiles = [];
 
 // Build-Time
 // gulp.task('imagemin', function () {
@@ -93,7 +173,7 @@ gulp.task('serve', ['styles', 'scripts'], () => {
 // gulp.task('bower', function() {
 //   gulp.src('./app/index.html')
 //     .pipe(wiredep())
-//     .pipe(gulpDebug())
+//     .pipe(debug())
 //     .pipe(gulp.dest('./.tmp/dest'));
 // });
 
@@ -151,7 +231,9 @@ gulp.task('serve', ['styles', 'scripts'], () => {
 
 
 gulp.task('clean', function() {
-  gulp.src('./.tmp', {read: false})
+  gulp.src('.tmp', {read: false})
     .pipe(clean({force: true}))
+  gulp.src('dist', {read: false})
+    .pipe(clean({force: true}))    
 });
 
