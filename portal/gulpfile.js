@@ -41,27 +41,17 @@ gulp.task('bower:postcss', ['bower:assets'], (cb) => {
 // Extra Concat paths to fix missing assets from Bootstrap (missing fonts) and leaflet-dist
 // (missing images)
 gulp.task('bower:assets', function () {
-  return gulp.src($.mainBowerFiles()
+  var src = $.mainBowerFiles()
     .concat('./bower_components/bootstrap-sass-official/assets/fonts/**')
-    .concat('./bower_components/leaflet-dist/images/**'), { base: './bower_components' })
+    .concat('./bower_components/leaflet-dist/images/**');
+  
+  gulp.src(src, { base: './bower_components' })
+    .pipe($.filter(['**/*', '!**/*.{js,css,scss,less}']))
+    .pipe(gulp.dest('dist/bower_components'));
+
+  return gulp.src(src, { base: './bower_components' })
     .pipe($.filter(['**/*', '!**/*.{css,scss,less}']))
     .pipe(gulp.dest('.tmp/bower_components'))
-    .pipe(gulp.dest('dist/bower_components'));
-});
-
-// Extra Concat paths to fix missing assets from Bootstrap (missing fonts) and leaflet-dist
-// (missing images)
-// gulp.task('bower:assets-dist', function () {
-//   return gulp.src($.mainBowerFiles()
-//     .concat('./bower_components/bootstrap-sass-official/assets/fonts/**')
-//     .concat('./bower_components/leaflet-dist/images/**'), { base: './bower_components' })
-//     .pipe($.filter(['**/*', '!**/*.{js,css,scss,less}']))
-//     .pipe(gulp.dest('dist/bower_components'));
-// });
-
-gulp.task('bower:html-dist', function () {
-  return gulp.src('./app/**/*.html')
-    .pipe(gulp.dest('.tmp'));
 });
 
 gulp.task('scripts', () => {
