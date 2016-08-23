@@ -25,6 +25,39 @@ var $ = {
   uglify: require('gulp-uglify')
 };
 
+gulp.task('scripts', () => {
+  return gulp.src('./app/**/*.coffee')
+    .pipe($.sourcemaps.init())
+    .pipe($.coffee({ bare: true }).on('error', $.gutil.log))
+    .pipe($.sourcemaps.write())
+    .pipe(gulp.dest('.tmp'))
+});
+
+gulp.task('styles', () => {
+  return gulp.src('./app/styles/**/*.scss')
+    .pipe($.plumber())
+    .pipe($.sourcemaps.init())
+    .pipe($.sass.sync({
+      outputStyle: 'expanded',
+      precision: 10,
+      includePaths: ['./bower_components']
+    }).on('error', $.sass.logError))
+    .pipe($.autoprefixer({ browsers: ['> 1%', 'last 2 versions', 'Firefox ESR'] }))
+    .pipe($.sourcemaps.write())
+    .pipe(gulp.dest('.tmp/styles'));
+});
+
+gulp.task('html-dist', function () {
+  return gulp.src('app/**/*.html')
+    .pipe(gulp.dest('dist'));
+});
+
+gulp.task('images-dist', function () {
+  return gulp.src('app/images/**/*')
+    .pipe($.imagemin())
+    .pipe(gulp.dest('dist/images'));
+});
+
 gulp.task('bower:postcss', ['bower:assets'], (cb) => {
   var processors = [
     $.url({ url: "rebase" })
@@ -54,54 +87,6 @@ gulp.task('bower:assets', function () {
     .pipe(gulp.dest('.tmp/bower_components'))
 });
 
-gulp.task('scripts', () => {
-  return gulp.src('./app/**/*.coffee')
-    .pipe($.sourcemaps.init())
-    .pipe($.coffee({ bare: true }).on('error', $.gutil.log))
-    .pipe($.sourcemaps.write())
-    .pipe(gulp.dest('.tmp'))
-});
-
-gulp.task('styles', () => {
-  return gulp.src('./app/styles/**/*.scss')
-    .pipe($.plumber())
-    .pipe($.sourcemaps.init())
-    .pipe($.sass.sync({
-      outputStyle: 'expanded',
-      precision: 10,
-      includePaths: ['./bower_components']
-    }).on('error', $.sass.logError))
-    .pipe($.autoprefixer({ browsers: ['> 1%', 'last 2 versions', 'Firefox ESR'] }))
-    .pipe($.sourcemaps.write())
-    .pipe(gulp.dest('.tmp/styles'));
-  //.pipe(reload({stream: true}));
-});
-
-// Serve build for debug
-gulp.task('serve', $.sync.sync(['clean', 'styles', 'scripts']), () => {
-  $.browserSync({
-    notify: false,
-    port: 9000,
-    server: {
-      baseDir: ['.tmp', 'app'],
-      routes: {
-        '/bower_components': './bower_components'
-      }
-    }
-  });
-});
-
-gulp.task('html-dist', function () {
-  gulp.src('app/**/*.html')
-    .pipe(gulp.dest('dist'));
-});
-
-gulp.task('images-dist', function () {
-  gulp.src('app/images/**/*')
-    .pipe($.imagemin())
-    .pipe(gulp.dest('dist/images'));
-});
-
 gulp.task('dist', $.sync.sync(['clean', 'scripts', 'styles', ['html-dist', 'images-dist', 'bower:assets', 'bower:postcss']]), () => {
   return gulp.src('app/index.html')
     .pipe($.useref({ searchPath: '.tmp' })) // magic
@@ -114,7 +99,37 @@ gulp.task('dist', $.sync.sync(['clean', 'scripts', 'styles', ['html-dist', 'imag
     .pipe(gulp.dest('dist'));
 });
 
+gulp.task('scripts-watch', ['scripts'], function (done) {
+    $.browserSync.reload();
+    done();
+});
+
+gulp.task('styles-watch', ['styles'], function (done) {
+    $.browserSync.reload();
+    done();
+});
+
 // Serve build for debug
+gulp.task('serve', $.sync.sync(['clean', 'styles', 'scripts']), (done) => {
+  $.browserSync({
+    notify: false,
+    port: 9000,
+    server: {
+      baseDir: ['.tmp', 'app'],
+      routes: {
+        '/bower_components': './bower_components'
+      }
+    }
+  });
+  
+  gulp.watch("app/**/*.html").on('change', $.browserSync.reload);
+  gulp.watch("**/*.scss", ['styles-watch']);
+  gulp.watch("**/*.coffee", ['scripts-watch']);
+
+  done();
+});
+
+// Serve dist build for debug
 gulp.task('serve-dist', ['dist'], () => {
   $.browserSync({
     notify: false,
