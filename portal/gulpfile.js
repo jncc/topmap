@@ -13,82 +13,65 @@ var $ = {
   imagemin: require('gulp-imagemin'),
   mainBowerFiles: require('main-bower-files'),
   plumber: require('gulp-plumber'),
+  postcss: require('gulp-postcss'),
   rev: require('gulp-rev'),
   revReplace: require('gulp-rev-replace'),
   sass: require('gulp-sass'),
   sourcemaps: require('gulp-sourcemaps'),
+  sync: require('gulp-sync')(gulp),
+  url: require("postcss-url"),
+  urlAdjuster: require('gulp-css-url-adjuster'),
   useref: require('gulp-useref'),
-  uglify: require('gulp-uglify')  
+  uglify: require('gulp-uglify')
 };
 
-var postcss = require('gulp-postcss');
-var assets = require('postcss-assets');
-var base64 = require('postcss-base64');
-var url = require("postcss-url");
-var syntax = require('postcss-scss');
-
-gulp.task('bower:postcss', ['bower:assets'], () => {
+gulp.task('bower:postcss', ['bower:assets'], (cb) => {
   var processors = [
-    url({url: "rebase"})
+    $.url({ url: "rebase" })
   ];
   return gulp.src($.mainBowerFiles(), { base: './bower_components' })
     .pipe($.filter('**/*.css'))
-    .pipe(debug())
-    .pipe(postcss(processors, {to: './'}))
-    .pipe(debug())
+    .pipe($.postcss(processors, { to: './' }))
+    .pipe($.urlAdjuster({
+      prependRelative: '/',
+    }))
     .pipe(gulp.dest('.tmp/bower_components'));
 });
 
-// Copy bower assets that need copying
+// Extra Concat paths to fix missing assets from Bootstrap (missing fonts) and leaflet-dist
+// (missing images)
 gulp.task('bower:assets', function () {
-  return gulp.src($.mainBowerFiles().concat('./bower_components/bootstrap-sass-official/assets/fonts/**'), { base: './bower_components' })
-    .pipe($.filter(['**/*', '!**/*.{js,css,scss,less}']))
-    .pipe(debug())
-    .pipe(gulp.dest('.tmp/bower_components'));
+  return gulp.src($.mainBowerFiles()
+    .concat('./bower_components/bootstrap-sass-official/assets/fonts/**')
+    .concat('./bower_components/leaflet-dist/images/**'), { base: './bower_components' })
+    .pipe($.filter(['**/*', '!**/*.{css,scss,less}']))
+    .pipe(gulp.dest('.tmp/bower_components'))
+    .pipe(gulp.dest('dist/bower_components'));
 });
 
-// //generate bower stylesheets with correct asset paths
-// gulp.task('bower:styles', function() {
-//     return gulp.src(mainBowerFiles(), {
-//         base: './bower_components'
-//     })
-//     .pipe(filter([
-//         '**/*.{css,scss}',
-//         '!**/_bootstrap.scss',
-//         '!foundation/**/*',
-//         '!compass-mixins/**/*'
-//     ]))
-//     // .pipe(foreach(function(stream, file) {
-//     //     var dirName = path.dirname(file.path);
-//     //     return stream
-//     //         .pipe(rework(reworkUrl(function(url) {
-//     //             var fullUrl = path.join(dirName, url);
-//     //             if (fs.existsSync(fullUrl)) {
-//     //                 bowerCopyFiles.push(fullUrl);
-//     //                 console.log(path.relative('css', fullUrl).replace(/bower_components/, 'styles/vendor'));
-//     //                 return path.relative('css', fullUrl).replace(/bower_components/, 'styles/vendor');
-//     //             }
-//     //             return url;
-//     //         })));
-//     // }))
-//     .pipe($.sourcemaps.init())
-//     //.pipe(concat('bower.css'))
-//     //.pipe(minifyCss())
-//     .pipe($.sourcemaps.write())
-//     .pipe(gulp.dest('./.tmp/app/styles/vendor'));
+// Extra Concat paths to fix missing assets from Bootstrap (missing fonts) and leaflet-dist
+// (missing images)
+// gulp.task('bower:assets-dist', function () {
+//   return gulp.src($.mainBowerFiles()
+//     .concat('./bower_components/bootstrap-sass-official/assets/fonts/**')
+//     .concat('./bower_components/leaflet-dist/images/**'), { base: './bower_components' })
+//     .pipe($.filter(['**/*', '!**/*.{js,css,scss,less}']))
+//     .pipe(gulp.dest('dist/bower_components'));
 // });
 
+gulp.task('bower:html-dist', function () {
+  return gulp.src('./app/**/*.html')
+    .pipe(gulp.dest('.tmp'));
+});
 
-// Coffescript build to ./tmp
 gulp.task('scripts', () => {
-  gulp.src('./app/**/*.coffee')
+  return gulp.src('./app/**/*.coffee')
     .pipe($.sourcemaps.init())
     .pipe($.coffee({ bare: true }).on('error', $.gutil.log))
     .pipe($.sourcemaps.write())
     .pipe(gulp.dest('.tmp'))
 });
 
-// Build SASS files
 gulp.task('styles', () => {
   return gulp.src('./app/styles/**/*.scss')
     .pipe($.plumber())
@@ -105,34 +88,34 @@ gulp.task('styles', () => {
 });
 
 // Serve build for debug
-gulp.task('serve', ['styles', 'scripts'], () => {
+gulp.task('serve', $.sync.sync(['clean', 'styles', 'scripts']), () => {
   $.browserSync({
     notify: false,
     port: 9000,
     server: {
       baseDir: ['.tmp', 'app'],
       routes: {
-        '/bower_components': 'bower_components'
+        '/bower_components': './bower_components'
       }
     }
   });
 });
 
 gulp.task('html-dist', function () {
-  gulp.src('./app/**/*.html')
+  gulp.src('app/**/*.html')
     .pipe(gulp.dest('dist'));
 });
 
 gulp.task('images-dist', function () {
-  gulp.src('./app/images/**/*')
+  gulp.src('app/images/**/*')
     .pipe($.imagemin())
     .pipe(gulp.dest('dist/images'));
 });
 
-gulp.task('dist', ['html-dist', 'images-dist', 'styles', 'scripts'], () => {
-  return gulp.src('app/*.html')
-    .pipe($.useref({ searchPath: ['.tmp', 'app', '.'] })) // magic
-    .pipe($.if('*.js', $.uglify({mangle: false})))   // angular can't cope with uglification of js due to dependency injection, turn off mangle
+gulp.task('dist', $.sync.sync(['clean', 'scripts', 'styles', ['html-dist', 'images-dist', 'bower:assets', 'bower:postcss']]), () => {
+  return gulp.src('app/index.html')
+    .pipe($.useref({ searchPath: '.tmp' })) // magic
+    .pipe($.if('*.js', $.uglify({ mangle: false })))   // angular can't cope with uglification of js due to dependency injection, turn off mangle
     .pipe($.if('*.css', $.cssnano({safe: true, autoprefixer: false})))
     .pipe($.if('*.js', $.rev()))      // "rev" does static asset revisioning
     .pipe($.if('*.css', $.rev()))     // e.g. unicorn.css -> unicorn-098f6bcd.css
@@ -155,7 +138,7 @@ gulp.task('serve-dist', ['dist'], () => {
 gulp.task('clean', function () {
   gulp.src('.tmp', { read: false })
     .pipe($.clean({ force: true }))
-  gulp.src('dist', { read: false })
+  return gulp.src('dist', { read: false })
     .pipe($.clean({ force: true }))
 });
 
