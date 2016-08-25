@@ -3,9 +3,9 @@ var debug = require('gulp-debug');
 var $ = {
   autoprefixer: require('gulp-autoprefixer'),
   browserSync: require('browser-sync'),
-  clean: require('gulp-clean'),
   coffee: require('gulp-coffee'),
   cssnano: require('gulp-cssnano'),
+  del: require('del'),
   filter: require('gulp-filter'),
   gutil: require('gulp-util'),
   htmlmin: require('gulp-htmlmin'),
@@ -141,9 +141,6 @@ gulp.task('serve-dist', ['dist'], () => {
 });
 
 gulp.task('clean', function () {
-  gulp.src('.tmp', { read: false })
-    .pipe($.clean({ force: true }))
-  return gulp.src('dist', { read: false })
-    .pipe($.clean({ force: true }))
+  return $.del(['.tmp', 'dist'])
 });
 
