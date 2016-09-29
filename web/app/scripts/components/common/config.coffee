@@ -25,6 +25,7 @@ angular.module 'topmap.common'
           version: '2.0.1'
         },
         wmts: {
+          url: 'https://eodip.jncc.gov.uk/geoserver/gwc/service/wmts?REQUEST=GetCapabilities',
           version: '1.0.0'
         }        
       }

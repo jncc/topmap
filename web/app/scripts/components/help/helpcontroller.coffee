@@ -8,14 +8,14 @@
  # Controller of the topmap
 ###
 angular.module 'topmap.help'
-  .controller 'helpController', ($scope) ->
+  .controller 'helpController', ($scope, ogc, config) ->
     $scope.$on '$routeChangeSuccess', ($currentRoute, $previousRoute) ->
       footer = angular.element '#footer'
       footer.removeClass 'hidden'
+    
+    datasource = config.ogc_datasources[0]
 
-    $scope.base_wms_url = config.ogc_datasources[0].url
-
-    $scope.wms_capabilities_url = ogc.getCapabilitiesURL($scope.base_wms_url, 'wms', config.ogc_datasources[0].wms.version)
-    $scope.wfs_capabilities_url = ogc.getCapabilitiesURL($scope.base_wms_url, 'wfs', config.ogc_datasources[0].wfs.version)
-    $scope.wcs_capabilities_url = ogc.getCapabilitiesURL($scope.base_wms_url, 'wcs', config.ogc_datasources[0].wcs.version)
-    $scope.wmts_capabilities_url = 'http://eodip.jncc.gov.uk/geoserver/gwc/service/wmts?REQUEST=GetCapabilities'
+    $scope.wfs_capabilities_url = ogc.getCapabilitiesURL(datasource.url, 'wfs', datasource.wfs.version)
+    $scope.wcs_capabilities_url = ogc.getCapabilitiesURL(datasource.url, 'wcs', datasource.wcs.version)
+    $scope.wms_capabilities_url = ogc.getCapabilitiesURL(datasource.url, 'wms', datasource.wms.version)
+    $scope.wmts_capabilities_url = datasource.wmts.url 
