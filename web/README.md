@@ -7,7 +7,7 @@ version 0.12.1.
 
 ## Build & development
 
-From a fresh machine, I would recomend setting up using NodeJS using [NVM](https://github.com/creationix/nvm) after which you will need to install grunt and bower to build (`npm install grunt-cli -g` / `npm install bower -g`)
+From a fresh machine, I would recomend setting up using NodeJS using [NVM](https://github.com/creationix/nvm) after which you will need to install grunt and bower to build (`npm install gulp-cli -g` / `npm install bower -g`)
 
 You will need to run `npm install` and `bower install` to install dependencies
 
@@ -17,8 +17,5 @@ NOTE: On windows you probably want to use a windows installer i.e. [rubyinstalle
 
 `gem install compass` 
 
-After everything is set up run `grunt clean build` for building and `grunt serve` for preview.
+After everything is set up run `gulp clean dist` for building and `grunt serve` for preview.
 
-## Testing
-
-Running `grunt test` will run the unit tests with karma.
