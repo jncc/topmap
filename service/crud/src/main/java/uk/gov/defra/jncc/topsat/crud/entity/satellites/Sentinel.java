@@ -43,13 +43,12 @@ public class Sentinel implements Serializable {
     @Column(name="relorbitno")
     private int relOrbitNo;
     private String platform;
-    private boolean available;
-    private boolean downloaded;
     private String footprint;
     private String centroid;
     @Column(columnDefinition = "geometry(Polygon,4326)")
     @Type(type = "org.hibernate.spatial.GeometryType")
     private Geometry footprintGeom;
+    private String location;
 
     /**
      * @return the uniqueId
@@ -207,33 +206,6 @@ public class Sentinel implements Serializable {
         this.platform = platform;
     }
 
-    /**
-     * @return the available
-     */
-    public boolean isAvailable() {
-        return available;
-    }
-
-    /**
-     * @param available the available to set
-     */
-    public void setAvailable(boolean available) {
-        this.available = available;
-    }
-
-    /**
-     * @return the downloaded
-     */
-    public boolean isDownloaded() {
-        return downloaded;
-    }
-
-    /**
-     * @param downloaded the downloaded to set
-     */
-    public void setDownloaded(boolean downloaded) {
-        this.downloaded = downloaded;
-    }
 
     /**
      * @return the footprint
@@ -275,5 +247,19 @@ public class Sentinel implements Serializable {
      */
     public void setFootprintGeom(Geometry footprintGeom) {
         this.footprintGeom = footprintGeom;
+    }
+
+    /**
+     * @return the location
+     */
+    public String getLocation() {
+        return location;
+    }
+
+    /**
+     * @param location the location to set
+     */
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

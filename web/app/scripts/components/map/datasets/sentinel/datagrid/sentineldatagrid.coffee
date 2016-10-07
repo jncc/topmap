@@ -17,7 +17,7 @@ angular.module 'topmap.map'
       displayName: 'Title',
       width: 300,
       cellTemplate: '<div class="non-overflowing-cell cell-padding">
-      <a target="_blank" ng-href="{{grid.appScope.datagrid.datasetConfig.layerUrl}}{{grid.appScope.datagrid.datasetConfig.apiEndpoint}}/download/{{row.entity.title}}" ng-bind-html="row.entity.title"></a>
+      <a target="_blank" ng-href="{{row.entity.location}}" ng-bind-html="row.entity.title"></a>
       </div>'
   
     sentinelDatagrid.gridColumnDefs = [titleColDef,
