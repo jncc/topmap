@@ -28,9 +28,7 @@ public class SentinelResourceAssembler extends ResourceAssemblerSupport<Sentinel
         
         resource.uniqueId = t.getUniqueid();
         resource.Centroid = t.getCentroid();
-        resource.available = t.isAvailable();
         resource.beginPosition = t.getBeginPosition();
-        resource.downloaded = t.isDownloaded();
         resource.endPosition = t.getEndPosition();
         resource.footprint = t.getFootprint();
         resource.ingestionDate = t.getIngestionDate();
@@ -41,6 +39,7 @@ public class SentinelResourceAssembler extends ResourceAssemblerSupport<Sentinel
         resource.productType = t.getProductType();
         resource.relOrbitNo = t.getRelOrbitNo();
         resource.title = t.getTitle();
+        resource.location = t.getLocation();
         
         return resource;
     }

@@ -25,8 +25,7 @@ public class SentinelResource extends ResourceSupport {
     public int orbitNo;
     public int relOrbitNo;
     public String platform;
-    public boolean available;
-    public boolean downloaded;
     public String footprint;
     public String Centroid;
+    public String location;
 }

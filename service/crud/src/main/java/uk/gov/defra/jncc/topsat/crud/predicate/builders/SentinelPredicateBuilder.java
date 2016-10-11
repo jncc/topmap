@@ -42,6 +42,7 @@ public class SentinelPredicateBuilder {
             predicates.add(sentinel.productType.equalsIgnoreCase(params.Product));
         }
         
+        
         return PredicateBuilderHelper.assemblePredicates(predicates);
     }
 }
