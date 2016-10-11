@@ -33,7 +33,6 @@ angular.module 'topmap.common'
     topsat_api: {
       name: 'JNCC TopSat API',
       url: 'https://eodip.jncc.gov.uk/api/'
-      # url: 'http://localhost:8084/api/'
     },
     topsat_layers: [
       {
