@@ -32,14 +32,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.defra.jncc.topsat.api.configuration.ApiConfiguration;
 import uk.gov.defra.jncc.topsat.api.resources.ParameterValueList;
+import uk.gov.defra.jncc.topsat.api.resources.assemblers.SentinelArdResourceAssembler;
 import uk.gov.defra.jncc.topsat.api.resources.sentinel.SentinelResource;
 import uk.gov.defra.jncc.topsat.api.resources.assemblers.SentinelResourceAssembler;
+import uk.gov.defra.jncc.topsat.api.resources.sentinel.SentinelArdResource;
 import uk.gov.defra.jncc.topsat.crud.entity.satellites.Sentinel;
 import uk.gov.defra.jncc.topsat.crud.repository.satellites.SentinelRepository;
 import uk.gov.defra.jncc.topsat.api.services.FileReader;
 import uk.gov.defra.jncc.topsat.api.services.FileReaderResponse;
+import uk.gov.defra.jncc.topsat.crud.entity.products.SentinelArd;
+import uk.gov.defra.jncc.topsat.crud.predicate.builders.SentinelArdPredicateBuilder;
 import uk.gov.defra.jncc.topsat.crud.predicate.builders.SentinelPredicateBuilder;
 import uk.gov.defra.jncc.topsat.crud.predicate.parameters.SentinelParameters;
+import uk.gov.defra.jncc.topsat.crud.repository.products.SentinelArdRepository;
 
 /**
  *
@@ -50,6 +55,8 @@ import uk.gov.defra.jncc.topsat.crud.predicate.parameters.SentinelParameters;
 @CrossOrigin
 @Api(value = "/sentinel", description = "Retrieve scenes for sentinel satellites")
 public class SentinelController {
+    @Autowired SentinelArdRepository sentinelArdRepository;
+    @Autowired SentinelArdResourceAssembler sentinelArdResourceAssembler;
     @Autowired SentinelRepository sentinelRepository;
     @Autowired SentinelResourceAssembler sentinelResourceAssembler;
 //    @Autowired ApiConfiguration configuration;
@@ -61,8 +68,11 @@ public class SentinelController {
         responseContainer = "Page")
     public HttpEntity<PagedResources<SentinelResource>> getAll(Pageable pageable, PagedResourcesAssembler assembler) {
         Page<Sentinel> sentinalProducts = sentinelRepository.findAll(pageable);
-        return new ResponseEntity<PagedResources<SentinelResource>>(assembler.toResource(sentinalProducts, sentinelResourceAssembler), HttpStatus.OK); 
+        return new ResponseEntity<>(assembler.toResource(sentinalProducts, sentinelResourceAssembler), HttpStatus.OK); 
     }
+    
+
+    
     
     @ResponseBody
     @RequestMapping(path = "/search", method = RequestMethod.GET)
@@ -94,6 +104,42 @@ public class SentinelController {
             Page<Sentinel> sentinalProducts = sentinelRepository.findAll(criteria, pageable);
             return new ResponseEntity<PagedResources<SentinelResource>>(assembler.toResource(sentinalProducts, sentinelResourceAssembler), HttpStatus.OK);
         }
+    
+    @ResponseBody
+    @RequestMapping(path = "/products/ard", method = RequestMethod.GET)
+    @ApiOperation(value = "Retrieves all Sentinel scenes in a pageable manner", 
+        response = SentinelResource.class, 
+        responseContainer = "Page")
+    public HttpEntity<PagedResources<SentinelArdResource>> getAllArd(Pageable pageable, PagedResourcesAssembler assembler) {
+        Page<SentinelArd> sentinalArdProducts = sentinelArdRepository.findAll(pageable);
+        return new ResponseEntity<>(assembler.toResource(sentinalArdProducts, sentinelArdResourceAssembler), HttpStatus.OK); 
+    }
+    
+    @ResponseBody
+    @RequestMapping(path = "/products/ard/search", method = RequestMethod.GET)
+    @ApiOperation(value = "Retrieves all Sentinel images in a given a set of parameters a pageable manner",
+            response = SentinelResource.class,
+            responseContainer = "Page")
+    public HttpEntity<PagedResources<SentinelArdResource>> searchArd(
+            Pageable pageable, 
+            PagedResourcesAssembler assembler, 
+            @ApiParam(value = "A WKT bounding box defined in WGS84 (EPSG:4326)")
+            @RequestParam(name = "wkt", required = false) String wkt) throws ParseException 
+        {
+            SentinelParameters params = new SentinelParameters();
+            params.BoundingBoxWkt = wkt;
+
+            BooleanExpression criteria = SentinelArdPredicateBuilder.buildPredicates(params);
+            
+            if (criteria == null) 
+            {
+                return getAllArd(pageable, assembler);
+            }
+            
+            Page<SentinelArd> sentinalArdProducts = sentinelArdRepository.findAll(criteria, pageable);
+            return new ResponseEntity<>(assembler.toResource(sentinalArdProducts, sentinelArdResourceAssembler), HttpStatus.OK);
+        }
+  
     
     @ResponseBody
     @RequestMapping(value = "/download/{title}", method = RequestMethod.GET)
