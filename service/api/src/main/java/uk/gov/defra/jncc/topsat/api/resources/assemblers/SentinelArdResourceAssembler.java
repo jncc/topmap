@@ -6,11 +6,12 @@
 package uk.gov.defra.jncc.topsat.api.resources.assemblers;
 
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
+import org.springframework.stereotype.Component;
 import uk.gov.defra.jncc.topsat.api.controllers.satellites.SentinelController;
 import uk.gov.defra.jncc.topsat.api.resources.sentinel.SentinelArdResource;
 import uk.gov.defra.jncc.topsat.crud.entity.products.SentinelArd;
 
-
+@Component
 public class SentinelArdResourceAssembler extends ResourceAssemblerSupport<SentinelArd, SentinelArdResource>  {
     public SentinelArdResourceAssembler() {
         super(SentinelController.class, SentinelArdResource.class);
