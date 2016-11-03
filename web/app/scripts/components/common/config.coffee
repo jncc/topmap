@@ -38,6 +38,7 @@ angular.module 'topmap.common'
       {
         name: 'sentinel', 
         layerName: 'EODIP:sentinelview', 
+        layerName: 'eodip:sentinelview', 
         apiEndpoint: 'sentinel', 
         resourceListName: 'sentinelResourceList', 
         geomField: 'footprint_geom',
@@ -49,7 +50,7 @@ angular.module 'topmap.common'
       },
       {
         name: 'landsat', 
-        layerName: 'EODIP:landsat_coverage', 
+        layerName: 'eodip:landsat_coverage', 
         apiEndpoint: 'landsat', 
         resourceListName: 'landsatSceneResourceList', 
         geomField: 'wkb_geometry'
