@@ -34,6 +34,7 @@ public class LandsatSceneResourceAssembler extends ResourceAssemblerSupport<Land
                 entity.getWrs2().getWrs2sequence(), 
                 entity.getWrs2().getWkt(), 
                 entity.getWrs2().getGeojson());
+        resource.location = entity.getLocation();
         
         return resource;
     }   
