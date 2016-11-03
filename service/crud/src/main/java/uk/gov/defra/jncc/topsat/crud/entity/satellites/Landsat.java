@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.OneToOne;
-import javax.persistence.Transient;
 import uk.gov.defra.jncc.topsat.crud.entity.crs.wrs2;
 
 /**
@@ -37,7 +36,7 @@ public class Landsat implements Serializable {
     @Column(name = "cloudcover")
     private double cloudCover;
     private String platform;
-    
+    private String location;    
     
     public Landsat() {}
 
@@ -110,4 +109,12 @@ public class Landsat implements Serializable {
     public void setPlatform(String platform) {
         this.platform = platform;
     }
+    
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }    
 }
