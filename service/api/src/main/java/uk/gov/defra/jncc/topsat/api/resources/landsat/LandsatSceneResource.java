@@ -12,4 +12,5 @@ public class LandsatSceneResource extends ResourceSupport {
     public Wrs2 wrs2;
     public String captureDate;
     public double cloudCover;
+    public String location;
 }

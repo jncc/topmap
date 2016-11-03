@@ -37,6 +37,7 @@ angular.module 'topmap.common'
     topsat_layers: [
       {
         name: 'sentinel', 
+        layerName: 'EODIP:sentinelview', 
         layerName: 'eodip:sentinelview', 
         apiEndpoint: 'sentinel', 
         resourceListName: 'sentinelResourceList', 
