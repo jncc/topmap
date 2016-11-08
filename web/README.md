@@ -17,5 +17,5 @@ NOTE: On windows you probably want to use a windows installer i.e. [rubyinstalle
 
 `gem install compass` 
 
-After everything is set up run `gulp clean dist` for building and `grunt serve` for preview.
+After everything is set up run `gulp clean dist` for building and `gulp serve` for preview.
 

@@ -37,16 +37,20 @@ angular.module 'topmap.common'
     topsat_layers: [
       {
         name: 'sentinel', 
-        layerName: 'EODIP:sentinelview', 
         layerName: 'eodip:sentinelview', 
         apiEndpoint: 'sentinel', 
         resourceListName: 'sentinelResourceList', 
         geomField: 'footprint_geom',
-        filterController: 'sentinelFilter',
-        filterView: 'sentinelFilter.html',
         cqlParameterMap:
           senplt: 'platform',
           senprd: 'producttype'
+      },
+      {
+        name: 'sentinelard', 
+        layerName: 'eodip:Sentinel ARD Products', 
+        apiEndpoint: 'sentinel/products/ard', 
+        resourceListName: 'sentinelArdResourceList', 
+        geomField: 'footprint_geom'
       },
       {
         name: 'landsat', 
@@ -54,8 +58,6 @@ angular.module 'topmap.common'
         apiEndpoint: 'landsat', 
         resourceListName: 'landsatSceneResourceList', 
         geomField: 'wkb_geometry'
-        filterController: 'landsatFilter',
-        filterView: 'landsatFilter.html',
         cqlParameterMap:
           lanplt: 'platform'
       }
