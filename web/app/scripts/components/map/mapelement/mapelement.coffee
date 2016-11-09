@@ -13,7 +13,6 @@ angular.module 'topmap.map'
     mapCtrl = this
     
     mapCtrl.drawnlayerwkt = ''
-    mapCtrl.drawnlayercql = ''
 
     mapCtrl.layer = {}
 
@@ -106,21 +105,15 @@ angular.module 'topmap.map'
         
     mapCtrl.removeOverlays = () ->
       mapCtrl.layers.overlays = {}
-              
 
     mapCtrl.getCQLFilter = ->
       cqlParams = {}
       cqlfilter = ''
 
       if (mapCtrl.parameters.urlParameters.wkt)
-        cqlCoords = leafletHelper.wktToCQL(mapCtrl.parameters.urlParameters.wkt)
-        if cqlCoords == ''
-          alert('The WKT must define a rectangular bounding box')
-        else 
-          mapCtrl.drawnlayercql = cqlCoords
-          geom = mapCtrl.layerConfig.geomField        
-          cqlfilter = 'BBOX(' + geom + ',' + mapCtrl.drawnlayercql + ')'
-
+        geom = mapCtrl.layerConfig.geomField
+        cqlfilter = 'INTERSECTS(' + geom + ',' + mapCtrl.parameters.urlParameters.wkt + ')'        
+      
       for p of mapCtrl.layerConfig.cqlParameterMap
         value = mapCtrl.parameters.urlParameters[p]
         if value
