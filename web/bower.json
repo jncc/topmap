@@ -22,7 +22,8 @@
     "Leaflet.EasyButton": "~1.1.2",
     "leaflet-draw": "leaflet.draw#^0.2.4",
     "angular-ui-grid": "~3.1.1",
-    "govuk_frontend_toolkit": "git://github.com/alphagov/govuk_frontend_toolkit#v4.7.0"
+    "govuk_frontend_toolkit": "git://github.com/alphagov/govuk_frontend_toolkit#v4.7.0",
+    "Proj4Leaflet": "^0.7.2"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.0"

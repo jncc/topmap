@@ -18,16 +18,47 @@ angular.module 'topmap.map'
 
     mapCtrl.markers = {}
 
+    osCrs = new L.Proj.CRS('EPSG:27700', '+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +datum=OSGB36 +units=m +no_defs',
+      resolutions: [
+        8192
+        4096
+        2048
+        1024
+        512
+        256
+        128
+      ])
+      # origin: [
+      #   0
+      #   0
+      # ])
+
+    mapCtrl.crs = osCrs
+
     mapCtrl.layers = {
         baselayers: {
-          xyz: {
-            name: 'OpenStreetMap',
-            url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            type: 'xyz',
-            layerOptions: {
-              attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          wms: {
+            name: 'OS-Scale-Dependent',
+            title: 'OS-Scale-Dependent',
+            crs: osCrs,
+            type: 'wms',
+            url: 'http://maps.ukbars.org.uk/map?',
+            layerParams: {
+              layers: 'OS-Scale-Dependent',
+              format: 'image/png',
+              transparent: true,
+              crs: osCrs,
+              tiled: true
             }
           }
+          # xyz: {
+          #   name: 'OpenStreetMap',
+          #   url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          #   type: 'xyz',
+          #   layerOptions: {
+          #     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          #   }
+          # }
         },
         overlays: {
           draw: {
@@ -83,7 +114,8 @@ angular.module 'topmap.map'
         layers: layer.name,
         version: layer.version,
         format: 'image/png',
-        transparent: true
+        transparent: true,
+        crs: osCrs
       }
       
       wmsUrl = layer.base + '?tiled=true'
@@ -153,6 +185,9 @@ angular.module 'topmap.map'
 
       usSpinnerService.spin('spinner-main')
       
+      leafletData.getMap().then (map) ->
+        map.crs = osCrs
+
       console.log('map begins fetch capabilites')
 
       ogc.fetchWMSCapabilities(

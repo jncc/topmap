@@ -42,5 +42,8 @@
     "gulp-util": "^3.0.7",
     "main-bower-files": "^2.13.1",
     "postcss-url": "^5.1.2"
+  },
+  "dependencies": {
+    "proj4leaflet": "^0.7.2"
   }
 }
